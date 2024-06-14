@@ -40,3 +40,11 @@ callback(null,true);
 
 // ******************* 自訂 top-level middleware
 app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  res.locals.session =req.session; //是讓template可以使用session
+  // res.send("<p>直接被中斷</p>"); // 不應該回應
+  res.locals.title = 'YeahFUN'; // 預設的頁面 title
+  res.locals.pageName ="";
+
+  next();
+});
