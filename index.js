@@ -14,6 +14,7 @@ import db from"./utils/connect-mysql.js"
 
 const app = express();
 const MysqlStore = mysql_session(session);
+const sessionStore = new MysqlStore({},db);
 
 app.use(express.urlencoded({extended: true}))
 
@@ -48,3 +49,15 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.get("/", (req, res) => {
+  res.send("<h2>HELLO world</h2>")
+ 
+});
+
+const port = process.env.WEB_PORT || 3002;
+
+app.listen(port, () => {
+  console.log(`伺服器動了 port:${port}`);
+});
+
