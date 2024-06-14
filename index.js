@@ -8,7 +8,7 @@ import mysql_session from 'express-mysql-session';
 import moment from 'moment-timezone';
 
 
-// import db from"./utils/connect-mysql.js"
+import db from"./utils/connect-mysql.js"
 // import admin2Router from "./routes/admin2.js";
 // import upload from "./utils/upload-imgs.js";
 
