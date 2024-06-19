@@ -24,8 +24,9 @@ callback(null,"public/img-blog") //這裡的路徑和此JS檔所在的位置無�
     const timeName = Date.now();
    let timestampDate = moment(timeName);
    let formattedDate = timestampDate.format('YYYYMMDDHHmmssSSS')
+   const randomNum = Math.floor(Math.random() * 10000);
 const ext = extMap[file.mimetype]; // 取得副檔名
-callback(null, formattedDate+ ext);
+callback(null, formattedDate+randomNum+ ext);
   },
 });
 
