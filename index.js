@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import session from "express-session";
 import mysql_session from 'express-mysql-session';
 import moment from 'moment-timezone';
+import blogRouter from './routes/blog.js'
 
 
 import db from"./utils/connect-mysql.js"
@@ -51,10 +52,11 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("<h2>HELLO world</h2>")
+  res.send("<h2>YeahFun首頁</h2>")
  
 });
 
+app.use("/blog",blogRouter)
 const port = process.env.WEB_PORT || 3002;
 
 app.listen(port, () => {
