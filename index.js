@@ -8,6 +8,8 @@ import mysql_session from 'express-mysql-session';
 import moment from 'moment-timezone';
 import blogRouter from './routes/blog.js'
 
+import jwt from "jsonwebtoken";
+
 
 import db from"./utils/connect-mysql.js"
 // import admin2Router from "./routes/admin2.js";
@@ -47,6 +49,15 @@ app.use((req, res, next) => {
   // res.send("<p>直接被中斷</p>"); // 不應該回應
   res.locals.title = 'YeahFUN'; // 預設的頁面 title
   res.locals.pageName ="";
+
+  const auth = req.get('Authorization')  //取得用戶端request的Header
+if(auth && auth.indexOf("Bearer ")===0){
+const token = auth.slice(7) //只取得token的部分
+try{
+  // 解密token 並把資料掛在req的my_jwt
+req.my_jwt = jwt.verify(token, process.env.JWT_KEY)
+}catch(ex){}
+}
 
   next();
 });
