@@ -67,8 +67,14 @@ app.get("/", (req, res) => {
  
 });
 
+
 app.use("/blog",blogRouter)
+
+// *****************************設定靜態資料夾，類似apache的document route
+app.use(express.static("public"));
+
 const port = process.env.WEB_PORT || 3002;
+
 
 app.listen(port, () => {
   console.log(`伺服器動了 port:${port}`);
