@@ -6,11 +6,15 @@ import upload from './../utils/upload-img-blog.js';
 const router = express.Router();
 
 const getBlogData= async (req)=>{
+  const conditions = []
   let keyword = req.query.keyword || '';
 
   let birthBegin = req.query.dateBegin || ''; //這日期之後出生的
   let birthEnd = req.query.dateEnd || ''; //這日期之前出生的
-  const perPage = 20; //每頁最多有幾筆
+
+  // 分頁
+  const perPage = Number(req.query.perpage) || 10; //每頁最多有幾筆
+
 
   let page = +req.query.page || 1;
   if(page<1){
@@ -20,6 +24,10 @@ const getBlogData= async (req)=>{
   info:"值太小"
     }
   };
+  const offset = (page - 1) * perPage
+  const limit = perPage
+
+
 
   const sql0 =`SELECT count(*)  totalRows FROM blog b `;
   const [[{totalRows}]] = await db.query(sql0);
