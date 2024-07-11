@@ -2,29 +2,30 @@ import mysql from "mysql2/promise";
 const {
   DB_HOST,
 
-  DB_USER,
+  DB_USERNAME,
 
-  DB_PASS,
+  DB_PASSWORD,
 
-  DB_NAME,
+  DB_DATABASE,
   DB_PORT,
 } = process.env;
 console.log({
   DB_HOST,
 
-  DB_USER,
+  DB_USERNAME,
 
-  DB_PASS,
+  DB_PASSWORD,
 
-  DB_NAME,
+  DB_DATABASE,
   DB_PORT,
 });
 
 const db =  mysql.createPool({
    host:DB_HOST,
-   user:DB_USER,
-   password:DB_PASS,
-   database:DB_NAME,
+   user:  DB_USERNAME,
+   
+   password:DB_PASSWORD,
+   database:DB_DATABASE,
    waitForConnections:true,
    connectionLimit:8,
    queueLimit: 0,
