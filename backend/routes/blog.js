@@ -105,8 +105,7 @@ let keyword = req.query.keyword || ''; //相當於預設值
 //     }
 //   };
   // 
-  const sql =`SELECT b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where} ${orderby} LIMIT ${limit} OFFSET ${offset};
-  `;
+  const sql =`SELECT   b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where}  ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
 
   rows.forEach((r) => {
@@ -123,7 +122,7 @@ r.date=''
   const output={
     success:true,
     data:{
-      where,page,perPage,totalPages,totalRows,blogs:rows
+      sql,page,perPage,totalPages,totalRows,blogs:rows
 
     }
   }
