@@ -7,12 +7,14 @@ const router = express.Router();
 
 const getBlogData= async (req)=>{
   const conditions = []
-  let keyword = req.query.keyword || '';
+  const dateFormat1 = 'YYYY-MM-DD HH:MI:SS'
+  const dateFormat2 = 'YYYY年MM月DD日 '
 
 
 
   // 分頁
   const perPage = Number(req.query.perpage) || 10; //每頁最多有幾筆
+  
 
   // 篩選
    const name_like = req.query.name_like || ''
@@ -24,12 +26,12 @@ const getBlogData= async (req)=>{
   let birthEndCondition=''
   birthBegin = moment(birthBegin);
   if(birthBegin.isValid()){
-    birthStartCondition =` b.create_at >= '${birthBegin.format('YYYY-MM-DD HH:MI:SS')}' `
+    birthStartCondition =` b.create_at >= '${birthBegin.format(dateFormat1)}' `
   };
 
   birthEnd = moment(birthEnd);
   if(birthEnd.isValid()){
-    birthEndCondition =` b.create_at <= '${birthEnd.format('YYYY-MM-DD HH:MI:SS')}' `
+    birthEndCondition =` b.create_at <= '${birthEnd.format(dateFormat1)}' `
   };
   
   let dateBeEn=''
@@ -106,6 +108,17 @@ let keyword = req.query.keyword || ''; //相當於預設值
   const sql =`SELECT b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where} ${orderby} LIMIT ${limit} OFFSET ${offset};
   `;
   const [rows]= await db.query(sql);
+
+  rows.forEach((r) => {
+r.date=''
+    // "JS 的Date 類型 轉換成日期格式的字串"
+    if(r.create_at){
+
+      r.create_at =moment(r.create_at).format(dateFormat1);
+      r.date=r.create_at
+      r.date=moment(r.create_at, dateFormat1).format(dateFormat2);
+    }
+  })
 
   const output={
     success:true,
