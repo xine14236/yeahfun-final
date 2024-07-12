@@ -43,6 +43,10 @@ const getBlogData= async (req)=>{
 
   conditions[1]=dateBeEn
 
+  const categories = req.query.categories ? req.query.categories.split(',') : []
+  conditions[2] =
+  categories.length > 0 ? categories.map((v) => `bc.blog_category_id='${v}'`).join(' OR ') : ''
+
 
   const cvs = conditions.filter((v) => v)
   // 2.用AMD串接所有從句
