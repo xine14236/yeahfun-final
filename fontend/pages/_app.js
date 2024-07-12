@@ -4,6 +4,8 @@ import '@/styles/globals.scss'
 import '@/styles/product.scss'
 import '@/styles/cart.scss'
 import '@/styles/loader.scss'
+import { ConfigProvider } from 'antd'
+import theme from '@/theme/themeConfig'
 // 載入購物車context
 import { CartProvider } from '@/hooks/use-cart-state'
 // 載入認証用context
@@ -27,10 +29,12 @@ export default function MyApp({ Component, pageProps }) {
     Component.getLayout || ((page) => <DefaultLayout>{page}</DefaultLayout>)
 
   return (
-    // <AuthProvider>
+    <ConfigProvider theme={theme}>
+     {/* <AuthProvider> */}
       <LoaderProvider close={2} CustomLoader={CatLoader}>
         <CartProvider>{getLayout(<Component {...pageProps} />)}</CartProvider>
       </LoaderProvider>
-    // </AuthProvider>
+     {/* </AuthProvider> */}
+    </ConfigProvider>
   )
 }

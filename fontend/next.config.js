@@ -22,6 +22,17 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
+  transpilePackages: [
+    'antd',
+    '@ant-design',
+    'rc-util',
+    'rc-pagination',
+    'rc-picker',
+    'rc-notification',
+    'rc-tooltip',
+    'rc-tree',
+    'rc-table',
+  ],
   // output: 'export', // don't use with `next start` or api route
   // distDir: 'dist',
   // avoid cors with proxy

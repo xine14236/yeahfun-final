@@ -1,0 +1,205 @@
+[
+  {
+    "id": 1,
+    "customer_id": 1,
+    "stores_id": 1,
+    "comment_star": 3,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 2,
+    "customer_id": 2,
+    "stores_id": 2,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 3,
+    "customer_id": 3,
+    "stores_id": 3,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 4,
+    "customer_id": 4,
+    "stores_id": 4,
+    "comment_star": 3,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 5,
+    "customer_id": 5,
+    "stores_id": 5,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 6,
+    "customer_id": 6,
+    "stores_id": 6,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 7,
+    "customer_id": 7,
+    "stores_id": 7,
+    "comment_star": 3,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 8,
+    "customer_id": 8,
+    "stores_id": 8,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 9,
+    "customer_id": 9,
+    "stores_id": 9,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 10,
+    "customer_id": 10,
+    "stores_id": 10,
+    "comment_star": 3,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 11,
+    "customer_id": 11,
+    "stores_id": 11,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 12,
+    "customer_id": 12,
+    "stores_id": 12,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 13,
+    "customer_id": 13,
+    "stores_id": 13,
+    "comment_star": 3,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 14,
+    "customer_id": 14,
+    "stores_id": 14,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 15,
+    "customer_id": 15,
+    "stores_id": 15,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 16,
+    "customer_id": 16,
+    "stores_id": 16,
+    "comment_star": 3,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 17,
+    "customer_id": 17,
+    "stores_id": 17,
+    "comment_star": 4,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 18,
+    "customer_id": 18,
+    "stores_id": 18,
+    "comment_star": 5,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 19,
+    "customer_id": 19,
+    "stores_id": 19,
+    "comment_star": 3,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 20,
+    "customer_id": 20,
+    "stores_id": 20,
+    "comment_star": 4,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 21,
+    "customer_id": 21,
+    "stores_id": 21,
+    "comment_star": 5,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 22,
+    "customer_id": 22,
+    "stores_id": 22,
+    "comment_star": 3,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 23,
+    "customer_id": 23,
+    "stores_id": 23,
+    "comment_star": 4,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 24,
+    "customer_id": 24,
+    "stores_id": 24,
+    "comment_star": 5,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 25,
+    "customer_id": 25,
+    "stores_id": 25,
+    "comment_star": 3,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 26,
+    "customer_id": 26,
+    "stores_id": 26,
+    "comment_star": 4,
+    "comment_content": "風景優美，設施齊全"
+  },
+  {
+    "id": 27,
+    "customer_id": 27,
+    "stores_id": 27,
+    "comment_star": 5,
+    "comment_content": "鳥語花香，適合親子活動"
+  },
+  {
+    "id": 28,
+    "customer_id": 28,
+    "stores_id": 28,
+    "comment_star": 5,
+    "comment_content": "夜晚星空美不勝收"
+  },
+  {
+    "id": 29,
+    "customer_id": 29,
+    "stores_id": 29,
+    "comment_star": 4,
+    "comment_content": "鳥語花香，適合親子活動"
+  }
+]
