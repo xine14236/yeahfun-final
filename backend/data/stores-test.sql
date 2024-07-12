@@ -96,3 +96,27 @@
      LEFT JOIN room_campsite ON store.stores_id = room_campsite.stores_id
      WHERE 1=1 AND store.address='南投縣'
      GROUP BY store.stores_id, store.name, store.address
+
+    SELECT s.*,
+       GROUP_CONCAT(t.tag_name SEPARATOR ',') AS tag_name
+        FROM store AS s
+       INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
+       INNER JOIN tag AS t ON t.tag_id = st.tag_id
+    WHERE t.tag_name IN ('草地', '遠景','獨立包區','森林系','櫻花祭','親子同遊','雨棚','小木屋','山景雲海','海景')
+    GROUP BY s.stores_id;
+
+    SELECT s.stores_id, s.name, s.address, 
+        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
+        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
+        MAX(stores_img.img_name) AS img_name, 
+        MIN(room_campsite.normal_price) AS lowest_normal_price
+        FROM store AS s
+        LEFT JOIN comment ON s.stores_id = comment.stores_id
+        LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
+        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
+        INNER JOIN tag AS t ON t.tag_id = st.tag_id
+        WHERE t.tag_name IN ('草地', '遠景','獨立包區','森林系','櫻花祭','親子同遊','雨棚','小木屋','山景雲海','海景')
+        GROUP BY s.stores_id, s.name, s.address;
+
+
