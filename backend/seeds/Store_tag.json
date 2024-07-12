@@ -1,0 +1,287 @@
+[
+  {
+    "store_tag_id": 1,
+    "stores_id": 1,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 2,
+    "stores_id": 1,
+    "tag_id": 1
+  },
+  {
+    "store_tag_id": 3,
+    "stores_id": 2,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 4,
+    "stores_id": 2,
+    "tag_id": 2
+  },
+  {
+    "store_tag_id": 5,
+    "stores_id": 3,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 6,
+    "stores_id": 3,
+    "tag_id": 3
+  },
+  {
+    "store_tag_id": 7,
+    "stores_id": 4,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 8,
+    "stores_id": 4,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 9,
+    "stores_id": 5,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 10,
+    "stores_id": 5,
+    "tag_id": 7
+  },
+  {
+    "store_tag_id": 11,
+    "stores_id": 6,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 12,
+    "stores_id": 6,
+    "tag_id": 8
+  },
+  {
+    "store_tag_id": 13,
+    "stores_id": 7,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 14,
+    "stores_id": 7,
+    "tag_id": 1
+  },
+  {
+    "store_tag_id": 15,
+    "stores_id": 8,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 16,
+    "stores_id": 8,
+    "tag_id": 2
+  },
+  {
+    "store_tag_id": 17,
+    "stores_id": 9,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 18,
+    "stores_id": 9,
+    "tag_id": 3
+  },
+  {
+    "store_tag_id": 19,
+    "stores_id": 10,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 20,
+    "stores_id": 10,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 21,
+    "stores_id": 11,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 22,
+    "stores_id": 11,
+    "tag_id": 5
+  },
+  {
+    "store_tag_id": 23,
+    "stores_id": 12,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 24,
+    "stores_id": 12,
+    "tag_id": 7
+  },
+  {
+    "store_tag_id": 25,
+    "stores_id": 13,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 26,
+    "stores_id": 13,
+    "tag_id": 8
+  },
+  {
+    "store_tag_id": 27,
+    "stores_id": 14,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 28,
+    "stores_id": 14,
+    "tag_id": 7
+  },
+  {
+    "store_tag_id": 29,
+    "stores_id": 15,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 30,
+    "stores_id": 15,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 31,
+    "stores_id": 16,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 32,
+    "stores_id": 16,
+    "tag_id": 3
+  },
+  {
+    "store_tag_id": 33,
+    "stores_id": 17,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 34,
+    "stores_id": 17,
+    "tag_id": 2
+  },
+  {
+    "store_tag_id": 35,
+    "stores_id": 18,
+    "tag_id": 9
+  },
+  {
+    "store_tag_id": 36,
+    "stores_id": 18,
+    "tag_id": 1
+  },
+  {
+    "store_tag_id": 37,
+    "stores_id": 19,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 38,
+    "stores_id": 19,
+    "tag_id": 1
+  },
+  {
+    "store_tag_id": 39,
+    "stores_id": 20,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 40,
+    "stores_id": 20,
+    "tag_id": 2
+  },
+  {
+    "store_tag_id": 41,
+    "stores_id": 21,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 42,
+    "stores_id": 21,
+    "tag_id": 3
+  },
+  {
+    "store_tag_id": 43,
+    "stores_id": 22,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 44,
+    "stores_id": 22,
+    "tag_id": 6
+  },
+  {
+    "store_tag_id": 45,
+    "stores_id": 23,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 46,
+    "stores_id": 23,
+    "tag_id": 7
+  },
+  {
+    "store_tag_id": 47,
+    "stores_id": 24,
+    "tag_id": 4
+  },
+  {
+    "store_tag_id": 48,
+    "stores_id": 24,
+    "tag_id": 8
+  },
+  {
+    "store_tag_id": 49,
+    "stores_id": 25,
+    "tag_id": 10
+  },
+  {
+    "store_tag_id": 50,
+    "stores_id": 25,
+    "tag_id": 2
+  },
+  {
+    "store_tag_id": 51,
+    "stores_id": 26,
+    "tag_id": 10
+  },
+  {
+    "store_tag_id": 52,
+    "stores_id": 26,
+    "tag_id": 3
+  },
+  {
+    "store_tag_id": 53,
+    "stores_id": 27,
+    "tag_id": 10
+  },
+  {
+    "store_tag_id": 54,
+    "stores_id": 27,
+    "tag_id": 8
+  },
+  {
+    "store_tag_id": 55,
+    "stores_id": 28,
+    "tag_id": 10
+  },
+  {
+    "store_tag_id": 56,
+    "stores_id": 29,
+    "tag_id": 7
+  },
+  {
+    "store_tag_id": 57,
+    "stores_id": 29,
+    "tag_id": 1
+  }
+]
