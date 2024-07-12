@@ -20,8 +20,29 @@ const getBlogData= async (req)=>{
 
   let birthBegin = req.query.date_begin || ''; //這日期之後出生的
   let birthEnd = req.query.date_end || ''; //這日期之前出生的
+  let birthStartCondition=''
+  let birthEndCondition=''
+  birthBegin = moment(birthBegin);
+  if(birthBegin.isValid()){
+    birthStartCondition =` b.create_at >= '${birthBegin.format('YYYY-MM-DD HH:MI:SS')}' `
+  };
+
+  birthEnd = moment(birthEnd);
+  if(birthEnd.isValid()){
+    birthEndCondition =` b.create_at <= '${birthEnd.format('YYYY-MM-DD HH:MI:SS')}' `
+  };
   
-  
+  let dateBeEn=''
+  if(birthStartCondition && birthEndCondition){
+     dateBeEn = `${birthStartCondition} AND ${birthEndCondition}`
+  }else if(birthStartCondition){
+     dateBeEn = `${birthStartCondition} `
+  }else if(birthEndCondition){
+    dateBeEn=`${birthEndCondition} `
+  }
+
+  conditions[1]=dateBeEn
+
 
   const cvs = conditions.filter((v) => v)
   // 2.用AMD串接所有從句
@@ -85,7 +106,7 @@ let keyword = req.query.keyword || ''; //相當於預設值
   const output={
     success:true,
     data:{
-      page,perPage,totalPages,totalRows,blogs:rows
+      where,page,perPage,totalPages,totalRows,blogs:rows
 
     }
   }
