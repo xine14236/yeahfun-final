@@ -9,6 +9,7 @@ import Image from 'next/image'
 export default function ECPayIndex() {
   const router = useRouter()
   const { auth } = useAuth()
+  
   // confirm回來用的，在記錄確認之後，line-pay回傳訊息與代碼，例如
   // {returnCode: '1172', returnMessage: 'Existing same orderId.'}
   // const [result, setResult] = useState({

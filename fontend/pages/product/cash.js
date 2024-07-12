@@ -92,7 +92,6 @@ export default function Cash() {
   padding: 20px;
   padding-inline-end: 100px;
 }
-
 .detailLeft {
   width: 30%;
   background-color: rgba(255, 253, 253, 0.46);
