@@ -7,13 +7,66 @@ const router = express.Router();
 
 const getBlogData= async (req)=>{
   const conditions = []
-  let keyword = req.query.keyword || '';
+  const dateFormat1 = 'YYYY-MM-DD HH:MI:SS'
+  const dateFormat2 = 'YYYY年MM月DD日 '
 
-  let birthBegin = req.query.dateBegin || ''; //這日期之後出生的
-  let birthEnd = req.query.dateEnd || ''; //這日期之前出生的
+
 
   // 分頁
   const perPage = Number(req.query.perpage) || 10; //每頁最多有幾筆
+  
+
+  // 篩選
+   const name_like = req.query.name_like || ''
+  conditions[0] = name_like ? `b.title LIKE '%${name_like}%' OR b.content LIKE '%${name_like}%'` : ''
+
+  let birthBegin = req.query.date_begin || ''; //這日期之後出生的
+  let birthEnd = req.query.date_end || ''; //這日期之前出生的
+  let birthStartCondition=''
+  let birthEndCondition=''
+  birthBegin = moment(birthBegin);
+  if(birthBegin.isValid()){
+    birthStartCondition =` b.create_at >= '${birthBegin.format(dateFormat1)}' `
+  };
+
+  birthEnd = moment(birthEnd);
+  if(birthEnd.isValid()){
+    birthEndCondition =` b.create_at <= '${birthEnd.format(dateFormat1)}' `
+  };
+  
+  let dateBeEn=''
+  if(birthStartCondition && birthEndCondition){
+     dateBeEn = `${birthStartCondition} AND ${birthEndCondition}`
+  }else if(birthStartCondition){
+     dateBeEn = `${birthStartCondition} `
+  }else if(birthEndCondition){
+    dateBeEn=`${birthEndCondition} `
+  }
+
+  conditions[1]=dateBeEn
+
+  const categories = req.query.categories ? req.query.categories.split(',') : []
+  conditions[2] =
+  categories.length > 0 ? categories.map((v) => `bc.blog_category_id='${v}'`).join(' OR ') : ''
+
+
+  const cvs = conditions.filter((v) => v)
+  // 2.用AMD串接所有從句
+  const where =
+    cvs.length > 0 ? 'WHERE' + cvs.map((v) => `( ${v} )`).join(` AND `) : ''
+  console.log(where)
+
+
+
+  const sort = req.query.sort || 'id' //預設的排序資料庫欄位
+
+  const order = req.query.order || 'asc'
+  const sortList = ['id', 'author']
+  const orderList = ['asc', 'desc']
+  let orderby = ''
+  if (orderList.includes(order) && sortList.includes(sort)) {
+    orderby = `ORDER BY b.${sort} ${order}`
+  }
 
 
   let page = +req.query.page || 1;
@@ -27,9 +80,12 @@ const getBlogData= async (req)=>{
   const offset = (page - 1) * perPage
   const limit = perPage
 
+  
+  
 
 
-  const sql0 =`SELECT count(*)  totalRows FROM blog b `;
+
+  const sql0 =`SELECT count(*)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
   const [[{totalRows}]] = await db.query(sql0);
   
   let totalPages = 0; //總頁數，預設值設定為0
@@ -49,14 +105,24 @@ let keyword = req.query.keyword || ''; //相當於預設值
 //     }
 //   };
   // 
-  const sql =`SELECT b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id WHERE 1;
-  `;
+  const sql =`SELECT   b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where}  ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
+
+  rows.forEach((r) => {
+r.date=''
+    // "JS 的Date 類型 轉換成日期格式的字串"
+    if(r.create_at){
+
+      r.create_at =moment(r.create_at).format(dateFormat1);
+      r.date=r.create_at
+      r.date=moment(r.create_at, dateFormat1).format(dateFormat2);
+    }
+  })
 
   const output={
     success:true,
     data:{
-      page,perPage,totalPages,blogs:rows
+      sql,page,perPage,totalPages,totalRows,blogs:rows
 
     }
   }
