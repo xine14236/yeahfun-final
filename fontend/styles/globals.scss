@@ -70,3 +70,135 @@ body {
 }
 
 // below is test only
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-1: #389b87;
+  --secondary-1: #929311;
+  --secondary-2: #c1c202;
+  --secondary-3: #fdaf17;
+  --secondary-4: #fffcf0;
+  --white: white;
+  --black: black;
+  --grey-800: #575757;
+  --grey-600: #757575;
+  --grey-400: #c4c4c4;
+  --grey-200: #f7f7f7;
+  --white: #ffffff;
+}
+h1 {
+  font-size: 48px;
+  font-weight: 700;
+}
+h2 {
+  font-size: 32px;
+  font-weight: 700;
+}
+h3 {
+  font-size: 28px;
+  font-weight: 700;
+}
+h4 {
+  font-size: 24px;
+  font-weight: 600;
+}
+h5 {
+  font-size: 20px;
+  font-weight: 600;
+}
+h6 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+body {
+  margin: 0;
+  font-family: 'MyInter', 'MyNotoSansTC', sans-serif;
+  background-color: var(--secondary-4);
+  line-height: normal;
+}
+.transition {
+  transition: all 0.5s ease;
+}
+.btnGreenPc {
+  padding: 10px 30px;
+  border: 1px solid var(--white);
+  background: var(--primary-1);
+  color: var(--white);
+  /* font-size: var(--p); */
+  border: 1px solid var(--white);
+}
+
+.btnGreenPc:hover {
+  border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+  background: var(--white);
+  color: var(--primary-1);
+}
+
+.btnOrangePc {
+  display: flex;
+  padding: 10px 30px;
+  background-color: var(--secondary-3);
+  color: var(--white);
+  /* font-size: var(--h5); */
+  border: var(--white);
+}
+.btnOrangePc:hover {
+  background-color: var(--white);
+  color: var(--secondary-3);
+  border: var(--secondary-3);
+}
+.btnWhitePc {
+  display: flex;
+  padding: 10px 30px;
+  background-color: var(--white);
+  color: var(--secondary-3);
+  border: var(--secondary-3);
+}
+.btnWhitePc:hover {
+  background-color: var(--secondary-3);
+  color: var(--white);
+  border: var(--white);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Luckiest Guy';
+  .titleContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .titleText {
+      color: var(--grey-800, #575757);
+      text-align: center;
+      font-family: 'MyLuckiestGuy';
+      font-size: 48px;
+      font-weight: 400;
+    }
+    p {
+      color: var(--grey-800, #575757);
+      text-align: center;
+      font-size: var(--p2);
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+}
+.card {
+  --bs-card-bg: transparent;
+  --bs-card-border-color: transparent;
+}
+Link {
+  text-decoration: none;
+}
+a {
+  text-decoration: none;
+}
