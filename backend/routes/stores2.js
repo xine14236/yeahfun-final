@@ -62,7 +62,7 @@ router.get('/', async function (req, res) {
   // 分頁 (查詢字串QS: page=2&perpage=5)
   // 預設值 page = 1, perpage = 10
   const page = Number(req.query.page) || 1
-  const perpage = Number(req.query.perpage) || 10
+  const perpage = Number(req.query.perpage) || 12
   const offset = (page - 1) * perpage
   const limit = perpage
 

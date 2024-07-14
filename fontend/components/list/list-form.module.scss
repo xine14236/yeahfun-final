@@ -1,0 +1,77 @@
+.searchBar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: var(--secondary-3, #fdaf17);
+  /* border-radius: 10px; */
+
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+.searchBarSort {
+  display: none;
+}
+.productSearchForm {
+  display: flex;
+  padding: 15px 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  align-self: stretch;
+  color: var(--white);
+}
+.goWhereTeam,
+.calendarTeam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (max-width: 576px) {
+  .searchBarSort {
+    display: flex;
+  }
+  .sort {
+    display: none;
+  }
+  .searchBar {
+    justify-content: start;
+  }
+  .productSearchForm {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+    padding: 40px 30px;
+  }
+
+  .calendarTeam,
+  .goWhereTeam {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+  .searchBarSort {
+    flex-direction: column;
+    display: flex;
+  }
+  .searchBarSort p,
+  .searchBarSort label {
+    font-size: var(--h5);
+    font-weight: var(--h4h5-weight);
+  }
+  .orderByNone {
+    display: flex;
+    margin-block: 10px;
+    justify-content: end;
+    gap: 5px;
+  }
+  .keyword,
+  .price {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
