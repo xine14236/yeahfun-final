@@ -1,5 +1,3 @@
-//next/pages/cs-0708/product/list.js
-
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -50,22 +48,20 @@ export default function List() {
   return (
     <>
       <h1>商品列表頁</h1>
-      <ul>
-        {products.map((v, i) => {
-          return (
-            <li key={v.id}>
-              <p>{v.name}</p>
-              <p>{v.address}</p>
-              <p>{v.stores_id}</p>
-              <p>{v.my_tag_id}</p>
-              <p>{v.tag_name}</p>
-              <p>{v.comment_star}</p>
-              <p>{v.lowest_normal_price}</p>
-              <p>{v.img_name}</p>
-            </li>
-          )
-        })}
-      </ul>
+      {products.map((v, i) => {
+        return (
+          <div className="card" key={v.id}>
+            <p>{v.name}</p>
+            <p>{v.address}</p>
+            <p>{v.stores_id}</p>
+            <p>{v.my_tag_id}</p>
+            <p>{v.tag_name}</p>
+            <p>{v.comment_star}</p>
+            <p>{v.lowest_normal_price}</p>
+            <p>{v.img_name}</p>
+          </div>
+        )
+      })}
     </>
   )
 }
