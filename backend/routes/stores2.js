@@ -8,16 +8,17 @@ import db from '#configs/mysql.js'
 router.get('/', async function (req, res) {
   // where條件 ----- START
   const conditions = []
+  const conditions2 = []
 
   // 分每個條件加入到conditions陣列
 
   // 名稱 關鍵字(查詢字串QS: name_like=sa)
   const name_like = req.query.name_like || ''
-  conditions[0] = name_like ? `name LIKE '%${name_like}%'` : ''
+  conditions[0] = name_like ? `s.name LIKE '%${name_like}%'` : ''
 
   // 地點搜尋
   const location = req.query.location || ''
-  conditions[1] = location ? `store.address='${location}'` : ''
+  conditions[1] = location ? `s.address='${location}'` : ''
 
   // 標籤搜尋
   const tag = req.query.tag || ''
@@ -27,14 +28,18 @@ router.get('/', async function (req, res) {
   const lowest_normal_price_gte = Number(req.query.lowest_normal_price_gte) || 0 // 最小價格
   const lowest_normal_price_lte =
     Number(req.query.lowest_normal_price_lte) || 10000 // 最大價格
-  conditions[3] = `lowest_normal_price BETWEEN ${lowest_normal_price_gte} AND ${lowest_normal_price_lte}`
+  conditions2[0] = `lowest_normal_price BETWEEN ${lowest_normal_price_gte} AND ${lowest_normal_price_lte}`
 
   // 組合成where從句
   // 1. 過濾空白的條件
   const cvs = conditions.filter((v) => v)
+  const cvs2 = conditions2.filter((v) => v)
+
   // 2. 用AND串接所有從句
   const where =
     cvs.length > 0 ? 'WHERE ' + cvs.map((v) => `( ${v} )`).join(` AND `) : ''
+
+  const having = cvs2.length > 0 ? 'HAVING ' + cvs2.map((v) => `( ${v} )`) : ''
 
   console.log(where)
 
@@ -62,62 +67,46 @@ router.get('/', async function (req, res) {
   const limit = perpage
 
   const [rows] = await db.query(
-    `SELECT 
-        store.stores_id, 
-        store.name, 
-        store.address, 
-        st.tag_id AS my_tag_id,
-        t.tag_name,
-        ROUND(c.comment_star, 1) AS comment_star, 
-        si.img_name,
-        rc.lowest_normal_price
-      FROM 
-        store
-      LEFT JOIN 
-        store_tag st ON store.stores_id = st.stores_id
-      LEFT JOIN 
-        tag t ON st.tag_id = t.tag_id
-      LEFT JOIN 
-        (SELECT stores_id, AVG(comment_star) AS comment_star
-         FROM comment
-         GROUP BY stores_id) c ON store.stores_id = c.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MAX(img_name) AS img_name
-         FROM stores_img
-         GROUP BY stores_id) si ON store.stores_id = si.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-         FROM room_campsite
-         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id
-         ${where}
+    `        SELECT s.stores_id, s.name, s.address, 
+       GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
+       ROUND(AVG(comment.comment_star), 1) AS comment_star, 
+       MAX(stores_img.img_name) AS img_name, 
+       MIN(room_campsite.normal_price) AS lowest_normal_price
+        FROM store AS s
+        LEFT JOIN comment ON s.stores_id = comment.stores_id
+        LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
+        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
+        INNER JOIN tag AS t ON t.tag_id = st.tag_id
+        ${where}
+        GROUP BY s.stores_id, s.name, s.address
+        ${having}
          ${orderby} 
-          LIMIT ${limit} OFFSET ${offset};`
+        LIMIT ${limit} OFFSET ${offset};
+        `
   )
   const stores = rows
 
   // 計算在此條件下總共多少筆(WHERE)
   const [rows2] = await db.query(
     `SELECT 
-        COUNT(*) AS count
-      FROM 
-        store
-      LEFT JOIN 
-        store_tag st ON store.stores_id = st.stores_id
-      LEFT JOIN 
-        tag t ON st.tag_id = t.tag_id
-      LEFT JOIN 
-        (SELECT stores_id, AVG(comment_star) AS comment_star
-         FROM comment
-         GROUP BY stores_id) c ON store.stores_id = c.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MAX(img_name) AS img_name
-         FROM stores_img
-         GROUP BY stores_id) si ON store.stores_id = si.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-         FROM room_campsite
-         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id
-         ${where};`
+    COUNT(*) AS count
+    FROM (
+        SELECT 
+            s.stores_id
+        FROM 
+            store AS s
+            LEFT JOIN comment ON s.stores_id = comment.stores_id
+            LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
+            LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+            INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
+            INNER JOIN tag AS t ON t.tag_id = st.tag_id
+        GROUP BY 
+            s.stores_id, s.name, s.address
+        HAVING
+            COUNT(DISTINCT CASE WHEN room_campsite.normal_price BETWEEN ${lowest_normal_price_gte} AND ${lowest_normal_price_lte} THEN s.stores_id END) > 0
+    ) AS subquery;
+     `
   )
 
   const { count } = rows2[0]
@@ -170,7 +159,7 @@ router.get('/:id', async function (req, res) {
       LEFT JOIN 
         (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
          FROM room_campsite
-         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id
+         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id'
         WHERE store.stores_id = ?`,
     [id]
   )
