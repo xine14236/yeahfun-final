@@ -2,74 +2,67 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // 組合以下區塊
-import Menubar from './menubar'
-import SearchForm from './search-form'
-import Toolbar from './toolbar'
-import ToturialPanel from './tutorial-panel'
+import MemberBar from './member-bar'
 
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
+import styles from '@/components/layout/default-layout/my-navbar/my-navbar.module.scss'
+import GreenLogo from '@/components/icons/green-logo'
+
 export default function MyNavbar() {
-  // currentRoute是用來套用active樣式(目前區域對應選單項目)，需傳入MainMenu中
-  const router = useRouter()
-  const currentRoute = router.pathname
-
-  // 控制Off
-  const [show, setShow] = useState(false)
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg fixed-top navbar-light bg-light">
-          <div className="container-fluid">
-            <Link className="navbar-brand" href="/">
-              <Image src="/next.svg" alt="" width={100} height={24} priority />
-            </Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasNavbar"
-              aria-controls="offcanvasNavbar"
+      <nav
+        className={`navbar navbar-expand-lg navbar-light py-3 py-sm-3 ${styles.navbar}`}
+      >
+        <GreenLogo width={90} className={styles.homeLogo} />
+
+        <div className={`container-fluid ${styles.myContainer}`}>
+          <Link className={` ${styles.HomepageName}`} href="#/">
+            <h3>YeahFun</h3>
+          </Link>
+          <button
+            className={`navbar-toggler ${styles.navbarToggler}`}
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span
+              className={`navbar-toggler-icon ${styles.navbarTogglerIcon}`}
+            />
+          </button>
+          <div
+            className={`collapse navbar-collapse ${styles.navbarCollapse}`}
+            id="navbarSupportedContent"
+          >
+            <ul
+              className={`navbar-nav me-auto mb-0 py-3 py-sm-0 gap-2 gap-sm-4 ${styles.navMenu}`}
             >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div
-              className="offcanvas offcanvas-end"
-              tabIndex="-1"
-              id="offcanvasNavbar"
-              aria-labelledby="offcanvasNavbarLabel"
-            >
-              <div className="offcanvas-header">
-                <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-                  <Image
-                    src="/next.svg"
-                    alt=""
-                    width={80}
-                    height={20}
-                    priority
-                  />
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="offcanvas-body">
-                <Menubar currentRoute={currentRoute} />
-                <SearchForm />
-                <Toolbar currentRoute={currentRoute} handleShow={handleShow} />
-              </div>
-            </div>
+              <li className={`nav-item ${styles.navItem}`}>
+                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                  <h3>Action</h3>
+                </Link>
+              </li>
+              <li className={`nav-item ${styles.navItem}`}>
+                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                  <h3>List</h3>
+                </Link>
+              </li>
+              <li className={`nav-item ${styles.navItem}`}>
+                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                  <h3>Blog</h3>
+                </Link>
+              </li>
+            </ul>
+            <MemberBar />
           </div>
-        </nav>
-        <ToturialPanel show={show} handleClose={handleClose} />
-      </header>
+        </div>
+      </nav>
+
       {/* hover動畫(下底線)，需要覆蓋原本global.scss樣式 */}
       <style global jsx>{`
         @media screen and (min-width: 992px) {
@@ -95,7 +88,7 @@ export default function MyNavbar() {
           right: 0;
           margin: 0 auto;
           content: '';
-          background-color: black;
+          background-color: var(--secondary-3);
           width: 0%;
           height: 2px;
           transition: all 0.5s;
