@@ -1,0 +1,92 @@
+.searchBar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
+  // background: var(--secondary-3, #ffb998);
+  /* border-radius: 10px; */
+  
+
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+.searchBarSort {
+  display: none;
+}
+.productSearchForm {
+  display: flex;
+  padding: 15px 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  align-self: stretch;
+  color: var(--white);
+}
+.goWhereTeam,
+.calendarTeam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.btnGreenPc {
+  padding: 10px 30px;
+  border: 1px solid var(--white);
+  background: var(--primary-1);
+  color: var(--white);
+
+  border: 1px solid var(--white);
+}
+
+.btnGreenPc:hover {
+  border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+  background: var(--white);
+  color: var(--primary-1);
+}
+@media (max-width: 576px) {
+  .searchBarSort {
+    display: flex;
+  }
+  .sort {
+    display: none;
+  }
+  .searchBar {
+    justify-content: start;
+  }
+  .productSearchForm {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+    padding: 40px 30px;
+  }
+
+  .calendarTeam,
+  .goWhereTeam {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+  .searchBarSort {
+    flex-direction: column;
+    display: flex;
+  }
+  .searchBarSort p,
+  .searchBarSort label {
+    font-size: var(--h5);
+    font-weight: var(--h4h5-weight);
+  }
+  .orderByNone {
+    display: flex;
+    margin-block: 10px;
+    justify-content: end;
+    gap: 5px;
+  }
+  .keyword,
+  .price {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
