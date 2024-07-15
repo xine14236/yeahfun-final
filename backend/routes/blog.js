@@ -105,7 +105,11 @@ let keyword = req.query.keyword || ''; //相當於預設值
 //     }
 //   };
   // 
-  const sql =`SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names FROM blog b INNER JOIN blog_category bc ON b.id=bc.blog_id INNER join blog_category_name bcn on bc.blog_category_id= bcn.id ${where} 
+  const sql =`SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names,COUNT(fb.blog_id) AS favorite_count,COUNT(lb.blog_id) AS likes_count
+   FROM blog b INNER JOIN blog_category bc ON b.id=bc.blog_id 
+   INNER join blog_category_name bcn on bc.blog_category_id= bcn.id 
+   Left join favorite_blog fb ON b.id = fb.blog_id 
+   Left join likes_blog lb ON b.id = lb.blog_id ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
 
