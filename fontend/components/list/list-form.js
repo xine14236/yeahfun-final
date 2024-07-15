@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '@/components/list/list-form.module.scss'
-import { Select, Space, DatePicker } from 'antd'
+import { Select, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
 
 export default function ListForm() {
@@ -77,9 +77,7 @@ export default function ListForm() {
               </label>
             </div>
           </div>
-          <button className={`${styles.btnGreenPc} ${styles.transition}`}>
-            開始探索
-          </button>
+          <button className={`btnGreenPc styles.transition`}>開始探索</button>
         </form>
       </div>
     </>

@@ -26,7 +26,20 @@
   align-items: center;
   gap: 20px;
 }
+.btnGreenPc {
+  padding: 10px 30px;
+  border: 1px solid var(--white);
+  background: var(--primary-1);
+  color: var(--white);
 
+  border: 1px solid var(--white);
+}
+
+.btnGreenPc:hover {
+  border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+  background: var(--white);
+  color: var(--primary-1);
+}
 @media (max-width: 576px) {
   .searchBarSort {
     display: flex;

@@ -36,7 +36,7 @@ export default function HomeNavbar() {
             id="navbarSupportedContent"
           >
             <ul
-              className={`navbar-nav me-auto mb-0 py-3 py-sm-0 gap-2 gap-sm-4 ${styles.navMenu}`}
+              className={`navbar-nav me-auto mb-0 py-3 py-sm-0 gap-2 gap-sm-5 ${styles.navMenu}`}
             >
               <li className={`nav-item ${styles.navItem}`}>
                 <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
@@ -61,7 +61,8 @@ export default function HomeNavbar() {
 
       {/* hover動畫(下底線)，需要覆蓋原本global.scss樣式 */}
       <style global jsx>{`
-        @media screen and (min-width: 992px) {
+         {
+          /* @media screen and (min-width: 992px) {
           .navbar {
             padding: 0;
           }
@@ -71,6 +72,7 @@ export default function HomeNavbar() {
           .navbar .navbar-nav .nav-item {
             margin: 0 1em;
           }
+        } */
         }
 
         .navbar .navbar-nav .nav-item {
@@ -79,7 +81,7 @@ export default function HomeNavbar() {
 
         .navbar .navbar-nav .nav-item::after {
           position: absolute;
-          bottom: 0;
+          bottom: -5px;
           left: 0;
           right: 0;
           margin: 0 auto;

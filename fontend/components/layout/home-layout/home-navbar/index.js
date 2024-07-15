@@ -2,22 +2,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // 組合以下區塊
-import MemberBar from './member-bar'
+import styles from '@/components/layout/home-layout/home-navbar/navbar.module.scss'
+import HomeMemberBar from './home-member-bar'
 
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-import styles from '@/components/layout/default-layout/my-navbar/my-navbar.module.scss'
-import GreenLogo from '@/components/icons/green-logo'
-
-export default function MyNavbar() {
+export default function HomeNavbar() {
   return (
     <>
       <nav
         className={`navbar navbar-expand-lg navbar-light py-3 py-sm-3 ${styles.navbar}`}
       >
-        <GreenLogo width={90} className={styles.homeLogo} />
-
         <div className={`container-fluid ${styles.myContainer}`}>
           <Link className={` ${styles.HomepageName}`} href="#/">
             <h3>YeahFun</h3>
@@ -58,7 +54,7 @@ export default function MyNavbar() {
                 </Link>
               </li>
             </ul>
-            <MemberBar />
+            <HomeMemberBar />
           </div>
         </div>
       </nav>

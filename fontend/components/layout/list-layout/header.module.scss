@@ -1,0 +1,22 @@
+.kv {
+  flex-direction: column;
+  width: 100%;
+  height: 300px;
+  background: url(/images/homepage/kv.jpg) lightgray 50% / cover no-repeat;
+  background-blend-mode: multiply;
+}
+.whiteLogo {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 90px;
+}
+@media (max-width: 576px) {
+  .kv {
+    height: 0;
+    background: transparent;
+  }
+  .whiteLogo {
+    display: none;
+  }
+}

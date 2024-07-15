@@ -22,7 +22,7 @@
 
 .navA::after {
   position: absolute;
-  bottom: 0;
+  bottom: -5px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -36,12 +36,11 @@
   width: 100%;
 }
 
-
 @media (max-width: 576px) {
-.iconOpensuse {
-  display: none;
-}
-.iconShoppingCart {
-  display: none;
-}
+  .iconOpensuse {
+    display: none;
+  }
+  .iconShoppingCart {
+    display: none;
+  }
 }

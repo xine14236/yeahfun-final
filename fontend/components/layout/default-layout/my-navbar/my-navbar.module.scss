@@ -11,12 +11,12 @@
 .HomepageName {
   color: var(--secondary-3);
   position: relative;
-  margin-right: 25px;
+  margin-right: 3rem;
 }
 
 .HomepageName::after {
   position: absolute;
-  bottom: 0;
+  bottom: -5px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -36,8 +36,6 @@
 .navMenuA:hover {
   color: var(--secondary-3);
 }
-
-
 
 .homeLogo {
   position: absolute;

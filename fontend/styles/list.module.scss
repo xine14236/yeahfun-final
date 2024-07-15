@@ -1,15 +1,14 @@
-
-.pageBtn{
+.pageBtn {
   display: flex;
   justify-content: center;
 }
 
-.listContainer{
+.listContainer {
   padding: 0px 60px;
 }
 
-
-.section02,.myCardList {
+.section02,
+.myCardList {
   width: 100%;
   display: flex;
   padding: 80px 0;
@@ -19,8 +18,7 @@
   gap: 30px;
   align-self: stretch;
 }
-
-.sort{
+.sort {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -30,19 +28,23 @@
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.sort p,.sort label{
+.sort p,
+.sort label {
   color: var(--white);
   font-weight: 600;
 }
-.types{
+.orderBys {
   display: flex;
   flex-direction: column;
-
 }
-.price input{
+.types {
+  display: flex;
+  flex-direction: column;
+}
+.price input {
   width: 100%;
 }
-.keyword input{
+.keyword input {
   width: 100%;
 }
 /* .cards {
@@ -52,18 +54,16 @@
   gap: 30px;
   align-self: stretch;
 } */
-.orderByNone{
+.orderByNone {
   display: none;
 }
 .card {
   --bs-card-bg: transparent;
   --bs-card-border-color: transparent;
-  
 }
 .cardImage {
   border-radius: 10px;
   width: 100%;
-  
 }
 
 .cardBody {
@@ -112,6 +112,12 @@
   border-radius: 10px;
   background: var(--primary-1, #389b87);
 }
+.cardTitle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
 
 .myCardList .card .cardTitle {
   overflow: hidden;
@@ -125,17 +131,17 @@
 }
 
 @media (max-width: 576px) {
-  .searchBarSort{
+  .searchBarSort {
     display: flex;
   }
-  .sort{
+  .sort {
     display: none;
   }
 
-  .searchBar{
+  .searchBar {
     justify-content: start;
   }
-  .productSearchForm{
+  .productSearchForm {
     display: flex;
     flex-direction: column;
     margin-top: 30px;
@@ -145,29 +151,36 @@
     padding: 40px 30px;
   }
 
-  .calendarTeam,.goWhereTeam{
+  .calendarTeam,
+  .goWhereTeam {
     flex-direction: column;
     justify-content: start;
     align-items: start;
   }
-  .searchBarSort{
+  .searchBarSort {
     flex-direction: column;
     display: flex;
   }
-  .searchBarSort p,.searchBarSort label {
+  .searchBarSort p,
+  .searchBarSort label {
     font-size: var(--h5);
     font-weight: var(--h4h5-weight);
   }
-  .orderByNone{
+  .orderByNone {
     display: flex;
     margin-block: 10px;
     justify-content: end;
     gap: 5px;
   }
-  .keyword,.price{
+  .keyword,
+  .price {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  
+
+  .listContainer {
+    width: 100%;
+    padding: 0px 15px;
+  }
 }
