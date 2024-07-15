@@ -62,13 +62,13 @@
 
 /* filter */
 
-.filterControl1 {
+/* .filterControl1 {
   padding-left: 20%;
   padding-right: 5%;
   @media (max-width: 992px) {
     padding-left: 5%;
   }
-}
+} */
 .filterWidth1 {
   margin-top: 20px;
   width: 100%;

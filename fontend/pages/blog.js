@@ -94,6 +94,21 @@ console.log(resData)
               className={`col-12 col-sm-4 col-lg-5 border d-flex flex-column  ${styles.filterControl1}`}
               style={{ height: 100 }}
             >
+            <div className="row">
+            <div className="col-6">
+
+            <select>
+          <option value="id,asc">依id排序(由小至大)</option>
+          <option value="id,desc">依id排序(由大至小)</option>
+          <option value="price,asc">依價格排序(由低至高)</option>
+          <option value="price,desc">依價格排序(由高至低)</option>
+        </select>
+            </div>
+       
+
+
+            </div>
+           
               <input
                 type="text"
                 className={`form-control  ${styles.filterWidth1}`}
