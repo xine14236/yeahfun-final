@@ -143,9 +143,95 @@ const result = await getBlogData(req)
   res.json(result)
 })
 
+router.get("/fav/:b_id", async (req,res)=>{
+  const output={
+    success:false,
+    action:'',
+    error:'',
+    code:0,
+  };
+  // 1.檢查用戶的授權
+  // if(!req.my_jwt?.id){
+  //   output.error = "沒有授權";
+  //   output.code=402;
+  //   return res.status(403).json(output)
+  // }
+  // 2.有沒有這個項目的資料
+  const sql =`SELECT * FROM blog WHERE id=?`;
+  const [rows]=await db.query(sql,[req.params.b_id]);
+  if(rows.length<1){
+    output.error = "沒有這個項目";
+    output.code=405;
+    return res.status(403).json(output)
+  }
+  // 3.該項有沒有加入過
+  const sql2 = `SELECT id FROM favorite_blog WHERE customer_id=? AND blog_id=?`;
+  // ********************先用req給
+  const [rows2]= await db.query(sql2,[req.query.customer, req.params.b_id]);
+  let result;
+  if(rows2.length<1){
+    // 沒有加入過
+    output.action='add';
+    const sql3=`INSERT INTO favorite_blog (customer_id, blog_id) VALUES (?, ?)`;
+    [result]= await db.query(sql3,[req.query.customer, req.params.b_id]);
+  }else{
+    // 已經加入了
+    output.action='remove'
+    const sql4=`DELETE FROM favorite_blog WHERE id=?`;
+    [result]= await db.query(sql4,[rows2[0].id]);
+  }
+  output.success=!!result.affectedRows;
+  
+  res.json(output);
+    })
+
+    router.get("/like/:b_id", async (req,res)=>{
+      const output={
+        success:false,
+        action:'',
+        error:'',
+        code:0,
+      };
+      // 1.檢查用戶的授權
+      // if(!req.my_jwt?.id){
+      //   output.error = "沒有授權";
+      //   output.code=402;
+      //   return res.status(403).json(output)
+      // }
+      // 2.有沒有這個項目的資料
+      const sql =`SELECT * FROM blog WHERE id=?`;
+      const [rows]=await db.query(sql,[req.params.b_id]);
+      if(rows.length<1){
+        output.error = "沒有這個項目";
+        output.code=405;
+        return res.status(403).json(output)
+      }
+      // 3.該項有沒有加入過
+      const sql2 = `SELECT id FROM likes_blog WHERE customer_id=? AND blog_id=?`;
+      // ********************先用req給
+      const [rows2]= await db.query(sql2,[req.query.customer, req.params.b_id]);
+      let result;
+      if(rows2.length<1){
+        // 沒有加入過
+        output.action='add';
+        const sql3=`INSERT INTO likes_blog (customer_id, blog_id) VALUES (?, ?)`;
+        [result]= await db.query(sql3,[req.query.customer, req.params.b_id]);
+      }else{
+        // 已經加入了
+        output.action='remove'
+        const sql4=`DELETE FROM likes_blog WHERE id=?`;
+        [result]= await db.query(sql4,[rows2[0].id]);
+      }
+      output.success=!!result.affectedRows;
+      
+      res.json(output);
+        })
+
 
 router.post("/uploads",upload.array("photos",10),(req,res) => {
   res.json(req.files);
 })
+
+
 
 export default router;
