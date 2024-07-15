@@ -8,6 +8,7 @@ const { RangePicker } = DatePicker;
 
 export default function Blog() {
 
+
   const [blogs, setBlogs] = useState([])
   const [total, setTotal] = useState(0) //總筆數
   const [pageCount, setPageCount] = useState(0) //總頁數
@@ -17,6 +18,17 @@ export default function Blog() {
    // 排序
    const [sort, setSort] = useState('id')
    const [order, setOrder] = useState('asc')
+
+   const [selectedRange, setSelectedRange] = useState([null, null]);
+
+   const handleRangeChange = (dates, dateStrings) => {
+    console.log('Selected Range:', dates);
+    setSelectedRange(dates); // 更新状态变量
+    if(dates){
+
+      console.log(dates[0].$d)
+    }
+  };
 
   const getLists = async (params = {}) => {
     const baseUrl = 'http://localhost:3005/api/blog'
@@ -94,7 +106,7 @@ console.log(resData)
               className="col-12 col-sm-6  col-lg-5 border d-flex justify-content-evenly align-items-center"
               style={{ height: 100 }}
             >
-               <RangePicker showTime />
+               <RangePicker showTime  onChange={handleRangeChange}/>
             </div>
             <div
               className="col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center "
