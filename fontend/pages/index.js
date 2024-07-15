@@ -3,7 +3,7 @@ import Image from 'next/image'
 import PlaceholderText from '@/components/common/placeholder-text'
 import styles from '@/styles/list.module.scss'
 import HomeLayout from '@/components/layout/home-layout'
-import ListProduct from '@/components/list/list-product'
+// import ListProduct from '@/components/list/list-product'
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
         <div className="container">
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
-              <ListProduct />
+              {/* <ListProduct /> */}
             </div>
           </div>
         </div>
