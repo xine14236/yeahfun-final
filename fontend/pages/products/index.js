@@ -8,7 +8,7 @@ import Image from 'next/image'
 import ListSort from '@/components/list/list-sort'
 import ListProduct from '@/components/list/list-product'
 
-export default function List() {
+export default function Products() {
   return (
     <>
       <div className={`${styles.myCardList} ${styles.section02}`}>
@@ -56,6 +56,6 @@ export default function List() {
   )
 }
 
-List.getLayout = function (page) {
+Products.getLayout = function (page) {
   return <ListLayout>{page}</ListLayout>
 }

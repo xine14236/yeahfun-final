@@ -40,42 +40,56 @@ export default function ListProduct() {
     getProducts(params)
   }, [page, perpage])
 
+  // 將陣列分成小塊的函數
+  const chunkArray = (array, size) => {
+    const chunkedArr = []
+    for (let i = 0; i < array.length; i += size) {
+      chunkedArr.push(array.slice(i, i + size))
+    }
+    return chunkedArr
+  }
+
+  // 將 products 分成每組三個的小塊
+  const productChunks = chunkArray(products, 3)
+
   return (
     <>
       <div className="col-sm-10 col-12">
-        <div className="row">
-          {products.map((v) => (
-            <div className="col-12 col-sm-4" key={v.id}>
-              <div className={`card ${styles.productCard}`}>
-                <Link href="#">
-                  <img
-                    src="/images/homepage/tent13.jpg"
-                    className={styles.cardImage}
-                    alt="tents"
-                  />
-                </Link>
-                <div className={`card-body ${styles.cardBody}`}>
-                  <div className={styles.cardTags}>
-                    <div className={styles.cardTagLocation}>
-                      <Location className={styles.iconLocation} />
-                      <p>{v.address}</p>
+        {productChunks.map((chunk, chunkIndex) => (
+          <div className="row" key={chunkIndex}>
+            {chunk.map((v) => (
+              <div className="col-12 col-sm-4" key={v.id}>
+                <div className={`card ${styles.productCard}`}>
+                  <Link href="#">
+                    <img
+                      src="/images/homepage/tent13.jpg"
+                      className={styles.cardImage}
+                      alt="tents"
+                    />
+                  </Link>
+                  <div className={`card-body ${styles.cardBody}`}>
+                    <div className={styles.cardTags}>
+                      <div className={styles.cardTagLocation}>
+                        <Location className={styles.iconLocation} />
+                        <p>{v.address}</p>
+                      </div>
+                      <div className={styles.cardTagStar}>
+                        <Star className={styles.iconStar} />
+                        <p>{v.comment_star}</p>
+                      </div>
                     </div>
-                    <div className={styles.cardTagStar}>
-                      <Star className={styles.iconStar} />
-                      <p>{v.comment_star}</p>
+                    <div className={`card-title ${styles.cardTitle}`}>
+                      <h4>
+                        <Link href="#">{v.name}</Link>
+                      </h4>
+                      <h6>${v.lowest_normal_price}</h6>
                     </div>
-                  </div>
-                  <div className={`card-title ${styles.cardTitle}`}>
-                    <h4>
-                      <Link href="#">{v.name}</Link>
-                    </h4>
-                    <h6>${v.lowest_normal_price}</h6>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ))}
       </div>
       <div aria-label="Page navigation example" className={styles.pageBtn}>
         <ul className="pagination">
