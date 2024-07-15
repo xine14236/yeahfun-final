@@ -87,6 +87,7 @@ console.log(resData)
   return (
     <>
       <div className="container">
+     
         <div id="blogFilter">
           <div className="row  ">
             <div
@@ -131,25 +132,28 @@ console.log(resData)
                 >
                   <div className="row g-0 ">
                     <div
-                      className={`col-md-5 d-flex flex-column ${
+                      className={`col-md-5 d-flex flex-column my-auto ${
                         i % 2 === 1 ? `${styles.order1}` : ''
                       } `}
                     >
-                      <img
-                        src="https://via.placeholder.com/300x200"
+                      <Image
+                        src='http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp'
                         className="img-fluid"
                         alt="..."
+                        width={400}
+                        height={350}
+                        style={{ width: '100%', height: 'auto',minHeight:'280px', objectFit: 'cover' }}
                       />
                     </div>
                     <div className="col-md-7 d-flex flex-column">
                       <div className={`card-body ${styles.order0}`}>
                         <div className="d-flex flex-column">
                           <h3
-                            className={`card-title ${styles.color1} ${styles.textTruncate2}`}
+                            className={`card-title mt-md-3 ${styles.color1} ${styles.textTruncate2}`}
                           >
                            {v.title}
                           </h3>
-                          <div className="d-flex justify-content-between">
+                          <div className="d-flex justify-content-between ">
                             <p className="card-text ">
                               <small className="text-muted">
                                { v.date}
@@ -160,18 +164,18 @@ console.log(resData)
                               <span className="ms-3">{v.likes_count}</span>
                             </div>
                           </div>
-                          <p className="card-text text-muted">
+                          <p className="card-text text-muted mb-md-5">
                             <small className="text-muted">{v.author}</small>
                           </p>
                           <div
-                            className={`card-content ${styles.textTruncate4}`}
+                            className={`card-content mb-md-3 ${styles.textTruncate4}`}
                           >
                             <h5 className="card-text">
                             { stripHtmlTags(v.content).replace(/\\r\\n/g, '').replace(/\s+/g, '')}
                             </h5>
                           </div>
                         </div>
-                        <a href="" className="text-decoration-none text-end">
+                        <a href="" className="text-decoration-none text-end ">
                           <p className={`card-text ${styles.color2}`}>
                             查看更多
                           </p>
