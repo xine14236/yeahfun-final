@@ -72,16 +72,65 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
             <div className="campInfo" style={{ border: '1px solid orange' }}>
               <div className="" style={{ border: '1px solid yellow' }}>
                 <h5 className="card-title">{detail.name}</h5>
+
                 <button
-                  className="btn-square"
-                  style={{
-                    borderRadius: 10,
-                    border: '1px solid var(--primary-1, #389B87)',
-                    background: '#FFF',
-                  }}
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  style={
+                    {
+                      // borderRadius: 10,
+                      // border: '1px solid var(--primary-1, #389B87)',
+                      // background: '#FFF',
+                    }
+                  }
                 >
                   詳細內容
                 </button>
+                {/* Modal */}
+                <div
+                  className="modal fade  modal-xl "
+                  id="exampleModal"
+                  tabIndex={-1}
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          {detail.name}
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        />
+                      </div>
+                      <div className="modal-body">
+                        <div className="modal-body">
+                          <div className="container-fluid">
+                            <div className="row">
+                              <div className="col-md-8">
+                                <img
+                                  className="w-100"
+                                  src={`/productDetail/${detail.img}`}
+                                />
+                              </div>
+                              <div className="col-md-4">
+                                <div>尺寸：{detail.square_meters}</div>
+                                <div>詳細介紹：</div>
+                                <div>{detail.introduction}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="campPrice" style={{ border: '1px solid yellow' }}>
