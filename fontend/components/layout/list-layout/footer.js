@@ -1,4 +1,4 @@
-import styles from '@/components/layout/default-layout/my-footer.module.scss'
+import styles from '@/components/layout/list-layout/footer.module.scss'
 import Image from 'next/image'
 
 // icons
@@ -7,7 +7,7 @@ import FacebookLogo from '@/components/icons/facebook-logo'
 import IgLogo from '@/components/icons/ig-logo'
 import MailLogo from '@/components/icons/mail-logo'
 
-export default function MyFooter() {
+export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={`${styles.containerFluid} container-fluid`}>
