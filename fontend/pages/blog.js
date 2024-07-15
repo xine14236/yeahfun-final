@@ -1,10 +1,65 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '@/styles/blog.module.css'
 import heart from '@/assets/heart.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 
 export default function Blog() {
+
+  const [blogs, setBlogs] = useState([])
+  const [total, setTotal] = useState(0) //總筆數
+  const [pageCount, setPageCount] = useState(0) //總頁數
+  const [page, setPage] = useState(1)
+  const [perpage, setPerPage] = useState(10)
+
+   // 排序
+   const [sort, setSort] = useState('id')
+   const [order, setOrder] = useState('asc')
+
+  const getLists = async (params = {}) => {
+    const baseUrl = 'http://localhost:3005/api/blog'
+    // 轉換params為查詢字串(預設字串)
+    const searchParams = new URLSearchParams(params)
+    const qs = searchParams.toString()
+    const url = `${baseUrl}?${qs}`
+
+    // 使用tyy-catch語句，真的要執行，不同的電腦上，讓和伺服器連線的程式能作錯誤處理
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+
+      if (resData.status === 'success') {
+        setPageCount(resData.data.pageCount)
+        setTotal(resData.data.total)
+        if (Array.isArray(resData.data.blogs)) {
+          setBlogs(resData.data.blogs)
+        }
+      }
+
+      // 設定到狀態中 ===>進入update階段，觸發重新渲染(re-render)，呈現資料
+      // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+
+
+
+  useEffect(() => {
+    //  建立搜尋參數物件
+    const params = {
+      page,
+      perpage,
+      sort,
+      order,
+    }
+    // 向伺服器fetch
+    getLists(params)
+  }, [])
+
+
+  
   return (
     <>
       <div className="container">

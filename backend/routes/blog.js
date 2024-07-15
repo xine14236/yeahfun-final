@@ -107,8 +107,8 @@ let keyword = req.query.keyword || ''; //相當於預設值
   // 
   const sql =`SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count
-   FROM blog b INNER JOIN blog_category bc ON b.id=bc.blog_id 
-   INNER join blog_category_name bcn on bc.blog_category_id= bcn.id 
+   FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
+   Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
