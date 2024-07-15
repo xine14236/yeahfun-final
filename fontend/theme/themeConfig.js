@@ -3,7 +3,12 @@
 const theme = {
   token: {
     fontSize: 16,
-    colorPrimary: '#52c41a',
+    colorPrimary: '#fa8752',
+  },
+  components: {
+    Select: {
+      optionSelectedBg: '#ffb998',
+    },
   },
 }
 

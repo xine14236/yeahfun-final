@@ -7,7 +7,6 @@ import Image from 'next/image'
 // 組合
 import ListSort from '@/components/list/list-sort'
 import ListProduct from '@/components/list/list-product'
-import ListPageBtn from '@/components/list/list-page-btn'
 
 export default function List() {
   return (
@@ -34,13 +33,8 @@ export default function List() {
             <div className="col-sm-2 col-12">
               <ListSort />
             </div>
-            <div className="col-sm-10 col-12">
-              <div className="row d-flex justify-content-center align-items-center">
-                <ListProduct />
-              </div>
-            </div>
+            <ListProduct />
           </div>
-          <ListPageBtn />
         </div>
       </div>
 

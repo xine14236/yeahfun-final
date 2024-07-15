@@ -38,7 +38,13 @@ export default function ListSort() {
         </div>
         <div className={styles.price}>
           <label htmlFor="range">今天的預算</label>
-          <Slider range defaultValue={[0, 3000]} min={0} max={5000} />
+          <Slider
+            range
+            defaultValue={[0, 3000]}
+            min={0}
+            max={5000}
+            step={100}
+          />
         </div>
         <div className={styles.types}>
           <p>類型</p>

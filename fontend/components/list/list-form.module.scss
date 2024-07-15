@@ -2,8 +2,10 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background: var(--secondary-3, #fdaf17);
+  background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
+  // background: var(--secondary-3, #ffb998);
   /* border-radius: 10px; */
+  
 
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
 }
