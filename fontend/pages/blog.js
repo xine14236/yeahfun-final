@@ -118,11 +118,10 @@ console.log(resData)
         <div className="row" id="card-container"></div>
       </div>
       <div className="container">
-        {Array(10)
-          .fill(0)
-          .map((v, i) => {
+        {
+          blogs.map((v, i) => {
             return (
-              <div className="row " id="card-container" key={i}>
+              <div className="row " id="card-container" key={v.id}>
                 {/* 卡片内容会在这里动态生成 */}
                 <div
                   className={`card col-md-12 ${styles.cardWrapper} col-lg-9 ${
@@ -147,21 +146,21 @@ console.log(resData)
                           <h3
                             className={`card-title ${styles.color1} ${styles.textTruncate2}`}
                           >
-                            需要考慮周詳露營的影響及因應對策
+                           {v.title}
                           </h3>
                           <div className="d-flex justify-content-between">
                             <p className="card-text ">
                               <small className="text-muted">
-                                2024年5月31日
+                               { v.date}
                               </small>
                             </p>
                             <div>
                               <Image src={heart} />
-                              <span className="ms-3">4</span>
+                              <span className="ms-3">{v.likes_count}</span>
                             </div>
                           </div>
                           <p className="card-text text-muted">
-                            <small className="text-muted">陳李鑫</small>
+                            <small className="text-muted">{v.author}</small>
                           </p>
                           <div
                             className={`card-content ${styles.textTruncate4}`}
