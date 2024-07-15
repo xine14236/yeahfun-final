@@ -141,7 +141,7 @@ console.log(resData)
                       />
                     </div>
                     <div className="col-md-7 d-flex flex-column">
-                      <div className="card-body order0">
+                      <div className={`card-body ${styles.order0}`}>
                         <div className="d-flex flex-column">
                           <h3
                             className={`card-title ${styles.color1} ${styles.textTruncate2}`}
