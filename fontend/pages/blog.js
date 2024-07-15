@@ -3,8 +3,11 @@ import styles from '@/styles/blog.module.css'
 import heart from '@/assets/heart.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
+import { DatePicker } from 'antd';
+const { RangePicker } = DatePicker;
 
 export default function Blog() {
+
 
   const [blogs, setBlogs] = useState([])
   const [total, setTotal] = useState(0) //總筆數
@@ -15,6 +18,17 @@ export default function Blog() {
    // 排序
    const [sort, setSort] = useState('id')
    const [order, setOrder] = useState('asc')
+
+   const [selectedRange, setSelectedRange] = useState([null, null]);
+
+   const handleRangeChange = (dates, dateStrings) => {
+    console.log('Selected Range:', dates);
+    setSelectedRange(dates); // 更新状态变量
+    if(dates){
+
+      console.log(dates[0].$d)
+    }
+  };
 
   const getLists = async (params = {}) => {
     const baseUrl = 'http://localhost:3005/api/blog'
@@ -73,12 +87,28 @@ console.log(resData)
   return (
     <>
       <div className="container">
+     
         <div id="blogFilter">
           <div className="row  ">
             <div
               className={`col-12 col-sm-4 col-lg-5 border d-flex flex-column  ${styles.filterControl1}`}
               style={{ height: 100 }}
             >
+            <div className="row">
+            <div className="col-6">
+
+            <select>
+          <option value="id,asc">依id排序(由小至大)</option>
+          <option value="id,desc">依id排序(由大至小)</option>
+          <option value="price,asc">依價格排序(由低至高)</option>
+          <option value="price,desc">依價格排序(由高至低)</option>
+        </select>
+            </div>
+       
+
+
+            </div>
+           
               <input
                 type="text"
                 className={`form-control  ${styles.filterWidth1}`}
@@ -92,24 +122,7 @@ console.log(resData)
               className="col-12 col-sm-6  col-lg-5 border d-flex justify-content-evenly align-items-center"
               style={{ height: 100 }}
             >
-              <select
-                className={`"form-select" ${styles.filterControl2}`}
-                aria-label="Default select example"
-              >
-                <option selected="">選擇起始時間</option>
-                <option value={1}>One</option>
-                <option value={2}>Two</option>
-                <option value={3}>Three</option>
-              </select>
-              <select
-                className={`"form-select" ${styles.filterControl2}`}
-                aria-label="Default select example"
-              >
-                <option selected="">選擇最後時間</option>
-                <option value={1}>One</option>
-                <option value={2}>Two</option>
-                <option value={3}>Three</option>
-              </select>
+               <RangePicker showTime  onChange={handleRangeChange}/>
             </div>
             <div
               className="col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center "
@@ -134,25 +147,28 @@ console.log(resData)
                 >
                   <div className="row g-0 ">
                     <div
-                      className={`col-md-5 d-flex flex-column ${
+                      className={`col-md-5 d-flex flex-column my-auto ${
                         i % 2 === 1 ? `${styles.order1}` : ''
                       } `}
                     >
-                      <img
-                        src="https://via.placeholder.com/300x200"
+                      <Image
+                        src='http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp'
                         className="img-fluid"
                         alt="..."
+                        width={400}
+                        height={350}
+                        style={{ width: '100%', height: 'auto',minHeight:'280px', objectFit: 'cover' }}
                       />
                     </div>
                     <div className="col-md-7 d-flex flex-column">
                       <div className={`card-body ${styles.order0}`}>
                         <div className="d-flex flex-column">
                           <h3
-                            className={`card-title ${styles.color1} ${styles.textTruncate2}`}
+                            className={`card-title mt-md-3 ${styles.color1} ${styles.textTruncate2}`}
                           >
                            {v.title}
                           </h3>
-                          <div className="d-flex justify-content-between">
+                          <div className="d-flex justify-content-between ">
                             <p className="card-text ">
                               <small className="text-muted">
                                { v.date}
@@ -163,18 +179,18 @@ console.log(resData)
                               <span className="ms-3">{v.likes_count}</span>
                             </div>
                           </div>
-                          <p className="card-text text-muted">
+                          <p className="card-text text-muted mb-md-5">
                             <small className="text-muted">{v.author}</small>
                           </p>
                           <div
-                            className={`card-content ${styles.textTruncate4}`}
+                            className={`card-content mb-md-3 ${styles.textTruncate4}`}
                           >
                             <h5 className="card-text">
                             { stripHtmlTags(v.content).replace(/\\r\\n/g, '').replace(/\s+/g, '')}
                             </h5>
                           </div>
                         </div>
-                        <a href="" className="text-decoration-none text-end">
+                        <a href="" className="text-decoration-none text-end ">
                           <p className={`card-text ${styles.color2}`}>
                             查看更多
                           </p>

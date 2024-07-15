@@ -7,10 +7,11 @@ const router = express.Router();
 
 const getBlogData= async (req)=>{
   const conditions = []
-  const dateFormat1 = 'YYYY-MM-DD HH:MI:SS'
+  const dateFormat1 = 'YYYY-MM-DD HH:mm:ss'
   const dateFormat2 = 'YYYY年MM月DD日 '
 
-
+  // let test1 =moment('Thu Jul 25 2024 00:00:00 ').format(dateFormat1)
+  // console.log({test1})
 
   // 分頁
   const perPage = Number(req.query.perpage) || 10; //每頁最多有幾筆
