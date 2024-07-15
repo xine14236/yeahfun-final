@@ -85,7 +85,7 @@ const getBlogData= async (req)=>{
 
 
 
-  const sql0 =`SELECT count(*)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
+  const sql0 =`SELECT COUNT(DISTINCT b.id)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
   const [[{totalRows}]] = await db.query(sql0);
   
   let totalPages = 0; //總頁數，預設值設定為0
@@ -105,7 +105,8 @@ let keyword = req.query.keyword || ''; //相當於預設值
 //     }
 //   };
   // 
-  const sql =`SELECT   b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where}  ${orderby} LIMIT ${limit} OFFSET ${offset};`;
+  const sql =`SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names FROM blog b INNER JOIN blog_category bc ON b.id=bc.blog_id INNER join blog_category_name bcn on bc.blog_category_id= bcn.id ${where} 
+  GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
 
   rows.forEach((r) => {
