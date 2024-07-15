@@ -1,10 +1,75 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '@/styles/blog.module.css'
 import heart from '@/assets/heart.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 
 export default function Blog() {
+
+  const [blogs, setBlogs] = useState([])
+  const [total, setTotal] = useState(0) //總筆數
+  const [pageCount, setPageCount] = useState(0) //總頁數
+  const [page, setPage] = useState(1)
+  const [perpage, setPerPage] = useState(10)
+
+   // 排序
+   const [sort, setSort] = useState('id')
+   const [order, setOrder] = useState('asc')
+
+  const getLists = async (params = {}) => {
+    const baseUrl = 'http://localhost:3005/api/blog'
+    // 轉換params為查詢字串(預設字串)
+    const searchParams = new URLSearchParams(params)
+    const qs = searchParams.toString()
+    const url = `${baseUrl}?${qs}`
+
+    // 使用tyy-catch語句，真的要執行，不同的電腦上，讓和伺服器連線的程式能作錯誤處理
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+console.log(resData)
+
+      if (resData.success === true) {
+        setPageCount(resData.data.pageCount)
+        setTotal(resData.data.total)
+        if (Array.isArray(resData.data.blogs)) {
+         
+          setBlogs(resData.data.blogs)
+        }
+        
+      }
+
+      // 設定到狀態中 ===>進入update階段，觸發重新渲染(re-render)，呈現資料
+      // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  const stripHtmlTags = (str) => {
+    return str.replace(/<[^>]*>/g, '');  // 使用正則表達式去除所有 HTML 標籤
+  };
+
+
+
+
+
+  useEffect(() => {
+    //  建立搜尋參數物件
+    const params = {
+      page,
+      perpage,
+      sort,
+      order,
+    }
+    // 向伺服器fetch
+    getLists(params)
+  }, [ page,
+    perpage,
+    sort,
+    order,])
+
+
+  
   return (
     <>
       <div className="container">
@@ -57,11 +122,10 @@ export default function Blog() {
         <div className="row" id="card-container"></div>
       </div>
       <div className="container">
-        {Array(10)
-          .fill(0)
-          .map((v, i) => {
+        {
+          blogs.map((v, i) => {
             return (
-              <div className="row " id="card-container" key={i}>
+              <div className="row " id="card-container" key={v.id}>
                 {/* 卡片内容会在这里动态生成 */}
                 <div
                   className={`card col-md-12 ${styles.cardWrapper} col-lg-9 ${
@@ -81,32 +145,32 @@ export default function Blog() {
                       />
                     </div>
                     <div className="col-md-7 d-flex flex-column">
-                      <div className="card-body order0">
+                      <div className={`card-body ${styles.order0}`}>
                         <div className="d-flex flex-column">
                           <h3
                             className={`card-title ${styles.color1} ${styles.textTruncate2}`}
                           >
-                            需要考慮周詳露營的影響及因應對策
+                           {v.title}
                           </h3>
                           <div className="d-flex justify-content-between">
                             <p className="card-text ">
                               <small className="text-muted">
-                                2024年5月31日
+                               { v.date}
                               </small>
                             </p>
                             <div>
                               <Image src={heart} />
-                              <span className="ms-3">4</span>
+                              <span className="ms-3">{v.likes_count}</span>
                             </div>
                           </div>
                           <p className="card-text text-muted">
-                            <small className="text-muted">陳李鑫</small>
+                            <small className="text-muted">{v.author}</small>
                           </p>
                           <div
                             className={`card-content ${styles.textTruncate4}`}
                           >
                             <h5 className="card-text">
-                              回過神才發現，思考露營的存在意義，已讓我廢寢忘食。可是，即使是這樣，露營的出現仍然代表了一定的意義。在人生的歷程中，露營的出現是必然的。曹禺說過一句著名的話，一個真正的人，應該為人民用儘自己的才智，專長和精力，再離開人間。不然，他總會感受到遺憾，浪費了有限的生命。我希望諸位也能好好地體會這句話。
+                            { stripHtmlTags(v.content).replace(/\\r\\n/g, '').replace(/\s+/g, '')}
                             </h5>
                           </div>
                         </div>
