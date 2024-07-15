@@ -27,13 +27,16 @@ export default function Blog() {
     try {
       const res = await fetch(url)
       const resData = await res.json()
+console.log(resData)
 
-      if (resData.status === 'success') {
+      if (resData.success === true) {
         setPageCount(resData.data.pageCount)
         setTotal(resData.data.total)
         if (Array.isArray(resData.data.blogs)) {
+         
           setBlogs(resData.data.blogs)
         }
+        
       }
 
       // 設定到狀態中 ===>進入update階段，觸發重新渲染(re-render)，呈現資料
@@ -56,7 +59,10 @@ export default function Blog() {
     }
     // 向伺服器fetch
     getLists(params)
-  }, [])
+  }, [ page,
+    perpage,
+    sort,
+    order,])
 
 
   
