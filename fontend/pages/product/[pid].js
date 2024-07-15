@@ -33,7 +33,7 @@ export default function Detail() {
           </div>
 
           <div className="inputNumber">
-            要住幾人房?
+            入住人數
             <select
               htmlFor=""
               style={
@@ -56,7 +56,7 @@ export default function Detail() {
               {peopleOptions.map((v, i) => {
                 return (
                   <option key={i} value={v}>
-                    {v}
+                    {v}人以上
                   </option>
                 );
               })}
