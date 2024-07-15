@@ -45,6 +45,10 @@ console.log(resData)
       console.error(e)
     }
   }
+  const stripHtmlTags = (str) => {
+    return str.replace(/<[^>]*>/g, '');  // 使用正則表達式去除所有 HTML 標籤
+  };
+
 
 
 
@@ -166,7 +170,7 @@ console.log(resData)
                             className={`card-content ${styles.textTruncate4}`}
                           >
                             <h5 className="card-text">
-                              回過神才發現，思考露營的存在意義，已讓我廢寢忘食。可是，即使是這樣，露營的出現仍然代表了一定的意義。在人生的歷程中，露營的出現是必然的。曹禺說過一句著名的話，一個真正的人，應該為人民用儘自己的才智，專長和精力，再離開人間。不然，他總會感受到遺憾，浪費了有限的生命。我希望諸位也能好好地體會這句話。
+                            { stripHtmlTags(v.content).replace(/\\r\\n/g, '').replace(/\s+/g, '')}
                             </h5>
                           </div>
                         </div>
