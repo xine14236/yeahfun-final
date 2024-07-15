@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StoreDetail from "@/components/product/storeDetail";
 import { useRouter } from "next/router";
+import Link from 'next/link'
 
 export default function Detail() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function Detail() {
 
   return (
     <>
+    <Link href="/product/cart">我是購物車請點擊我</Link>
       {/* 輸入日期、人數 */}
       <div className="campAreaSearchBar" style={{ border: "1px solid red" }}>
         <form className="inputDateAndNumber" action="">

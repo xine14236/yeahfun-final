@@ -1,22 +1,29 @@
-import { useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useCart } from '@/hooks/cart-hook';
+
 
 export default function StoreDetail({ title = '', type = '', pid, people }) {
+  //路徑
   const router = useRouter();
+  //更新購物車鉤子的狀態
+  const { setCartItems } = useCart();
+  //取得商店內的商品
   const [storeDetail, setStoreDetail] = useState([]);
 
-  const getStore = async (id, type) => {
+
+  const getStore = async (id, type, people) => {
     const url = `http://localhost:3005/api/store/${id}/${type}/${people}`;
     console.log("Fetching data from:", url);
 
     try {
       const res = await fetch(url);
       const resData = await res.json();
-      console.log("Response data:", resData);
+      //console.log("Response data:", resData);
 
       if (resData.status === "success") {
         // 打印完整的 resData.data
-        console.log("Complete data:", resData.data);
+        //console.log("Complete data:", resData.data);
 
         // 设置storeDetail为resData.data.store
         if (Array.isArray(resData.data.store)) {
@@ -34,10 +41,14 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
 
   useEffect(() => {
     if (router.isReady && pid) {
-      console.log("Router is ready, query:", router.query);
+      //console.log("Router is ready, query:", router.query);
       getStore(pid, type, people);
     }
   }, [router.isReady, pid, type, people]);
+
+  const addToCart = (detail) => {
+    setCartItems((prevItems) => [...prevItems, detail]);
+  };
 
   return (
     <>
@@ -76,7 +87,10 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
                   <div style={{ paddingBottom: 0, border: "1px solid darkgray" }} />
                   <div className="form-item"></div>
                   <div className="form-item">
-                    <button>
+                    <button 
+                    type="button"
+                    onClick={() => addToCart(detail)}
+                    >
                       加入訂房
                     </button>
                   </div>
