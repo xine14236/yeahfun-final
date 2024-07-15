@@ -10,7 +10,17 @@ router.get('/:stores_id', async function (req, res) {
   const id = +req.params.stores_id || 0
 
   const [rows] = await db.query(
-    'SELECT store.stores_id, store.name, store.address, comment.comment_star, comment.comment_content FROM store JOIN comment ON store.stores_id = comment.stores_id WHERE store.stores_id = ?',
+    `SELECT
+      store.stores_id,
+      store.name,
+      store.address,
+      comment.comment_star,
+      comment.comment_content
+    FROM store
+    JOIN comment 
+    ON store.stores_id = comment.stores_id
+    WHERE
+      store.stores_id = ?`,
     [id]
   )
   const store = rows[0]
