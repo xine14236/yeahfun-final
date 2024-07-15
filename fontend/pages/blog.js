@@ -95,9 +95,9 @@ console.log(resData)
               style={{ height: 100 }}
             >
             <div className="row">
-            <div className="col-6">
+            <div className="col-md-6 col-12 d-flex align-items-center">
 
-            <select>
+            <select className='form-select '>
           <option value="id,asc">依id排序(由小至大)</option>
           <option value="id,desc">依id排序(由大至小)</option>
           <option value="price,asc">依價格排序(由低至高)</option>
@@ -107,9 +107,8 @@ console.log(resData)
        
 
 
-            </div>
-           
-              <input
+           <div className="col-md-6 col-12">
+           <input
                 type="text"
                 className={`form-control  ${styles.filterWidth1}`}
                 placeholder=""
@@ -117,6 +116,9 @@ console.log(resData)
               <div className="form-text text-center">
                 透過部落格標題搜尋 <FaSearch />
               </div>
+           </div>
+            </div>
+             
             </div>
             <div
               className="col-12 col-sm-6  col-lg-5 border d-flex justify-content-evenly align-items-center"
