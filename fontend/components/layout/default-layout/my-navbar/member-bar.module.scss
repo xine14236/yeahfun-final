@@ -1,0 +1,46 @@
+.iconOpensuse {
+  transform: scaleX(-1);
+  color: var(--primary-1);
+  transition: color 0.5s ease;
+}
+.iconOpensuse:hover {
+  color: var(--secondary-3);
+}
+.iconShoppingCart {
+  color: var(--black);
+}
+.iconShoppingCart:hover {
+  color: var(--secondary-3);
+}
+.navA {
+  color: var(--black);
+  position: relative;
+}
+.navA:hover {
+  color: var(--secondary-3);
+}
+
+.navA::after {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  content: '';
+  background-color: var(--secondary-3);
+  width: 0%;
+  height: 2px;
+  transition: all 0.5s;
+}
+.navA:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .iconOpensuse {
+    display: none;
+  }
+  .iconShoppingCart {
+    display: none;
+  }
+}
