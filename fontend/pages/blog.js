@@ -3,6 +3,8 @@ import styles from '@/styles/blog.module.css'
 import heart from '@/assets/heart.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
+import { DatePicker } from 'antd';
+const { RangePicker } = DatePicker;
 
 export default function Blog() {
 
@@ -92,24 +94,7 @@ console.log(resData)
               className="col-12 col-sm-6  col-lg-5 border d-flex justify-content-evenly align-items-center"
               style={{ height: 100 }}
             >
-              <select
-                className={`"form-select" ${styles.filterControl2}`}
-                aria-label="Default select example"
-              >
-                <option selected="">選擇起始時間</option>
-                <option value={1}>One</option>
-                <option value={2}>Two</option>
-                <option value={3}>Three</option>
-              </select>
-              <select
-                className={`"form-select" ${styles.filterControl2}`}
-                aria-label="Default select example"
-              >
-                <option selected="">選擇最後時間</option>
-                <option value={1}>One</option>
-                <option value={2}>Two</option>
-                <option value={3}>Three</option>
-              </select>
+               <RangePicker showTime />
             </div>
             <div
               className="col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center "
