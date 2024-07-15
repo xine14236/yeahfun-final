@@ -7,10 +7,11 @@ const router = express.Router();
 
 const getBlogData= async (req)=>{
   const conditions = []
-  const dateFormat1 = 'YYYY-MM-DD HH:MI:SS'
+  const dateFormat1 = 'YYYY-MM-DD HH:mm:ss'
   const dateFormat2 = 'YYYY年MM月DD日 '
 
-
+  // let test1 =moment('Thu Jul 25 2024 00:00:00 ').format(dateFormat1)
+  // console.log({test1})
 
   // 分頁
   const perPage = Number(req.query.perpage) || 10; //每頁最多有幾筆
@@ -85,7 +86,7 @@ const getBlogData= async (req)=>{
 
 
 
-  const sql0 =`SELECT count(*)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
+  const sql0 =`SELECT COUNT(DISTINCT b.id)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
   const [[{totalRows}]] = await db.query(sql0);
   
   let totalPages = 0; //總頁數，預設值設定為0
@@ -105,7 +106,13 @@ let keyword = req.query.keyword || ''; //相當於預設值
 //     }
 //   };
   // 
-  const sql =`SELECT   b.*, bc.blog_category_id, bcn.blog_category_name FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id LEFT join blog_category_name bcn on bc.blog_category_id= bcn.id ${where}  ${orderby} LIMIT ${limit} OFFSET ${offset};`;
+  const sql =`SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
+    COALESCE(lb.likes_count, 0) AS likes_count
+   FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
+   Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
+   Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
+   Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
+  GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
 
   rows.forEach((r) => {
@@ -138,9 +145,103 @@ const result = await getBlogData(req)
   res.json(result)
 })
 
+// 收藏 還沒有連接會員
+router.get("/fav/:b_id", async (req,res)=>{
+  const output={
+    success:false,
+    action:'',
+    error:'',
+    code:0,
+  };
+  // 1.檢查用戶的授權
+  // if(!req.my_jwt?.id){
+  //   output.error = "沒有授權";
+  //   output.code=402;
+  //   return res.status(403).json(output)
+  // }
+  // 2.有沒有這個項目的資料
+  const sql =`SELECT * FROM blog WHERE id=?`;
+  const [rows]=await db.query(sql,[req.params.b_id]);
+  if(rows.length<1){
+    output.error = "沒有這個項目";
+    output.code=405;
+    return res.status(403).json(output)
+  }
+  // 3.該項有沒有加入過
+  const sql2 = `SELECT id FROM favorite_blog WHERE customer_id=? AND blog_id=?`;
+  // ********************先用req給
+  const [rows2]= await db.query(sql2,[req.query.customer, req.params.b_id]);
+  let result;
+  if(rows2.length<1){
+    // 沒有加入過
+    output.action='add';
+    const sql3=`INSERT INTO favorite_blog (customer_id, blog_id) VALUES (?, ?)`;
+    [result]= await db.query(sql3,[req.query.customer, req.params.b_id]);
+  }else{
+    // 已經加入了
+    output.action='remove'
+    const sql4=`DELETE FROM favorite_blog WHERE id=?`;
+    [result]= await db.query(sql4,[rows2[0].id]);
+  }
+  output.success=!!result.affectedRows;
+  
+  res.json(output);
+    })
+
+    // 喜歡
+    router.get("/like/:b_id", async (req,res)=>{
+      const output={
+        success:false,
+        action:'',
+        error:'',
+        code:0,
+      };
+      // 1.檢查用戶的授權
+      // if(!req.my_jwt?.id){
+      //   output.error = "沒有授權";
+      //   output.code=402;
+      //   return res.status(403).json(output)
+      // }
+      // 2.有沒有這個項目的資料
+      const sql =`SELECT * FROM blog WHERE id=?`;
+      const [rows]=await db.query(sql,[req.params.b_id]);
+      if(rows.length<1){
+        output.error = "沒有這個項目";
+        output.code=405;
+        return res.status(403).json(output)
+      }
+      // 3.該項有沒有加入過
+      const sql2 = `SELECT id FROM likes_blog WHERE customer_id=? AND blog_id=?`;
+      // ********************先用req給
+      const [rows2]= await db.query(sql2,[req.query.customer, req.params.b_id]);
+      let result;
+      if(rows2.length<1){
+        // 沒有加入過
+        output.action='add';
+        const sql3=`INSERT INTO likes_blog (customer_id, blog_id) VALUES (?, ?)`;
+        [result]= await db.query(sql3,[req.query.customer, req.params.b_id]);
+      }else{
+        // 已經加入了
+        output.action='remove'
+        const sql4=`DELETE FROM likes_blog WHERE id=?`;
+        [result]= await db.query(sql4,[rows2[0].id]);
+      }
+      output.success=!!result.affectedRows;
+      
+      res.json(output);
+        })
+
+
+        // 新增 還沒有連接會員
+        router.post('/add', async (req,res)=>{
+          
+        })
+
 
 router.post("/uploads",upload.array("photos",10),(req,res) => {
   res.json(req.files);
 })
+
+
 
 export default router;

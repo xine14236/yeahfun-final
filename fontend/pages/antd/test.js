@@ -1,10 +1,9 @@
-import React from 'react'
-import QuillToolbar from '@/components/blog/EditorToolbar'
+import dynamic from 'next/dynamic'
 
-export default function test() {
-  return (
-    <div>
-      <QuillToolbar />
-    </div>
-  )
+const MyComponent = dynamic(() => import('@/components/blog/test'), {
+  ssr: false,
+})
+
+export default function Test() {
+  return <MyComponent />
 }
