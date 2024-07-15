@@ -17,6 +17,8 @@ import DefaultLayout from '@/components/layout/default-layout'
 // 自訂用載入動畫元件
 import { CatLoader, NoLoader } from '@/hooks/use-loader/components'
 
+import { CartProviderNew } from '@/hooks/cart-hook'
+
 export default function MyApp({ Component, pageProps }) {
   // 導入bootstrap的JS函式庫
   useEffect(() => {
@@ -29,12 +31,15 @@ export default function MyApp({ Component, pageProps }) {
     Component.getLayout || ((page) => <DefaultLayout>{page}</DefaultLayout>)
 
   return (
-    <ConfigProvider theme={theme}>
+    <CartProviderNew>
+   <ConfigProvider theme={theme}>
      <AuthProvider>
       <LoaderProvider close={2} CustomLoader={CatLoader}>
         <CartProvider>{getLayout(<Component {...pageProps} />)}</CartProvider>
       </LoaderProvider>
      </AuthProvider>
     </ConfigProvider>
+    </CartProviderNew>
+    
   )
 }
