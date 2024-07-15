@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
 import { useEffect, useState } from 'react'
+import ReactPaginate from 'react-paginate'
 
 export default function ListProduct() {
   const [products, setProducts] = useState([])
@@ -52,6 +53,11 @@ export default function ListProduct() {
   // 將 products 分成每組三個的小塊
   const productChunks = chunkArray(products, 3)
 
+  const handlePageClick = (event) => {
+    setPage(event.selected + 1)
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  }
+
   return (
     <>
       <div className="col-sm-10 col-12">
@@ -92,31 +98,25 @@ export default function ListProduct() {
         ))}
       </div>
       <div aria-label="Page navigation example" className={styles.pageBtn}>
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#" onClick={() => setPage(1)}>
-              1
-            </a>
-          </li>
-          <button
-            onClick={() => {
-              if (page > 1) {
-                setPage(page - 1)
-              }
-            }}
-          >
-            上一頁
-          </button>{' '}
-          <button
-            onClick={() => {
-              if (page < pageCount) {
-                setPage(page + 1)
-              }
-            }}
-          >
-            下一頁
-          </button>
-        </ul>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+          containerClassName={'pagination'}
+          pageClassName={'pageItem item'}
+          pageLinkClassName={'pageLink'}
+          previousClassName={'previousItem item'}
+          previousLinkClassName={'previousLink'}
+          nextClassName={'nextItem item'}
+          nextLinkClassName={'nextLink'}
+          breakClassName={'breakItem item'}
+          breakLinkClassName={'breakLink'}
+          activeClassName={'active'}
+        />
       </div>
     </>
   )

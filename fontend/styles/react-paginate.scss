@@ -1,0 +1,31 @@
+/* ReactPaginate.module.scss */
+.pagination {
+  /* 容器样式 */
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.item {
+  /* 页面项样式 */
+  margin: 0 5px;
+}
+
+.link {
+  /* 页面链接样式 */
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.link:hover {
+  background-color: var(--secondary-3);
+}
+
+.active {
+  background-color: var(--secondary-3);
+  color: white;
+}

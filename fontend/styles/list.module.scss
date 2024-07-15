@@ -1,8 +1,3 @@
-.pageBtn {
-  display: flex;
-  justify-content: center;
-}
-
 .listContainer {
   padding: 0px 60px;
 }
@@ -129,6 +124,12 @@
   width: 100%;
   position: absolute;
   top: 920px;
+}
+.pageBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
 
 @media (max-width: 576px) {
