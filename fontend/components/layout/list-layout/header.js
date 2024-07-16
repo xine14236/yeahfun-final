@@ -1,6 +1,5 @@
 import React from 'react'
 import ListNavbar from './list-navbar'
-import ListForm from '@/components/list/list-form'
 import WhiteLogo from '@/components/icons/white-logo'
 import styles from '@/components/layout/list-layout/header.module.scss'
 
@@ -12,7 +11,6 @@ export default function Header() {
           <ListNavbar />
           <WhiteLogo width={130} className={styles.whiteLogo} />
         </div>
-        <ListForm />
       </header>
     </>
   )

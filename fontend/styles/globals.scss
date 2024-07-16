@@ -226,10 +226,10 @@ table {
   --secondary-4: #fffcf0;
   --white: white;
   --black: black;
-  --grey-800: #575757;
-  --grey-600: #757575;
-  --grey-400: #c4c4c4;
-  --grey-200: #f7f7f7;
+  --gray-800: #575757;
+  --gray-600: #757575;
+  --gray-400: #c4c4c4;
+  --gray-200: #f7f7f7;
   --white: #ffffff;
 }
 h1 {
@@ -259,7 +259,7 @@ h6 {
 
 body {
   margin: 0;
-  font-family: 'MyInter', 'MyNotoSansTC', sans-serif;
+  font-family: 'Inter', 'Noto Sans TC Regular', sans-serif;
   background-color: var(--secondary-4);
   line-height: normal;
 }
@@ -291,9 +291,14 @@ body {
 }
 .btnOrangePc:hover {
   // background: linear-gradient(0deg, #fdb524 0%, #fa8752 100%);
-/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#feccb1+0,f17432+50,ea5507+51,fb955e+100;Red+Gloss+%232 */
-background: linear-gradient(to bottom,  #feccb1 0%,#f17432 50%,#ea5507 51%,#fb955e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#feccb1+0,f17432+50,ea5507+51,fb955e+100;Red+Gloss+%232 */
+  background: linear-gradient(
+    to bottom,
+    #feccb1 0%,
+    #f17432 50%,
+    #ea5507 51%,
+    #fb955e 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .btnWhitePc {
   display: flex;
@@ -320,14 +325,14 @@ background: linear-gradient(to bottom,  #feccb1 0%,#f17432 50%,#ea5507 51%,#fb95
     justify-content: center;
     align-items: center;
     .titleText {
-      color: var(--grey-800, #575757);
+      color: var(--gray-800, #575757);
       text-align: center;
       font-family: 'Luckiest Guy';
       font-size: 48px;
       font-weight: 400;
     }
     p {
-      color: var(--grey-800, #575757);
+      color: var(--gray-800, #575757);
       text-align: center;
       font-size: var(--p2);
       font-weight: 400;
