@@ -36,6 +36,8 @@ export default function Blog() {
 
   const [visible, setVisible] = useState(false);
 
+  const[getSuccess,setGetSuccess]=false
+
   let params = {
     page,
     perpage,
@@ -70,11 +72,15 @@ export default function Blog() {
       console.log(resData)
 
       if (resData.success === true) {
+        setGetSuccess(true)
         setPageCount(resData.data.pageCount)
         setTotal(resData.data.total)
         if (Array.isArray(resData.data.blogs)) {
           setBlogs(resData.data.blogs)
         }
+      }else{
+        setGetSuccess(false)
+        setBlogs([])
       }
 
       // 設定到狀態中 ===>進入update階段，觸發重新渲染(re-render)，呈現資料
