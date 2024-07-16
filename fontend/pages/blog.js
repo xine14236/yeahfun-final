@@ -36,6 +36,8 @@ export default function Blog() {
 
   const [visible, setVisible] = useState(false);
 
+  const[getSuccess,setGetSuccess]=useState(false)
+
   let params = {
     page,
     perpage,
@@ -70,11 +72,15 @@ export default function Blog() {
       console.log(resData)
 
       if (resData.success === true) {
+        setGetSuccess(true)
         setPageCount(resData.data.pageCount)
         setTotal(resData.data.total)
         if (Array.isArray(resData.data.blogs)) {
           setBlogs(resData.data.blogs)
         }
+      }else{
+        setGetSuccess(false)
+        setBlogs([])
       }
 
       // 設定到狀態中 ===>進入update階段，觸發重新渲染(re-render)，呈現資料
@@ -83,8 +89,10 @@ export default function Blog() {
       console.error(e)
     }
   }
-  const stripHtmlTags = (str) => {
-    return str.replace(/<[^>]*>/g, '') // 使用正則表達式去除所有 HTML 標籤
+  const stripHtmlTags = (str,maxLength = 150) => {
+    const strippedStr = str.replace(/<[^>]*>/g, ''); // 去除所有 HTML 標籤
+  return strippedStr.length > maxLength ? strippedStr.slice(0, maxLength)  : strippedStr; 
+    // return str.replace(/<[^>]*>/g, '') // 使用正則表達式去除所有 HTML 標籤
   }
 
   const handleSearch = () => {
@@ -145,6 +153,12 @@ export default function Blog() {
     })
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     //  建立搜尋參數物件
   
@@ -183,7 +197,9 @@ export default function Blog() {
                     value={nameLike}
                     onChange={(e) => {
             setNameLike(e.target.value)
+            
           }}
+          onKeyDown={handleKeyDown}
                   />
                   <span
                     className={`form-text text-center ${styles.marginInline}`}
