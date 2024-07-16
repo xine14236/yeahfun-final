@@ -26,7 +26,7 @@ export default function Detail() {
       {/* <AttractionsNearby /> */}
       <Link href="/product/cart">我是購物車請點擊我</Link>
       {/* 輸入日期、人數 */}
-      
+
       <div className="campAreaSearchBar" style={{ border: '1px solid red' }}>
         <form className="inputDateAndNumber" action="">
           <div className="inputDate">
