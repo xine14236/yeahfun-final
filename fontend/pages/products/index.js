@@ -27,10 +27,10 @@ export default function Products() {
   const [order, setOrder] = useState('asc')
 
   // 查詢條件用(這裡用的初始值都與伺服器的預設值一致)
-  const [date, setDate] = useState('')
+  const [dateRange, setDateRange] = useState([])
   const [nameLike, setNameLike] = useState('')
   const [location, setLocation] = useState('')
-  const [tag, setTag] = useState([]) // 字串陣列
+  const [tag, setTag] = useState([]) 
   const [priceRange, setPriceRange] = useState([0, 5000])
 
   const tagOptions = [
@@ -45,7 +45,7 @@ export default function Products() {
     '山景雲海',
     '海景',
   ]
-  const locationOptions = ['全台灣', '南投縣', '屏東縣', '苗栗縣']
+  const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
 
   // 獲取產品數據
   const getProducts = async (params = {}) => {
@@ -111,12 +111,7 @@ export default function Products() {
     }
   }
   const handleDateChange = (e) => {
-    const [start, end] = e
-    setDate(
-      `startDate=${start.format('YYYY-MM-DD')}&endDate=${end.format(
-        'YYYY-MM-DD'
-      )}`
-    )
+    setDateRange(e)
   }
 
   const handleChangeSelect = (value) => {
@@ -125,6 +120,14 @@ export default function Products() {
     } else {
       setLocation(value)
     }
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
+    const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
+
+    router.push(`?startDate=${startDate}&endDate=${endDate}`)
   }
 
   // 按下搜尋按鈕
@@ -159,28 +162,9 @@ export default function Products() {
         <form
           className={styles.productSearchForm}
           action=""
-          onSubmit={(e) => {
-            e.preventDefault()
-            router.push(`?${date}`)
-          }}
+          onSubmit={handleSubmit}
           id="productSearchForm"
         >
-          <div className={styles.goWhereTeam}>
-            <label className={styles.formTitle} htmlFor="goWhere">
-              <h5>你想去哪裡 ?</h5>
-            </label>
-            <Select
-              defaultValue="全台灣"
-              style={{ width: 120 }}
-              onChange={handleChangeSelect}
-              options={locationOptions.map((value) => ({
-                key: value,
-                value: value,
-                label: value,
-              }))}
-            />
-          </div>
-
           <div className={styles.calendarTeam}>
             <label htmlFor="date" className={styles.formTitle}>
               <h5>入住日期區間</h5>
@@ -193,25 +177,54 @@ export default function Products() {
           <div className={styles.searchBarSort}>
             <div className={styles.keyword}>
               <label htmlFor="search" className={styles.formTitle}>
-                <p>關鍵字搜尋</p>
+                <h5>關鍵字搜尋</h5>
               </label>
-              <input type="text" id="search" name="search" placeholder="" />
+              <Input
+                value={nameLike}
+                onChange={(e) => {
+                  setNameLike(e.target.value)
+                }}
+              />
             </div>
             <div className={styles.price}>
-              <label htmlFor="minPrice">今天的預算</label>
-              <input type="text" id="minPrice" placeholder="最小價格" />
-              <input type="text" id="maxPrice" placeholder="最大價格" />
+              <label htmlFor="range">
+                <h5>價格區間</h5>
+              </label>
+              <Slider
+                range
+                value={priceRange}
+                defaultValue={[0, 3000]}
+                min={0}
+                max={5000}
+                step={100}
+                onChange={(value) => {
+                  setPriceRange(value)
+                }}
+              />
             </div>
             <div className={styles.types}>
-              <p>類型</p>
-              <label htmlFor="type">
-                <input type="checkbox" name="type" id="type" />
-                <span>森林系</span>
-              </label>
-              <label htmlFor="type2">
-                <input type="checkbox" name="type" id="type2" />
-                <span>森林系</span>
-              </label>
+              <h5>類型</h5>
+              <div className="row">
+                {tagOptions.map((v, i) => {
+                  return (
+                    <div className="col-6" key={i}>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          id={v}
+                          type="checkbox"
+                          value={v}
+                          checked={tag.includes(v)}
+                          onChange={handleTagChecked}
+                        />
+                        <label className="form-check-label" htmlFor={v}>
+                          {v}
+                        </label>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
           <button
@@ -232,15 +245,25 @@ export default function Products() {
         </div>
         <div className={`container-fluid ${styles.listContainer}`}>
           <div className={styles.orderByNone}>
-            <label htmlFor="orderBy" className={styles.formTitle}>
-              <p>排序方式</p>
-            </label>
-            <select name="orderBy" id="orderBy">
-              <option value="desc">價格依高到低排序</option>
-              <option value="asc">價格依低到高排序</option>
-            </select>
+            <Select
+              defaultValue="排序-價格-低到高排序"
+              style={{
+                width: '100%',
+              }}
+              onChange={handleChange}
+              options={[
+                {
+                  value: 'lowest_normal_price,asc',
+                  label: '排序-價格-低到高排序',
+                },
+                {
+                  value: 'lowest_normal_price,desc',
+                  label: '排序-價格-高到低排序',
+                },
+              ]}
+            />
           </div>
-          <div className="row g-5">
+          <div className="row">
             <div className="col-sm-2 col-12">
               <form
                 className={styles.sort}
@@ -268,6 +291,21 @@ export default function Products() {
                         label: '價格-高到低排序',
                       },
                     ]}
+                  />
+                </div>
+                <div className={styles.goWhereTeam}>
+                  <label className={styles.formTitle} htmlFor="goWhere">
+                    <p>你想去哪裡?</p>
+                  </label>
+                  <Select
+                    defaultValue="全台灣"
+                    style={{ width: '100%' }}
+                    onChange={handleChangeSelect}
+                    options={locationOptions.map((value, i) => ({
+                      key: i,
+                      value: value,
+                      label: value,
+                    }))}
                   />
                 </div>
                 <div className="keyword">
