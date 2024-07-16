@@ -1,13 +1,55 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { DatePicker, Space } from 'antd'//Ant Design日期套件
+import { createRoot } from 'react-dom/client'
+// import ReactDOM from 'react-dom';//使用 ReactDOM.render 方法來將一個 React 元素渲染到 DOM 中的某個節點
+// import DatePickerApp from './DatePickerApp'; // 請根據你的檔案結構調整路徑
+
 import StoreDetail from '@/components/product/storeDetail'
+import { set } from 'lodash'
 
 export default function CampAreaSearchBar() {
   const router = useRouter()
   const { pid } = router.query
 
-  const [people, setPeople] = useState(1)
+  //引入Ant Design日期套件
+  const { RangePicker } = DatePicker
+  const DatePickerApp = () => (
+    <Space direction="vertical" size={12}>
+      <RangePicker
+        id={{
+          start: 'startInput',
+          end: 'endInput',
+        }}
+        onFocus={(_, info) => {
+          console.log('Focus:', info.range)
+        }}
+        onBlur={(_, info) => {
+          console.log('Blur:', info.range)
+        }}
+      />
+      {/* <RangePicker showTime /> */}
+      {/* <RangePicker picker="week" /> */}
+      {/* <RangePicker picker="month" /> */}
+      {/* <RangePicker picker="quarter" /> */}
+      {/* <RangePicker picker="year" /> */}
+    </Space>
+  )
+  const handleClick = () => {
+    const inputDate = document.getElementById('inputDate')
+    const root = createRoot(inputDate)
+    root.render(<DatePickerApp />)
+  }
 
+  //追蹤用戶輸入的日期
+  const [date, setDate] = useState('');
+  const handleDateChange = (date,dateString) => {
+    setDate(date);
+    console.log('Date:', dateString);
+  }
+
+  // 人數選擇
+  const [people, setPeople] = useState(1)
   const peopleOptions = new Array(12).fill().map((_, i) => i + 1)
 
   return (
@@ -15,8 +57,14 @@ export default function CampAreaSearchBar() {
       {/* 輸入日期、人數 */}
       <div className="campAreaSearchBar" style={{ border: '1px solid red' }}>
         <form className="inputDateAndNumber" action="">
-          <div className="inputDate">
-            <div
+          <div className="inputDate" id="inputDate">
+            <DatePickerApp
+              type="text"
+              value={date}
+              onChange={handleDateChange}
+            />
+            <button onClick={handleClick}>選擇日期</button>
+            {/* <div
               htmlFor=""
               style={{
                 color: 'var(--white, /FFF)',
@@ -27,9 +75,7 @@ export default function CampAreaSearchBar() {
                 lineHeight: 'normal',
               }}
             >
-              請選擇入住日期：
-            </div>
-            <input type="text" />
+            </div> */}
           </div>
 
           <div className="inputNumber">
