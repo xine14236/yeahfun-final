@@ -114,6 +114,7 @@ let keyword = req.query.keyword || ''; //相當於預設值
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
+ 
 
   rows.forEach((r) => {
 r.date=''
@@ -137,6 +138,11 @@ r.date=''
   }
  
 return(output)
+}else{
+  return{
+    success:false,
+     info:"沒有找到資料"
+  }
 }
 
 }

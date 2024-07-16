@@ -17,7 +17,7 @@ router.get('/:stores_id', async function (req, res) {
       comment.comment_star,
       comment.comment_content
     FROM store
-    JOIN comment 
+    JOIN comment
     ON store.stores_id = comment.stores_id
     WHERE
       store.stores_id = ?`,
