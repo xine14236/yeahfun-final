@@ -1,5 +1,6 @@
 import ListLayout from '@/components/layout/list-layout'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styles from '@/styles/list.module.scss'
 import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
@@ -9,10 +10,14 @@ import RightArrow from '@/components/icons/right-arrow'
 import Link from 'next/link'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
 
 import Image from 'next/image'
 
 export default function Products() {
+  const router = useRouter()
   const [products, setProducts] = useState([])
   const [total, setTotal] = useState(0) // 總筆數
   const [pageCount, setPageCount] = useState(0) // 總頁數
@@ -22,6 +27,7 @@ export default function Products() {
   const [order, setOrder] = useState('asc')
 
   // 查詢條件用(這裡用的初始值都與伺服器的預設值一致)
+  const [date, setDate] = useState('')
   const [nameLike, setNameLike] = useState('')
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([]) // 字串陣列
@@ -75,6 +81,10 @@ export default function Products() {
   // 將 products 分成每組三個的小塊
   const productChunks = chunkArray(products, 3)
 
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day')
+  }
+
   const handleChange = (value) => {
     const [sortValue, orderValue] = value.split(',')
     setSort(sortValue)
@@ -86,16 +96,34 @@ export default function Products() {
     window.scrollTo({ top: 300, behavior: 'smooth' })
   }
 
-  // 品牌複選時使用(使用字串陣列狀態)
-  const handleTagChecked = (value) => {
-    if (tag.includes(value)) {
+  const handleTagChecked = (e) => {
+    // 宣告方便使用的tv名稱，取得觸發事件物件的目標值
+    const tv = e.target.value
+    // 判斷是否有在陣列中
+    if (tag.includes(tv)) {
       // 如果有===>移出陣列
-      const nextTag = tag.filter((v) => v !== value)
+      const nextTag = tag.filter((v) => v !== tv)
       setTag(nextTag)
     } else {
       // 否則===>加入陣列
-      const nextTag = [...tag, value]
+      const nextTag = [...tag, tv]
       setTag(nextTag)
+    }
+  }
+  const handleDateChange = (e) => {
+    const [start, end] = e
+    setDate(
+      `startDate=${start.format('YYYY-MM-DD')}&endDate=${end.format(
+        'YYYY-MM-DD'
+      )}`
+    )
+  }
+
+  const handleChangeSelect = (value) => {
+    if (value === '全台灣') {
+      setLocation([])
+    } else {
+      setLocation(value)
     }
   }
 
@@ -118,19 +146,12 @@ export default function Products() {
     getProducts(params)
   }
 
-  const handleChangeSelect = (value) => {
-    if (value === '全台灣') {
-      setLocation([])
-    } else {
-      setLocation(value)
-    }
-  }
-
   // 初始和頁數或每頁數變化時獲取數據
   useEffect(() => {
+    if (!router.isReady) return
     const params = { page, perpage, sort, order }
     getProducts(params)
-  }, [page, perpage, sort, order])
+  }, [page, perpage, sort, order, router])
 
   return (
     <>
@@ -140,6 +161,7 @@ export default function Products() {
           action=""
           onSubmit={(e) => {
             e.preventDefault()
+            router.push(`?${date}`)
           }}
           id="productSearchForm"
         >
@@ -163,7 +185,10 @@ export default function Products() {
             <label htmlFor="date" className={styles.formTitle}>
               <h5>入住日期區間</h5>
             </label>
-            <RangePicker />
+            <RangePicker
+              disabledDate={disabledDate}
+              onChange={handleDateChange}
+            />
           </div>
           <div className={styles.searchBarSort}>
             <div className={styles.keyword}>
@@ -272,20 +297,25 @@ export default function Products() {
                 </div>
                 <div className={styles.types}>
                   <p>類型</p>
-                  <Checkbox.Group
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '5px',
-                    }}
-                    options={tagOptions.map((v, i) => ({
-                      key: i,
-                      label: v,
-                      value: v,
-                    }))}
-                    onChange={handleTagChecked}
-                  />
+
+                  {tagOptions.map((v, i) => {
+                    return (
+                      <div className="form-check" key={i}>
+                        <input
+                          className="form-check-input"
+                          id={v}
+                          type="checkbox"
+                          value={v}
+                          checked={tag.includes(v)}
+                          onChange={handleTagChecked}
+                        />
+                        <label className="form-check-label" htmlFor={v}>
+                          {v}
+                        </label>
+                      </div>
+                    )
+                  })}
+
                   <div>
                     <button className="btnGreenPc" onClick={handleSearch}>
                       搜尋
