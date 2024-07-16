@@ -50,18 +50,14 @@ export default function StoreTitleWrap() {
   // 與伺服器作fetch獲得資料
   const getProduct = async (pid) => {
     const url = 'http://localhost:3005/api/detail/' + pid
-    // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
+
     try {
-      const res = await fetch(url) //undefined
+      const res = await fetch(url)
       const resData = await res.json()
       // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
       // 確定資料是純物件資料類型才設定到狀態中(最基本的保護)
       if (resData.status === 'success') {
         setStore(resData.data.store)
-        console.log(url)
-        console.log(resData)
-        console.log(resData.data)
-        console.log(resData.data.store) //undefined
         // 關閉載入動畫，1.5再關閉
         // setTimeout(() => {
         //   setIsLoading(false)
@@ -69,8 +65,6 @@ export default function StoreTitleWrap() {
       }
     } catch (e) {
       console.error(e)
-      console.error(pid)
-      console.log(url)
     }
   }
 
