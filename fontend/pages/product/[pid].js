@@ -1,32 +1,44 @@
-import React, { useState } from "react";
-import StoreDetail from "@/components/product/storeDetail";
-import { useRouter } from "next/router";
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
+import StoreTitleWrap from '@/components/product//detail/storeTitleWrap'
+import StoreNormalInfo from '@/components/product/detail/storeNormalInfo'
+// import CampAreaSearchBar from '@/components/product/detail/campAreaSearchBar'
+// import CampAreasList from '@/components/product/detail/campAreasList'
+import StoreDetail from '@/components/product/storeDetail'
+// import AttractionsNearby from '@/components/product/detail/attractionsNearby'
+
 export default function Detail() {
-  const router = useRouter();
-  const { pid } = router.query;
+  const router = useRouter()
+  const { pid } = router.query
 
-  const [people, setPeople] = useState(1);
+  const [people, setPeople] = useState(1)
 
-  const peopleOptions = new Array(12).fill().map((_, i) => i + 1);
+  const peopleOptions = new Array(12).fill().map((_, i) => i + 1)
 
   return (
     <>
-    <Link href="/product/cart">我是購物車請點擊我</Link>
+      <StoreTitleWrap />
+      <StoreNormalInfo />
+      {/* <CampAreaSearchBar /> */}
+      {/* <CampAreasList /> */}
+      {/* <AttractionsNearby /> */}
+      <Link href="/product/cart">我是購物車請點擊我</Link>
       {/* 輸入日期、人數 */}
-      <div className="campAreaSearchBar" style={{ border: "1px solid red" }}>
+      
+      <div className="campAreaSearchBar" style={{ border: '1px solid red' }}>
         <form className="inputDateAndNumber" action="">
           <div className="inputDate">
             <div
               htmlFor=""
               style={{
-                color: "var(--white, #FFF)",
-                fontFamily: "Inter",
+                color: 'var(--white, #FFF)',
+                fontFamily: 'Inter',
                 fontSize: 18,
-                fontStyle: "normal",
+                fontStyle: 'normal',
                 fontWeight: 500,
-                lineHeight: "normal",
+                lineHeight: 'normal',
               }}
             >
               請選擇入住日期：
@@ -50,7 +62,7 @@ export default function Detail() {
               }
               value={people}
               onChange={(e) => {
-                setPeople(e.target.value);
+                setPeople(e.target.value)
               }}
             >
               {/* 為了要對應初始的city狀態，加入這個初始或未選擇的選項 */}
@@ -60,7 +72,7 @@ export default function Detail() {
                   <option key={i} value={v}>
                     {v}人以上
                   </option>
-                );
+                )
               })}
             </select>
           </div>
@@ -70,10 +82,22 @@ export default function Detail() {
       {/* pid && ( ... )：条件判断，避免在 pid 不存在时出现渲染错误或异常情况。 */}
       {pid && (
         <>
-          <StoreDetail title="房型選擇" type="bed" pid={pid} people={people} />
-          <StoreDetail title="營區選擇" type="tent" pid={pid} people={people} />
+          <div>
+            <StoreDetail
+              title="房型選擇"
+              type="bed"
+              pid={pid}
+              people={people}
+            />
+            <StoreDetail
+              title="營區選擇"
+              type="tent"
+              pid={pid}
+              people={people}
+            />
+          </div>
         </>
       )}
     </>
-  );
+  )
 }

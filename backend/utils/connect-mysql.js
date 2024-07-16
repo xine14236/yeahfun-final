@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import mysql from 'mysql2/promise.js'
 const {
   DB_HOST,
 
@@ -8,7 +8,7 @@ const {
 
   DB_DATABASE,
   DB_PORT,
-} = process.env;
+} = process.env
 console.log({
   DB_HOST,
 
@@ -18,17 +18,17 @@ console.log({
 
   DB_DATABASE,
   DB_PORT,
-});
-
-const db =  mysql.createPool({
-   host:DB_HOST,
-   user:  DB_USERNAME,
-   
-   password:DB_PASSWORD,
-   database:DB_DATABASE,
-   waitForConnections:true,
-   connectionLimit:8,
-   queueLimit: 0,
 })
 
-export default db;
+const db = mysql.createPool({
+  host: DB_HOST,
+  user: DB_USERNAME,
+
+  password: DB_PASSWORD,
+  database: DB_DATABASE,
+  waitForConnections: true,
+  connectionLimit: 8,
+  queueLimit: 0,
+})
+
+export default db
