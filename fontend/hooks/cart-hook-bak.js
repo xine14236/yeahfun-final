@@ -1,30 +1,29 @@
-import React, { useState, useContext, createContext } from 'react'
+import { useState, useContext, createContext } from 'react'
 
 // 創建一个 Context 用于共享購物車數據
 const CartContext = createContext()
 
-export function CartProviderNew({ children }) {
-  const [cartItems, setCartItems] = useState([])
+export const useCart = () => {
+  return useContext(CartContext)
+}
+
+export const CartProviderNew = ({ children }) => {
+  const [cart, setCart] = useState([])
 
   const addToCart = (store) => {
-    setCartItems((prevCart) => [...prevCart, store])
+    setCart((prevCart) => [...prevCart, store])
   }
   const removeFromCart = (rooms_campsites_id) => {
-    setCartItems((prevCart) =>
+    setCart((prevCart) =>
       prevCart.filter((item) => item.rooms_campsites_id !== rooms_campsites_id)
     )
   }
 
   const value = {
-    cartItems,
-    setCartItems,
+    cart,
     addToCart,
     removeFromCart,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
-}
-
-export function useCart() {
-  return useContext(CartContext)
 }
