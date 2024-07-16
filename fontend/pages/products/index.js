@@ -1,6 +1,5 @@
 import ListLayout from '@/components/layout/list-layout'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import styles from '@/styles/list.module.scss'
 import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
@@ -13,11 +12,7 @@ import Star from '@/components/icons/star'
 
 import Image from 'next/image'
 
-// 組合
-import ListProduct from '@/components/list/list-product'
-
 export default function Products() {
-  const router = useRouter()
   const [products, setProducts] = useState([])
   const [total, setTotal] = useState(0) // 總筆數
   const [pageCount, setPageCount] = useState(0) // 總頁數
@@ -133,10 +128,9 @@ export default function Products() {
 
   // 初始和頁數或每頁數變化時獲取數據
   useEffect(() => {
-    if (!router.isReady) return // router 還沒準備好, 就什麼都不做
     const params = { page, perpage, sort, order }
     getProducts(params)
-  }, [page, perpage, sort, order, router])
+  }, [page, perpage, sort, order])
 
   return (
     <>
@@ -146,7 +140,6 @@ export default function Products() {
           action=""
           onSubmit={(e) => {
             e.preventDefault()
-            router.push(`?location=${location}`)
           }}
           id="productSearchForm"
         >
@@ -228,9 +221,6 @@ export default function Products() {
                 className={styles.sort}
                 onSubmit={(e) => {
                   e.preventDefault()
-                  router.push(
-                    `?nameLike=${nameLike}&lowest_normal_price=${priceRange[0]}&lowest_normal_price=${priceRange[1]}&tag=${tag}`
-                  ) // 變更 qs 參數, 觸發 router 的變更
                 }}
               >
                 <div className={styles.orderBys}>
