@@ -10,7 +10,7 @@ export default function ShoppingCart() {
       <ul>
         {cartItems.map((v, i) => (
           <li key={i}>
-            {v.name} - ${v.normal_price}
+            {v.name} - ${v.normal_price} 
           </li>
         ))}
       </ul>

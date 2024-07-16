@@ -1,7 +1,14 @@
 import React from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import axiosInstance from '@/services/axios-instance'
+import { useAuth } from '@/hooks/use-auth'
+import Link from 'next/link'
+import toast, { Toaster } from 'react-hot-toast'
 import styles from '@/styles/cash.module.scss'
 
-export default function Cash() {
+
+export default function ECPayIndex() {
   return (
     <>
       <div className={`d-flex flex-row m-5 ${styles.box}`}>
