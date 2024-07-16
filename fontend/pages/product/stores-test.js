@@ -61,6 +61,7 @@ const Stores = () => {
     addToCart({
       id: store.stores_id,
       name: store.store_name,
+      rooms_campsites_id: store.rooms_campsites_id,
       rooms_campsites_name: store.rooms_campsites_name,
       rooms_campsites_price: store.normal_price,
       startDate: store.startDate || '',

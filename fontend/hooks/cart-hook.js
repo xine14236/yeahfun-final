@@ -13,8 +13,10 @@ export const CartProviderNew = ({ children }) => {
   const addToCart = (store) => {
     setCart((prevCart) => [...prevCart, store])
   }
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id))
+  const removeFromCart = (rooms_campsites_id) => {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.rooms_campsites_id !== rooms_campsites_id)
+    )
   }
 
   const value = {

@@ -8,8 +8,8 @@ import { useRouter } from 'next/router'
 export default function Cart() {
   const { cart, removeFromCart } = useCart()
 
-  const handleRemove = (storeId) => {
-    removeFromCart(storeId)
+  const handleRemove = (rooms_campsites_id) => {
+    removeFromCart(rooms_campsites_id)
   }
 
   const router = useRouter()
@@ -29,6 +29,7 @@ export default function Cart() {
           ...prevInfo,
           [storeId]: {
             id: resData.data.store.stores_id,
+            rooms_campsites_id: resData.data.store.rooms_campsites_id,
             name: resData.data.store.name,
             address: resData.data.store.address,
             comment_star: resData.data.store.comment_star,
@@ -116,7 +117,7 @@ export default function Cart() {
                   <div className="minusButton py-1">
                     <button
                       className="btn btn-primary"
-                      onClick={() => handleRemove(store.id)}
+                      onClick={() => handleRemove(store.rooms_campsites_id)}
                     >
                       <FaMinus />
                     </button>
