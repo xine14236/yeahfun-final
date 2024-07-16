@@ -1,0 +1,54 @@
+/* ReactPaginate.module.scss */
+.pagination {
+  /* 容器样式 */
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.item {
+  /* 页面项样式 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  background: var(--white);
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.item:hover {
+  background-color: var(--gray-200);
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--gray-800);
+  text-decoration: none;
+  font-family: 'Inter';
+  width: 13px;
+}
+
+.active {
+  border: 1px solid var(--primary-1);
+  color: white;
+}
+.active a {
+  color: var(--primary-1);
+}
+
+.disabledItem {
+  /* 禁用样式 */
+  background: var(--gray-400);
+}
+
+.disabledItem svg {
+  /* 禁用样式 */
+  color: var(--gray-200);
+}
+.disabledItem:hover {
+  background-color: var(--gray-400);
+}
