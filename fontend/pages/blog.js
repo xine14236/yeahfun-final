@@ -36,7 +36,7 @@ export default function Blog() {
 
   const [visible, setVisible] = useState(false);
 
-  const[getSuccess,setGetSuccess]=false
+  const[getSuccess,setGetSuccess]=useState(false)
 
   let params = {
     page,
