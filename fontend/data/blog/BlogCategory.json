@@ -1,0 +1,92 @@
+[
+  {
+      "id": 6,
+      "blog_category_name": "官方",
+      "parent": 1
+  },
+  {
+      "id": 7,
+      "blog_category_name": "非官方",
+      "parent": 1
+  },
+  {
+      "id": 8,
+      "blog_category_name": "北部",
+      "parent": 2
+  },
+  {
+      "id": 9,
+      "blog_category_name": "中部",
+      "parent": 2
+  },
+  {
+      "id": 10,
+      "blog_category_name": "南部",
+      "parent": 2
+  },
+  {
+      "id": 11,
+      "blog_category_name": "東部",
+      "parent": 2
+  },
+  {
+      "id": 12,
+      "blog_category_name": "野外攝影",
+      "parent": 3
+  },
+  {
+      "id": 13,
+      "blog_category_name": "釣魚",
+      "parent": 3
+  },
+  {
+      "id": 14,
+      "blog_category_name": "獨木舟",
+      "parent": 3
+  },
+  {
+      "id": 15,
+      "blog_category_name": "星空觀賞",
+      "parent": 3
+  },
+  {
+      "id": 16,
+      "blog_category_name": "選擇營地",
+      "parent": 4
+  },
+  {
+      "id": 17,
+      "blog_category_name": "搭建技巧",
+      "parent": 4
+  },
+  {
+      "id": 18,
+      "blog_category_name": "生火材料",
+      "parent": 4
+  },
+  {
+      "id": 19,
+      "blog_category_name": "戶外烹飪技巧",
+      "parent": 4
+  },
+  {
+      "id": 20,
+      "blog_category_name": "山區露營地",
+      "parent": 5
+  },
+  {
+      "id": 21,
+      "blog_category_name": "湖泊露營地",
+      "parent": 5
+  },
+  {
+      "id": 22,
+      "blog_category_name": "螢火蟲營地",
+      "parent": 5
+  },
+  {
+      "id": 23,
+      "blog_category_name": "海灘露營地",
+      "parent": 5
+  }
+]
