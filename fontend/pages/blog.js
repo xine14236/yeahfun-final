@@ -14,7 +14,7 @@ const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryMo
 
 export default function Blog() {
   const initialCate = blogCategory.map((v, i) => {
-    return { ...v, check: false }
+    return { ...v, checked: false }
   })
   console.log(initialCate)
 
@@ -85,6 +85,34 @@ export default function Blog() {
   const handleCancel = () => {
     setVisible(false);
   };
+ 
+  const handleCategoryCheckedAll = (nextChecked, parent = 0) => {
+    if (parent === 0) {
+      // 全選強制修改所有項目的checked屬性
+      const nextCategory = category.map((v, i) => {
+        return { ...v, checked: nextCategory }
+      })
+      setCategory(nextCategory )
+    } else {
+      // 強制修改所有項目的checked屬性
+      const nextCategory = category.map((v, i) => {
+        if (v.parent === parent) return { ...v, checked: nextChecked }
+        else return v
+      })
+
+      setCategory(nextCategory )
+    }
+  }
+
+
+  const toggleCheckbox = (category, id) => {
+    return category.map((v, i) => {
+      // 如果物件資料中的id屬性符合傳入的id時，則切換(or反相)checked的布林值
+      if (v.id === id) return { ...v, checked: !v.checked }
+      // 否則直接回傳原本的物件值
+      else return v
+    })
+  }
 
   useEffect(() => {
     //  建立搜尋參數物件
@@ -227,7 +255,7 @@ export default function Blog() {
           )
         })}
       </div>
-      <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} />
+      <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} />
     </>
   )
 }
