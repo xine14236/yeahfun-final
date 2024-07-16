@@ -27,12 +27,25 @@ export default function Blog() {
   // 排序
   const [sort, setSort] = useState('id')
   const [order, setOrder] = useState('asc')
+  const [nameLike, setNameLike] = useState('')
+
 
   const [selectedRange, setSelectedRange] = useState([null, null])
 
   const [category, setCategory] = useState(initialCate)
 
   const [visible, setVisible] = useState(false);
+
+  let params = {
+    page,
+    perpage,
+    sort,
+    order,
+    name_like: nameLike,
+      categories: category.filter((v) => v.checked === true).map((v) => v.id).join(','),
+      date_begin: selectedRange[0]?.$d || '',
+      date_end: selectedRange[1]?.$d || '',
+  }
 
 
   const handleRangeChange = (dates, dateStrings) => {
@@ -72,6 +85,24 @@ export default function Blog() {
   }
   const stripHtmlTags = (str) => {
     return str.replace(/<[^>]*>/g, '') // 使用正則表達式去除所有 HTML 標籤
+  }
+
+  const handleSearch = () => {
+    // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁
+    setPage(1)
+
+     params = {
+      page: 1, // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁，向伺服器要第1頁的資料
+      perpage,
+      sort: sort,
+      order: order,
+      name_like: nameLike,
+      categories: category.filter((v) => v.checked === true).map((v) => v.id).join(','),
+      date_begin: selectedRange[0]?.$d || '',
+      date_end: selectedRange[1]?.$d || '',
+    }
+   
+    getLists(params)
   }
 
   const showModal = () => {
@@ -116,14 +147,10 @@ export default function Blog() {
 
   useEffect(() => {
     //  建立搜尋參數物件
-    const params = {
-      page,
-      perpage,
-      sort,
-      order,
-    }
+  
     // 向伺服器fetch
     getLists(params)
+    console.log(params)
   }, [page, perpage, sort, order])
 
   return (
@@ -136,7 +163,12 @@ export default function Blog() {
             >
               <div className="row">
                 <div className="col-lg-6 col-12 d-flex align-items-center">
-                  <select className="form-select ">
+                  <select className="form-select  " value={`${sort},${order}`}
+        onChange={(e) => {
+          const tv = e.target.value
+          setSort(tv.split(',')[0])
+          setOrder(tv.split(',')[1])
+        }}>
                     <option value="id,asc">依id排序(由小至大)</option>
                     <option value="id,desc">依id排序(由大至小)</option>
                     <option value="author,asc">依作者排序(由低至高)</option>
@@ -148,7 +180,10 @@ export default function Blog() {
                   <input
                     type="text"
                     className={`form-control  ${styles.filterWidth1}`}
-                    placeholder=""
+                    value={nameLike}
+                    onChange={(e) => {
+            setNameLike(e.target.value)
+          }}
                   />
                   <span
                     className={`form-text text-center ${styles.marginInline}`}
@@ -174,9 +209,10 @@ export default function Blog() {
           
             </div>
             <div
-              className={`col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center ${styles.h150}`}
+              className={`col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center ${styles.h150}` }
+              onClick={handleSearch}
             >
-              <FaSearch />
+              <FaSearch  />
             </div>
             <div className={`col-12 border ${styles.blogcategory}`} onClick={showModal} >點我展開分類搜尋</div>
           </div>
@@ -187,10 +223,10 @@ export default function Blog() {
       <div className="container">
         {blogs.map((v, i) => {
           return (
-            <div className="row " id="card-container" key={v.id}>
+            <div className={`row `} id="card-container" key={v.id}>
               {/* 卡片内容会在这里动态生成 */}
               <div
-                className={`card col-md-12 ${styles.cardWrapper} col-lg-9 ${
+                className={`card col-md-12 ${styles.cardWrapper} ${styles.blogBody} col-lg-9 ${
                   i % 2 === 1 ? `${styles.cardRight}` : `${styles.cardLeft}`
                 }`}
               >
