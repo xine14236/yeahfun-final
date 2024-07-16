@@ -125,11 +125,13 @@ r.date=''
       r.date=moment(r.create_at, dateFormat1).format(dateFormat2);
     }
   })
+  const sql1 ='SELECT * FROM `blog_category_name` WHERE parent >0'
+  const[rows3]= await db.query(sql1)
 
   const output={
     success:true,
     data:{
-      sql,page,perPage,totalPages,totalRows,blogs:rows
+      sql,page,perPage,totalPages,totalRows,categories:rows3,blogs:rows
 
     }
   }

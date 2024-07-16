@@ -4,6 +4,7 @@ import '@/styles/globals.scss'
 import '@/styles/product.scss'
 import '@/styles/cart.scss'
 import '@/styles/loader.scss'
+import '@/styles/react-paginate.scss'
 import { ConfigProvider } from 'antd'
 import theme from '@/theme/themeConfig'
 // 載入購物車context

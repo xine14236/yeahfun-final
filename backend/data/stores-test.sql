@@ -1,11 +1,11 @@
-    SELECT store.stores_id, store.name, store.address, comment.comment_star ,stores_img.img_name , MIN(room_campsite.normal_price) AS lowest_normal_price
+    SELECT store.stores_id, store.name, store.address, comment.comment_star ,stores_img.img_name , MIN(rooms_campsites.normal_price) AS lowest_normal_price
     FROM store
     LEFT JOIN comment
     ON store.stores_id = comment.stores_id
     LEFT  JOIN stores_img 
     ON store.stores_id = stores_img.stores_id
-    LEFT JOIN room_campsite
-    ON store.stores_id = room_campsite.stores_id
+    LEFT JOIN rooms_campsites
+    ON store.stores_id = rooms_campsites.stores_id
     GROUP BY 
         store.stores_id;
 
@@ -35,7 +35,7 @@
         GROUP BY stores_id) si ON store.stores_id = si.stores_id
     LEFT JOIN 
         (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-        FROM room_campsite
+        FROM rooms_campsites
         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id;
 
 -- 只填地點，沒有tag，記得要where
@@ -58,7 +58,7 @@
         GROUP BY stores_id) si ON store.stores_id = si.stores_id
     LEFT JOIN 
         (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-        FROM room_campsite
+        FROM rooms_campsites
         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id;
 
 -- 只填關鍵字，記得設變數
@@ -81,7 +81,7 @@
         GROUP BY stores_id) si ON store.stores_id = si.stores_id
     LEFT JOIN 
         (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-        FROM room_campsite
+        FROM rooms_campsites
         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id
           WHERE name LIKE '%露營%';
 
@@ -89,11 +89,11 @@
           SELECT store.stores_id, store.name, store.address, 
             ROUND(AVG(comment.comment_star), 1) AS comment_star, 
             MAX(stores_img.img_name) AS img_name, 
-            MIN(room_campsite.normal_price) AS lowest_normal_price
+            MIN(rooms_campsites.normal_price) AS lowest_normal_price
      FROM store
      LEFT JOIN comment ON store.stores_id = comment.stores_id
      LEFT JOIN stores_img ON store.stores_id = stores_img.stores_id
-     LEFT JOIN room_campsite ON store.stores_id = room_campsite.stores_id
+     LEFT JOIN rooms_campsites ON store.stores_id = rooms_campsites.stores_id
      WHERE 1=1 AND store.address='南投縣'
      GROUP BY store.stores_id, store.name, store.address
 
@@ -110,11 +110,11 @@
         GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
         ROUND(AVG(comment.comment_star), 1) AS comment_star, 
         MAX(stores_img.img_name) AS img_name, 
-        MIN(room_campsite.normal_price) AS lowest_normal_price
+        MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
         WHERE t.tag_name IN ('草地', '遠景','獨立包區','森林系','櫻花祭','親子同遊','雨棚','小木屋','山景雲海','海景')
@@ -128,11 +128,11 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
         WHERE t.tag_name IN ('草地', '遠景', '獨立包區', '森林系', '櫻花祭', '親子同遊', '雨棚', '小木屋', '山景雲海', '海景')
@@ -141,9 +141,9 @@ SELECT s.stores_id, s.name, s.address,
         AND s.stores_id IN (
             SELECT s.stores_id
             FROM store AS s
-            LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+            LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
             GROUP BY s.stores_id
-            HAVING MIN(room_campsite.normal_price) BETWEEN 1000 AND 2000
+            HAVING MIN(rooms_campsites.normal_price) BETWEEN 1000 AND 2000
             )
             GROUP BY s.stores_id, s.name, s.address
             HAVING FIND_IN_SET('櫻花祭', GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ','));
@@ -153,11 +153,11 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
             GROUP BY s.stores_id, s.name, s.address
@@ -168,11 +168,11 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
             GROUP BY s.stores_id, s.name, s.address
@@ -186,19 +186,19 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
         AND s.stores_id IN (
             SELECT s.stores_id
             FROM store AS s
-            LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+            LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
             GROUP BY s.stores_id
-            HAVING MIN(room_campsite.normal_price) BETWEEN 500 AND 1100
+            HAVING MIN(rooms_campsites.normal_price) BETWEEN 500 AND 1100
             )
         GROUP BY s.stores_id, s.name, s.address
 
@@ -213,11 +213,11 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
         WHERE t.tag_name IN ('草地', '遠景', '獨立包區', '森林系', '櫻花祭', '親子同遊', '雨棚', '小木屋', '山景雲海', '海景')
@@ -226,7 +226,7 @@ SELECT s.stores_id, s.name, s.address,
         AND t.tag_name = '櫻花祭'
         AND s.stores_id IN (
             SELECT stores_id
-            FROM room_campsite
+            FROM rooms_campsites
             GROUP BY stores_id
             HAVING MIN(normal_price) BETWEEN 1000 AND 2000
         )
@@ -237,11 +237,11 @@ SELECT s.stores_id, s.name, s.address,
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
 FROM store AS s
 LEFT JOIN comment ON s.stores_id = comment.stores_id
 LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
 INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
 INNER JOIN tag AS t ON t.tag_id = st.tag_id
 WHERE t.tag_name IN ('草地', '遠景', '獨立包區', '森林系', '櫻花祭', '親子同遊', '雨棚', '小木屋', '山景雲海', '海景')
@@ -249,7 +249,7 @@ WHERE t.tag_name IN ('草地', '遠景', '獨立包區', '森林系', '櫻花祭
   AND s.name LIKE '%露營%'
   AND t.tag_name = '櫻花祭'
 GROUP BY s.stores_id, s.name, s.address
-HAVING MIN(room_campsite.normal_price) BETWEEN 500 AND 1000;
+HAVING MIN(rooms_campsites.normal_price) BETWEEN 500 AND 1000;
 
 
 SELECT 
@@ -261,11 +261,25 @@ FROM (
         store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
         INNER JOIN tag AS t ON t.tag_id = st.tag_id
     GROUP BY 
         s.stores_id, s.name, s.address
     HAVING
-        COUNT(DISTINCT CASE WHEN room_campsite.normal_price BETWEEN 500 AND 1100 THEN s.stores_id END) > 0
+        COUNT(DISTINCT CASE WHEN rooms_campsites.normal_price BETWEEN 500 AND 1100 THEN s.stores_id END) > 0
 ) AS subquery;
+
+
+SELECT s.stores_id, s.name, s.address, 
+       GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
+       ROUND(AVG(comment.comment_star), 1) AS comment_star, 
+       MAX(stores_img.img_name) AS img_name, 
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
+        FROM store AS s
+        LEFT JOIN comment ON s.stores_id = comment.stores_id
+        LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
+        LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
+        LEFT JOIN tag AS t ON t.tag_id = st.tag_id
+        GROUP BY s.stores_id, s.name, s.address
