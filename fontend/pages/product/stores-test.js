@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 const Stores = () => {
   const [stores, setStores] = useState([])
-  const { addToCart } = useCart()
+  const { addCart } = useCart()
 
   const router = useRouter()
 
@@ -58,7 +58,7 @@ const Stores = () => {
   }
 
   const handleAddToCart = (store) => {
-    addToCart({
+    addCart({
       id: store.stores_id,
       name: store.store_name,
       rooms_campsites_id: store.rooms_campsites_id,

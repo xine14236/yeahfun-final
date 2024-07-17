@@ -6,9 +6,11 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
   //路徑
   const router = useRouter()
   //更新購物車鉤子的狀態
-  const { setCartItems } = useCart()
+  const { setCartItems, addCart } = useCart()
   //取得商店內的商品
   const [storeDetail, setStoreDetail] = useState([])
+
+  const [stores, setStores] = useState([])
 
   const getStore = async (id, type, people) => {
     const url = `http://localhost:3005/api/store/${id}/${type}/${people}`
@@ -37,6 +39,8 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }
 
+  // const handleAddToCart = () => {}
+
   useEffect(() => {
     if (router.isReady && pid) {
       //console.log("Router is ready, query:", router.query);
@@ -44,9 +48,9 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }, [router.isReady, pid, type, people])
 
-  const addToCart = (detail) => {
-    setCartItems((prevItems) => [...prevItems, detail])
-  }
+  // const addToCart = (detail) => {
+  //   setCartItems((prevItems) => [...prevItems, detail])
+  // }
 
   return (
     <>
@@ -146,7 +150,7 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
                   />
                   <div className="form-item"></div>
                   <div className="form-item">
-                    <button type="button" onClick={() => addToCart(detail)}>
+                    <button type="button" onClick={() => addCart(detail)}>
                       加入訂房
                     </button>
                   </div>
