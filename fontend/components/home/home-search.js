@@ -2,16 +2,17 @@ import styles from '@/components/layout/home-layout/header.module.scss'
 import { Select, DatePicker, Input } from 'antd'
 const { RangePicker } = DatePicker
 import dayjs from 'dayjs'
-import { useState, useRouter } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function HomeSearch() {
-  // const router = useRouter()
+  const router = useRouter()
   const [dateRange, setDateRange] = useState([])
   const [nameLike, setNameLike] = useState('')
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([])
 
-  const tagOptions = [
+  const tagOptions1 = [
     '草地',
     '遠景',
     '獨立包區',
@@ -24,11 +25,42 @@ export default function HomeSearch() {
     '海景',
   ]
 
+  const tagOptions = [
+    { label: '草地', value: '草地' },
+    { label: '遠景', value: '遠景' },
+    { label: '獨立包區', value: '獨立包區' },
+    { label: '森林系', value: '森林系' },
+    { label: '櫻花祭', value: '櫻花祭' },
+    { label: '親子同遊', value: '親子同遊' },
+    { label: '雨棚', value: '雨棚' },
+    { label: '小木屋', value: '小木屋' },
+    { label: '山景雲海', value: '山景雲海' },
+    { label: '海景', value: '海景' },
+  ]
+
   const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
+
+  const handleChange = (value) => {
+    setTag(value)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
+    const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
+
+    const query = `?name_like=${nameLike}&location=${location}&tag=${tag}&startDate=${startDate}&endDate=${endDate}`
+
+    router.push(`/products${query}`)
+  }
 
   const disabledDate = (current) => {
     return current && current < dayjs().endOf('day')
   }
+  useEffect(() => {
+    if (!router.isReady) return
+  }, [router])
 
   return (
     <div className={styles.glassCardSection}>
@@ -36,7 +68,7 @@ export default function HomeSearch() {
         <form
           className={styles.searchForm}
           action=""
-          onSubmit={() => false}
+          onSubmit={handleSubmit}
           id="searchForm"
         >
           <label className={styles.formTitle} htmlFor="goWhere">
@@ -45,12 +77,12 @@ export default function HomeSearch() {
           <Select
             defaultValue="全台灣"
             style={{ width: '100%' }}
-            // onChange={handleChangeSelect}
-            // options={locationOptions.map((value, i) => ({
-            //   key: i,
-            //   value: value,
-            //   label: value,
-            // }))}
+            onChange={(value) => setLocation(value)}
+            options={locationOptions.map((v, i) => ({
+              key: i,
+              value: v,
+              label: v,
+            }))}
           />
           <label htmlFor="type" className={styles.formTitle}>
             <h5>營地類型</h5>
@@ -62,10 +94,15 @@ export default function HomeSearch() {
             style={{
               width: '100%',
             }}
-            placeholder="Please select"
-            defaultValue={['a10', 'c12']}
-            onChange={(e) => false}
-            // options={}
+            placeholder="選擇類型"
+            onChange={handleChange}
+            options={tagOptions.map((v, i) => {
+              return {
+                key: i,
+                value: v.value,
+                label: v.label,
+              }
+            })}
           />
 
           <label htmlFor="date" className={styles.formTitle}>
@@ -73,7 +110,9 @@ export default function HomeSearch() {
           </label>
           <RangePicker
             disabledDate={disabledDate}
-            // onChange={handleDateChange}
+            onChange={(e) => {
+              setDateRange(e)
+            }}
           />
           <label htmlFor="date" className={styles.formTitle}>
             <h5>關鍵字搜尋</h5>
@@ -84,7 +123,14 @@ export default function HomeSearch() {
               setNameLike(e.target.value)
             }}
           />
-          <button className="btnGreenPc transition">開始探索</button>
+          <button
+            className="btnGreenPc transition"
+            onClick={(e) => {
+              handleSubmit(e)
+            }}
+          >
+            開始探索
+          </button>
         </form>
       </div>
     </div>

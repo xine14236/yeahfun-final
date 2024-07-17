@@ -30,10 +30,13 @@ export default function Home() {
                     </svg> */}
                   </a>
                   <Link href="#/">
-                    <img
+                    <Image
                       src="/images/homepage/tent13.jpg"
                       className={styles.cardImage}
                       alt="Image 2"
+                      width={300}
+                      height={200}
+                      style={{ width: '100%', height: 'auto' }}
                     />
                   </Link>
                   <div className={styles.cardBody}>
@@ -62,24 +65,35 @@ export default function Home() {
 
       <div className={styles.section03}>
         <div className="title">
-          <img src="/images/homepage/title-tree.png" alt="" />
+          <Image
+            src="/images/homepage/title-tree.png"
+            alt="blog"
+            width={66}
+            height={33}
+          />
           <div className="titleContent">
             <h3 className="titleText">Activity</h3>
             <p>最新消息</p>
           </div>
         </div>
-        <img
+        <Image
           className={styles.section03Bg}
           src="/images/homepage/home-bg01.jpg"
           alt="section03Bg"
+          width={1920}
+          height={1080}
+          style={{ width: '100%' }}
         />
         <div className={`row justify-content-center ${styles.rowActivity}`}>
           <div className={`col-12 col-sm-3 p-0 ${styles.customCol}`}>
             <div className={`card ${styles.activityCard}`}>
-              <img
+              <Image
                 src="/images/homepage/tent02.jpg"
                 className={styles.activityImg}
                 alt="blog"
+                width={400}
+                height={600}
+                style={{ width: 'auto', height: '100%' }}
               />
               <div className={`card-body ${styles.cardBody}`}>
                 <a href="#/">
