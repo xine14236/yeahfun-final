@@ -260,7 +260,7 @@ router.get('/:bid', async (req, res) => {
     COALESCE(lb.likes_count, 0) AS likes_count
    FROM blog b 
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  
-  GROUP BY b.id ORDER BY likes_count DESC
+  GROUP BY b.id ORDER BY likes_count DESC ,b.id DESC
 LIMIT 5 `
 
 const dateFormat3 = 'YYYYMMDD'
