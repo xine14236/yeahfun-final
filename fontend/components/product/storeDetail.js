@@ -10,6 +10,8 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
   //取得商店內的商品
   const [storeDetail, setStoreDetail] = useState([])
 
+  const [stores, setStores] = useState([])
+
   const getStore = async (id, type, people) => {
     const url = `http://localhost:3005/api/store/${id}/${type}/${people}`
     console.log('Fetching data from:', url)
@@ -37,6 +39,8 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }
 
+  // const handleAddToCart = () => {}
+
   useEffect(() => {
     if (router.isReady && pid) {
       //console.log("Router is ready, query:", router.query);
@@ -44,9 +48,9 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }, [router.isReady, pid, type, people])
 
-  const addToCart = (detail) => {
-    setCartItems((prevItems) => [...prevItems, detail])
-  }
+  // const addToCart = (detail) => {
+  //   setCartItems((prevItems) => [...prevItems, detail])
+  // }
 
   return (
     <>
@@ -78,13 +82,6 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
                   className="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
-                  style={
-                    {
-                      // borderRadius: 10,
-                      // border: '1px solid var(--primary-1, #389B87)',
-                      // background: '#FFF',
-                    }
-                  }
                 >
                   詳細內容
                 </button>
