@@ -33,14 +33,15 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <CartProviderNew>
-   <ConfigProvider theme={theme}>
-     <AuthProvider>
-      <LoaderProvider close={2} CustomLoader={CatLoader}>
-        <CartProvider>{getLayout(<Component {...pageProps} />)}</CartProvider>
-      </LoaderProvider>
-     </AuthProvider>
-    </ConfigProvider>
+      <ConfigProvider theme={theme}>
+        <AuthProvider>
+          <LoaderProvider close={2} CustomLoader={CatLoader}>
+            <CartProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </CartProvider>
+          </LoaderProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </CartProviderNew>
-    
   )
 }
