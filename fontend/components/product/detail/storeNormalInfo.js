@@ -1,6 +1,71 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function StoreNormalInfo() {
+  const router = useRouter()
+  const [store, setStore] = useState({
+    stores_id: 0,
+    owners_id: 0,
+    name: '',
+    mobile: '',
+    address: '',
+    longitude: '',
+    latitude: '',
+    altitude: '',
+    precautions: '',
+    introduction: '',
+    update_time: '',
+  })
+  // const [precautionsElements, setPrecautionsElements] = useState([])
+
+  const getProduct = async (pid) => {
+    const url = 'http://localhost:3005/api/detail/' + pid
+
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      if (resData.status === 'success') {
+        setStore(resData.data.store)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const precautionsElements = store.precautions
+    .split(',')
+    .map((item, index) => {
+      return <p key={index}>{item}</p>
+    })
+  // console.log('store', store)
+  // console.log('store.precautions', store.precautions)
+  console.log('precautionsElements', precautionsElements)
+
+  useEffect(() => {
+    console.log('render router.query=', router.query)
+  })
+
+  useEffect(() => {
+    if (router.isReady) {
+      // 這裡可以得到router.query
+      console.log(router.query)
+      // 向伺服器要求資料
+      getProduct(router.query.pid)
+    }
+  }, [router.isReady])
+
+  // useEffect(() => {
+  //   const precautionsElements = store.precautions
+  //     .split('\n')
+  //     .map((item, index) => {
+  //       return <p key={index}>{item}</p>
+  //     })
+  //   console.log('store', store)
+  //   console.log('precautionsElements', precautionsElements)
+  //   console.log('store.precautions', store.precautions)
+  // }, [store])
+
   return (
     <>
       <div
@@ -18,51 +83,49 @@ export default function StoreNormalInfo() {
                 <svg className="svgIcon">
                   <use href="/shower" />
                 </svg>
-                <div className="info">提供衛浴。</div>
+                <div className="info">{precautionsElements[0]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/fire" />
                 </svg>
-                <div className="info">離地焚火，自備薪柴。</div>
+                <div className="info">{precautionsElements[1]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/noSmoking" />
                 </svg>
-                <div className="info">公共區域，嚴禁抽菸</div>
+                <div className="info">{precautionsElements[2]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/wifi" />
                 </svg>
-                <div className="info">提供免費wifi</div>
+                <div className="info">{precautionsElements[3]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/trash" />
                 </svg>
-                <div className="info">嚴格分類，廚餘統一</div>
+                <div className="info">{precautionsElements[4]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/pet" />
                 </svg>
-                <div className="info">請注意犬吠及清理排遺、露營屋禁入。</div>
+                <div className="info">{precautionsElements[5]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/fishing" />
                 </svg>
-                <div className="info">營內提供免費垂釣魚池。</div>
+                <div className="info">{precautionsElements[6]}</div>
               </div>
               <div className="info">
                 <svg className="svgIcon">
                   <use href="/attention" />
                 </svg>
-                <div className="info">
-                  每個營位限用1條延長線，規定使用距離最近的插座，禁止私接它處電源
-                </div>
+                <div className="info">{precautionsElements[7]}</div>
               </div>
             </div>
           </div>
@@ -73,7 +136,9 @@ export default function StoreNormalInfo() {
               <tbody>
                 <tr>
                   <th>GPS座標</th>
-                  <td>N23.6281524, E120.8829127</td>
+                  <td>
+                    N{store.longitude}, E{store.latitude}
+                  </td>
                 </tr>
                 <tr>
                   <th>提供夜衝</th>
@@ -93,7 +158,7 @@ export default function StoreNormalInfo() {
                 </tr>
                 <tr>
                   <th>海拔</th>
-                  <td>900m</td>
+                  <td>{store.altitude}m</td>
                 </tr>
                 <tr>
                   <th>冰箱</th>
