@@ -340,3 +340,36 @@
     display: none;
   }
 }
+.section04 {
+  position: relative;
+}
+.theme1 {
+  border: transparent;
+  padding-inline: 10px;
+}
+.theme {
+  border-right: 2px solid var(--black);
+  padding-inline: 10px;
+}
+.iconRightSolid {
+  position: absolute;
+  right: 75px;
+  bottom: 425px;
+}
+.iconLeftSolid {
+  position: absolute;
+  left: 75px;
+  bottom: 425px;
+}
+@media (max-width: 576px) {
+  .iconRightSolid,
+  .iconLeftSolid {
+    display: none;
+  }
+  .theme1 {
+    font-size: var(--h6);
+  }
+  .theme {
+    font-size: var(--h6);
+  }
+}

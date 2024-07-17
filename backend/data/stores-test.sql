@@ -283,3 +283,42 @@ SELECT s.stores_id, s.name, s.address,
         LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
         LEFT JOIN tag AS t ON t.tag_id = st.tag_id
         GROUP BY s.stores_id, s.name, s.address
+
+SELECT 
+    s.stores_id, 
+    s.name, 
+    s.address,
+    ROUND(AVG(comment.comment_star), 1) AS comment_star,
+    MAX(stores_img.img_name) AS img_name 
+FROM 
+    store AS s
+LEFT JOIN 
+    comment ON s.stores_id = comment.stores_id
+LEFT JOIN 
+    stores_img ON s.stores_id = stores_img.stores_id
+GROUP BY 
+    s.stores_id, 
+    s.name, 
+    s.address;
+
+
+    SELECT 
+    s.stores_id, 
+    s.name, 
+    s.address,
+    ROUND(AVG(comment.comment_star), 1) AS comment_star,
+    MAX(stores_img.img_name) AS img_name 
+    FROM 
+        store AS s
+    LEFT JOIN 
+        comment ON s.stores_id = comment.stores_id
+    LEFT JOIN 
+        stores_img ON s.stores_id = stores_img.stores_id
+    GROUP BY 
+        s.stores_id, 
+        s.name, 
+        s.address;
+
+
+    SELECT title,content,img_name FROM blog
+    LEFT JOIN blog_img ON blog.id = blog_img.blog_id

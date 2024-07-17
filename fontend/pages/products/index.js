@@ -115,20 +115,30 @@ export default function Products() {
     setDateRange(e)
   }
 
-  const handleChangeSelect = (value) => {
+  const handleChangeSelect1 = (value) => {
     if (value === '全台灣') {
       setLocation([])
     } else {
       setLocation(value)
     }
   }
+
+  // const handleChangeSelect = (value) => {
+  //   if (value === '全台灣') {
+  //     setLocation([])
+  //   } else {
+  //     setLocation(value)
+  //   }
+  // }
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
     const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
 
-    router.push(`?startDate=${startDate}&endDate=${endDate}`)
+    router.push(
+      `?name_like=${nameLike}&location=${location}&tag=${tag}&startDate=${startDate}&endDate=${endDate}`
+    )
   }
 
   // 按下搜尋按鈕
@@ -150,11 +160,11 @@ export default function Products() {
     getProducts(params)
   }
   // 初始和頁數或每頁數變化時獲取數據
-  useEffect(() => {
-    if (!router.isReady) return
-    const params = { page, perpage, sort, order }
-    getProducts(params)
-  }, [page, perpage, sort, order, router])
+  // useEffect(() => {
+  //   if (!router.isReady) return
+  //   const params = { page, perpage, sort, order }
+  //   getProducts(params)
+  // }, [page, perpage, sort, order, router])
 
   useEffect(() => {
     if (
@@ -168,15 +178,16 @@ export default function Products() {
         `http://localhost:3005/api/stores?name_like=${query.name_like}&location=${query.location}&tag=${query.tag}`
       )
         .then((response) => response.json())
-        .then((resData) => setProducts(resData.data.stores))
+        .then((resData) => {
+          setProducts(resData.data.stores)
+          setPageCount(resData.data.pageCount)
+        })
         .catch((error) => console.error('Error fetching data:', error))
     } else {
-      fetch('http://localhost:3005/api/stores')
-        .then((response) => response.json())
-        .then((resData) => setProducts(resData.data.stores))
-        .catch((error) => console.error('Error fetching data:', error))
+      const params = { page, perpage, sort, order }
+      getProducts(params)
     }
-  }, [query])
+  }, [page, perpage, sort, order, query])
 
   return (
     <>
@@ -187,6 +198,32 @@ export default function Products() {
           onSubmit={handleSubmit}
           id="productSearchForm"
         >
+          <div className={styles.keyword}>
+            <label htmlFor="search" className={styles.formTitle}>
+              <h5>關鍵字搜尋</h5>
+            </label>
+            <Input
+              value={nameLike}
+              onChange={(e) => {
+                setNameLike(e.target.value)
+              }}
+            />
+          </div>
+          <div className={styles.goWhereTeam}>
+            <label className={styles.formTitle} htmlFor="goWhere">
+              <p>你想去哪裡?</p>
+            </label>
+            <Select
+              defaultValue="全台灣"
+              style={{ width: '100%' }}
+              onChange={handleChangeSelect1}
+              options={locationOptions.map((value, i) => ({
+                key: i,
+                value: value,
+                label: value,
+              }))}
+            />
+          </div>
           <div className={styles.calendarTeam}>
             <label htmlFor="date" className={styles.formTitle}>
               <h5>入住日期區間</h5>
@@ -196,8 +233,33 @@ export default function Products() {
               onChange={handleDateChange}
             />
           </div>
+          <div className={styles.types}>
+            <h5>類型</h5>
+            <div className="row">
+              {tagOptions.map((v, i) => {
+                return (
+                  <div className="col-6" key={i}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        id={v}
+                        type="checkbox"
+                        value={v}
+                        checked={tag.includes(v)}
+                        onChange={handleTagChecked}
+                      />
+                      <label className="form-check-label" htmlFor={v}>
+                        {v}
+                      </label>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
           <div className={styles.searchBarSort}>
-            <div className={styles.keyword}>
+            {/* <div className={styles.keyword}>
               <label htmlFor="search" className={styles.formTitle}>
                 <h5>關鍵字搜尋</h5>
               </label>
@@ -207,7 +269,7 @@ export default function Products() {
                   setNameLike(e.target.value)
                 }}
               />
-            </div>
+            </div> */}
             <div className={styles.price}>
               <label htmlFor="range">
                 <h5>價格區間</h5>
@@ -226,7 +288,8 @@ export default function Products() {
             </div>
             <div className={styles.types}>
               <h5>類型</h5>
-              <div className="row">
+
+              {/* <div className="row">
                 {tagOptions.map((v, i) => {
                   return (
                     <div className="col-6" key={i}>
@@ -246,12 +309,12 @@ export default function Products() {
                     </div>
                   )
                 })}
-              </div>
+              </div> */}
             </div>
           </div>
           <button
             className={`btnGreenPc styles.transition`}
-            onClick={handleSearch}
+            // onClick={handleSearch}
           >
             開始探索
           </button>
@@ -315,7 +378,7 @@ export default function Products() {
                     ]}
                   />
                 </div>
-                <div className={styles.goWhereTeam}>
+                {/* <div className={styles.goWhereTeam}>
                   <label className={styles.formTitle} htmlFor="goWhere">
                     <p>你想去哪裡?</p>
                   </label>
@@ -329,7 +392,7 @@ export default function Products() {
                       label: value,
                     }))}
                   />
-                </div>
+                </div> */}
                 <div className="keyword">
                   <label htmlFor="search" className={styles.formTitle}>
                     <p>關鍵字搜尋</p>
@@ -358,7 +421,7 @@ export default function Products() {
                 <div className={styles.types}>
                   <p>類型</p>
 
-                  {tagOptions.map((v, i) => {
+                  {/* {tagOptions.map((v, i) => {
                     return (
                       <div className="form-check" key={i}>
                         <input
@@ -374,7 +437,7 @@ export default function Products() {
                         </label>
                       </div>
                     )
-                  })}
+                  })} */}
 
                   <div>
                     <button className="btnGreenPc" onClick={handleSearch}>
