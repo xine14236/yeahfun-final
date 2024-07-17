@@ -263,13 +263,13 @@ router.get('/:bid', async (req, res) => {
   GROUP BY b.id ORDER BY likes_count DESC
 LIMIT 5 `
 
-const dateFormat2 = 'YYYYMMDD'
+const dateFormat3 = 'YYYYMMDD'
   const [row2]=await db.query(sql2)
   row2.forEach((r) => {
     r.date = ''
     // "JS 的Date 類型 轉換成日期格式的字串"
     if (r.create_at) {
-      r.create_at = moment(r.create_at).format(dateFormat2)
+      r.create_at = moment(r.create_at).format(dateFormat3)
     
     }
   })
