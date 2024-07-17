@@ -118,7 +118,9 @@ export default function Blog() {
   };
 
   const handleOk = () => {
+   
     setVisible(false);
+    handleSearch()
   };
 
   const handleCancel = () => {
@@ -129,7 +131,7 @@ export default function Blog() {
     if (parent === 0) {
       // 全選強制修改所有項目的checked屬性
       const nextCategory = category.map((v, i) => {
-        return { ...v, checked: nextCategory }
+        return { ...v, checked: nextChecked }
       })
       setCategory(nextCategory )
     } else {
@@ -307,7 +309,7 @@ export default function Blog() {
           )
         })}
       </div>
-      <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} />
+      <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} handleSearch={handleSearch} />
     </>
   )
 }
