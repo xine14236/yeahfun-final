@@ -19,7 +19,7 @@ export default function Blog() {
   const initialCate = blogCategory.map((v, i) => {
     return { ...v, checked: false }
   })
-  console.log(initialCate)
+  // console.log(initialCate)
 
   const [blogs, setBlogs] = useState([])
   const [total, setTotal] = useState(0) //總筆數
@@ -167,6 +167,11 @@ export default function Blog() {
     }
   };
 
+  const handleClickStar = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`)
+    const resData = await res.json()
+    console.log(resData.action)
+  }
 
 
   const handleMouseEnter = (id) => {
@@ -263,8 +268,8 @@ export default function Blog() {
             <div className={`row ${styles.blogBodyHead}`} id="card-container" key={v.id} onMouseEnter={() => handleMouseEnter(v.id)}
             onMouseLeave={handleMouseLeave}>
            
-            <div >
-      <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`} />
+            <div onClick={()=>{handleClickStar(v.id)}}>
+      <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />
       </div>
               {/* 卡片内容会在这里动态生成 */}
               <div
