@@ -34,6 +34,7 @@ export default function DetailTest() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
+      console.log(store)//[]
 
       if (resData.status === 'success') {
         setStore(resData.data.store)
@@ -55,6 +56,14 @@ export default function DetailTest() {
     )
   })
 
+  // TODO
+  // 將取得precautions資料map
+  // const precautionsElements = store.precautions
+  //   .split(',')
+  //   .map((item, index) => {
+  //     return <p key={index}>{item}</p>
+  //   })
+
   useEffect(() => {
     if (router.isReady) {
       getCampsitesInformation(router.query.pid)
@@ -73,33 +82,66 @@ export default function DetailTest() {
   return (
     <>
       <div className="storeTitleWrap">
-        <div className="storeTitle">
+        <div className="row storeTitle">
           <h1>{store.name}</h1>
           <div className="storeShare">
             <button>share</button>
             <button>add</button>
           </div>
-          <div className="row storeIntroduce">
-            <div className="col-6 briefIntroduce ">
-              <p>{store.introduction}</p>
-            </div>
-            <div className="col-2 campTags ">
-              <h5>{store.address}</h5>
-              {tags}
-            </div>
+        </div>
+        <div className="row storeIntroduce">
+          <div className="col-6 briefIntroduce ">
+            <p>{store.introduction}</p>
+          </div>
+          <div className="col-2 campTags ">
+            <h5>{store.address}</h5>
+            {tags}
           </div>
         </div>
       </div>
-      <div>
-        <h4>基本資訊</h4>
-        <p>露營地名稱: {store.name}</p>
-        <p>Location: {store.address}</p>
-        <p>mobile: {store.mobile}</p>
-        <p>露營地介紹: {store.introduction}</p>
-        <p>注意事項: {store.precautions}</p>
-        <p>經度: {store.latitude}°E</p>
-        <p>緯度: {store.longitude}°N</p>
-        <p>高度: {store.altitude}m</p>
+      <div className="row storeNormalInfo">
+        <div className="col-md-6 campPrecaution">
+          <h3 className="campSubtitle">營主叮嚀</h3>
+          {precautionsElements}
+        </div>
+        <div className="col-md-6">
+          <h3 className="campSubtitle">營地資訊</h3>
+          <table className="campTable">
+            <colgroup span={2} />
+            <tbody>
+              <tr>
+                <th>GPS座標</th>
+                <td>
+                  {store.longitude}°N, {store.latitude}°E
+                </td>
+              </tr>
+              <tr>
+                <th>提供夜衝</th>
+                <td>是</td>
+              </tr>
+              <tr>
+                <th>夜衝入場</th>
+                <td>18:00</td>
+              </tr>
+              <tr>
+                <th>入營時間</th>
+                <td>11:00</td>
+              </tr>
+              <tr>
+                <th>拔營時間</th>
+                <td>12:00</td>
+              </tr>
+              <tr>
+                <th>海拔</th>
+                <td> {store.altitude}m</td>
+              </tr>
+              <tr>
+                <th>聯絡電話</th>
+                <td> {store.mobile}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <hr />
       <select value={peopleFilter} onChange={handlePeopleFilterChange}>
@@ -278,6 +320,39 @@ export default function DetailTest() {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
+          }
+          .storeIntroduce {
+            /* 包含.briefIntroduce .campTags */
+            display: flex;
+            width: 100%;
+            height: 229px;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .campSubtitle {
+            display: flex;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+          }
+          .campPrecaution {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-self: stretch;
+          }
+          .campTable {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            border-collapse: collapse; /* 這行會讓格線更整齊 */
+          }
+          .campTable th,
+          .campTable td {
+            border: 1px solid black;
           }
           .cardContainer {
             display: flex;
