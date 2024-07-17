@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import { DatePicker, Space,Modal } from 'antd'
 import blogCategory from '@/data/blog/BlogCategory.json'
+import BS5Pagination from '@/components/common/bs5-pagination';
 const { RangePicker } = DatePicker
 const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryModal'), {
   ssr: false,
@@ -26,7 +27,7 @@ export default function Blog() {
 
   // 排序
   const [sort, setSort] = useState('id')
-  const [order, setOrder] = useState('asc')
+  const [order, setOrder] = useState('desc')
   const [nameLike, setNameLike] = useState('')
 
 
@@ -73,7 +74,7 @@ export default function Blog() {
 
       if (resData.success === true) {
         setGetSuccess(true)
-        setPageCount(resData.data.pageCount)
+        setPageCount(resData.data.totalPages)
         setTotal(resData.data.total)
         if (Array.isArray(resData.data.blogs)) {
           setBlogs(resData.data.blogs)
@@ -185,10 +186,12 @@ export default function Blog() {
           setSort(tv.split(',')[0])
           setOrder(tv.split(',')[1])
         }}>
-                    <option value="id,asc">依id排序(由小至大)</option>
-                    <option value="id,desc">依id排序(由大至小)</option>
-                    <option value="author,asc">依作者排序(由低至高)</option>
-                    <option value="author,desc">依作者排序(由高至低)</option>
+                    <option value="id,desc">依時間排序(由新至舊)</option>
+                    <option value="id,asc">依時間排序(由舊至新)</option>
+                    <option value="author,asc">依作者排序</option>
+                    {/* <option value="author,desc">依作者排序(由高至低)</option> */}
+                    <option value="likes_count,desc">依喜愛數排序</option>
+                    <option value="favorite_count,desc">依收藏數排序</option>
                   </select>
                 </div>
 
@@ -308,6 +311,15 @@ export default function Blog() {
             </div>
           )
         })}
+        <div>
+        <BS5Pagination
+          forcePage={page - 1}
+          pageCount={pageCount}
+          onPageChange={(e) => {
+            setPage(e.selected + 1)
+          }}
+        />
+        </div>
       </div>
       <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} handleSearch={handleSearch} />
     </>
