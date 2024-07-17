@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart-hook'
 import Image from 'next/image'
+import styles from '@/styles/detail.module.css'
 
 export default function DetailTest() {
   const router = useRouter()
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
+  const [tag, setTag] = useState([])
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
 
   const getCampsitesInformation = async (pid) => {
@@ -35,11 +37,23 @@ export default function DetailTest() {
 
       if (resData.status === 'success') {
         setStore(resData.data.store)
+        setTag(resData.data.tag)
       }
     } catch (e) {
       console.error(e)
     }
   }
+  // 將取得tag資料map
+  const tags = tag.map((item, index) => {
+    return (
+      <>
+        <span style={{ color: 'grey' }} key={index}>
+          #{item.tag_name}
+        </span>
+        <br />
+      </>
+    )
+  })
 
   useEffect(() => {
     if (router.isReady) {
@@ -58,7 +72,24 @@ export default function DetailTest() {
 
   return (
     <>
-      {/* <h1>商品詳細頁</h1> */}
+      <div className="storeTitleWrap">
+        <div className="storeTitle">
+          <h1>{store.name}</h1>
+          <div className="storeShare">
+            <button>share</button>
+            <button>add</button>
+          </div>
+          <div className="row storeIntroduce">
+            <div className="col-6 briefIntroduce ">
+              <p>{store.introduction}</p>
+            </div>
+            <div className="col-2 campTags ">
+              <h5>{store.address}</h5>
+              {tags}
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
         <h4>基本資訊</h4>
         <p>露營地名稱: {store.name}</p>
@@ -144,7 +175,9 @@ export default function DetailTest() {
                                 <div>房型型別: {campsite.type}</div>
                                 <div>房型坪數: {campsite.square_meters}</div>
                                 <div>詳細介紹：</div>
-                                <div>{campsite.rooms_campsites_introduction}</div>
+                                <div>
+                                  {campsite.rooms_campsites_introduction}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -174,7 +207,7 @@ export default function DetailTest() {
                     height={200}
                   />
                 </div>
-                
+
                 <p>平日價格: ${campsite.normal_price}</p>
                 <p>假日價格: ${campsite.holiday_price}</p>
                 <p>夜衝價格: ${campsite.night_price}</p>
@@ -224,7 +257,9 @@ export default function DetailTest() {
                                 <div>房型型別: {campsite.type}</div>
                                 <div>房型坪數: {campsite.square_meters}</div>
                                 <div>詳細介紹：</div>
-                                <div>{campsite.rooms_campsites_introduction}</div>
+                                <div>
+                                  {campsite.rooms_campsites_introduction}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -239,6 +274,11 @@ export default function DetailTest() {
       </div>
       <style jsx>
         {`
+          .storeTitle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
           .cardContainer {
             display: flex;
             flex-wrap: wrap;
