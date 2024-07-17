@@ -101,54 +101,67 @@ export default function DetailTest() {
       </div>
       <div>
         <div className=" campGallery">
-          <div className="gridRow">
+          <figure className="gridItem">
             <Image
-              className="gridItem"
-              src="../../detail/campGallery1.jpg"
+              src="../../detail/campGallery4.jpg"
               alt="Camping scene with tents"
               width={500} // 圖片的實際寬度
-              height={300} // 圖片的實際高度
+              height={100} // 圖片的實際高度
               layout="responsive" // 新增這行
+              style={{
+                borderRadius: '5px',
+              }}
             />
-          </div>
-          <div>
+          </figure>
+          <div style={{ display: 'flex' }}>
             <Image
-              className="gridItem"
-              src="../../detail/campGallery2.jpg"
+              src="../../detail/campGallery1.jpg"
               alt="Camping scene"
               width={500} // 圖片的實際寬度
               height={300} // 圖片的實際高度
               layout="responsive" // 新增這行
+              style={{
+                borderRadius: '5px',
+              }}
             />
           </div>
-          <div>
+          <div style={{ display: 'flex' }}>
             <Image
-              className="gridItem"
+              className="gridImage"
               src="../../detail/campGallery3.jpg"
               alt="Camping scene"
               width={500} // 圖片的實際寬度
               height={300} // 圖片的實際高度
               layout="responsive" // 新增這行
+              style={{
+                borderRadius: '5px',
+              }}
             />
           </div>
-          <div>
+          <div style={{ display: 'flex' }}>
             <Image
-              className="gridItem"
-              src="../../detail/campGallery4.jpg"
+              className="gridImage"
+              src="../../detail/campGallery2.jpg"
               alt="Camping scene"
               width={500} // 圖片的實際寬度
               height={300} // 圖片的實際高度
               layout="responsive" // 新增這行
+              style={{
+                borderRadius: '5px',
+              }}
             />
           </div>
-          <div>
+          <div style={{ display: 'flex' }}>
             <Image
-              className="gridItem"
+              className="gridImage"
               src="../../detail/campGallery5.jpg"
               alt="Camping scene"
               width={500} // 圖片的實際寬度
               height={300} // 圖片的實際高度
               layout="responsive" // 新增這行
+              style={{
+                borderRadius: '5px',
+              }}
             />
           </div>
         </div>
@@ -421,13 +434,10 @@ export default function DetailTest() {
             gap: 10px;
             margin-block: 20px;
           }
-          .gridRow {
-            grid-row: span 2;
-          }
           .gridItem {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            grid-column: 1 / 2;
+            grid-row: 1 / 3;
+            display: flex;
           }
           .campPrecaution {
             display: flex;
