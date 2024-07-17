@@ -2,29 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import styles from '@/styles/detail.module.css'
 // import Image from 'next/image'
 // eslint-disable-next-line import/no-unresolved
 // import Loader from '@/components/loader'
-
-// 資料範例:
-// {
-//   "status": "success",
-//   "data": {
-//     "store": {
-//       "stores_id": 1,
-//       "owners_id": 1,
-//       "name": "吉伊卡哇",
-//       "mobile": "0924566789",
-//       "address": "吉伊卡哇市",
-//       "longitude": "23.22222N",
-//       "latitude": "150.2522222E",
-//       "altitude": "500m",
-//       "precautions": "chiikawa",
-//       "introduction": "chiikawa cute",
-//       "update_time": "2024-05-03 10:57:01"
-//     }
-//   }
-// }
 
 export default function StoreTitleWrap() {
   const router = useRouter()
@@ -43,6 +24,16 @@ export default function StoreTitleWrap() {
     update_time: '',
   })
 
+  //宣告tag狀態
+  const [tag, setTag] = useState([
+    // {
+    //   stores_id: 0,
+    //   store_name: '',
+    //   tag_name: '',
+    //   tagId: 0,
+    // },
+  ])
+
   // 宣告一個載入的狀態信號值
   // 設定一開始進入此頁面就要向伺服器獲取資料，不出現初始值
   // const [isLoading, setIsLoading] = useState(true)
@@ -58,6 +49,8 @@ export default function StoreTitleWrap() {
       // 確定資料是純物件資料類型才設定到狀態中(最基本的保護)
       if (resData.status === 'success') {
         setStore(resData.data.store)
+        setTag(resData.data.tag)
+        console.log(`"標籤"：${resData.data.tag}`)
         // 關閉載入動畫，1.5再關閉
         // setTimeout(() => {
         //   setIsLoading(false)
@@ -67,6 +60,18 @@ export default function StoreTitleWrap() {
       console.error(e)
     }
   }
+
+  //將取得tag資料map
+  const tags = tag.map((item, index) => {
+    return (
+      <>
+        <span style={{ color: 'grey' }} key={index}>
+          #{item.tag_name}
+        </span>
+        <br />
+      </>
+    )
+  })
 
   useEffect(() => {
     console.log('render router.query=', router.query)
@@ -89,30 +94,47 @@ export default function StoreTitleWrap() {
       {/* <Loader /> */}
       {/* ) : ( */}
       <div className="storeTitleWrap">
-        <div className="storeTitle">
+        <div className={styles.storeTitle}>
           <h1>{store.name}</h1>
-          <div className="campShare">
+          <div className="storeShare">
             <div>share</div>
             <div>add</div>
           </div>
         </div>
-        <div className="storeIntroduce">
-          <div className="briefIntroduce">
+        <div className="storeIntroduce row">
+          <div className="briefIntroduce col-6">
             <p>{store.introduction}</p>
           </div>
-          <div className="campTags">
-            <h4>{store.address}</h4>
-            <div>
-              <div>/草地</div>
-              <div>/親子</div>
-              <div>/夜衝</div>
-            </div>
-            <div className="campTag">/夜衝</div>
+          <div className="campTags col-2">
+            <h5>{store.address}</h5>
+            {tags}
           </div>
         </div>
-        <div>暫時拿掉gallery</div>
       </div>
       {/* )} */}
+      <style jsx>
+        {`
+          .storeIntroduce {
+            justify-content: space-between;
+            align-items: center;
+          }
+          .briefIntroduce {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            flex-shrink: 0;
+            padding: 10px;
+          }
+          .campTags {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            flex-shrink: 0;
+            align-self: stretch;
+          }
+        `}
+      </style>
     </>
   )
 }
