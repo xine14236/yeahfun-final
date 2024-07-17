@@ -44,6 +44,9 @@ export default function Blog() {
   // const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   const [hoveredBlogId, setHoveredBlogId] = useState(null);
 
+  const [showModal1, setShowModal1] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
+
   let params = {
     page,
     perpage,
@@ -171,6 +174,11 @@ export default function Blog() {
     const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`)
     const resData = await res.json()
     console.log(resData.action)
+    if (resData.action === 'add') {
+      setShowModal1(true);
+    } else if (resData.action === 'remove') {
+      setShowModal2(true);
+    }
   }
 
 
@@ -348,6 +356,7 @@ export default function Blog() {
         </div>
       </div>
       <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} handleSearch={handleSearch} />
+      
     </>
   )
 }
