@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic';
-import styles from '@/styles/blog.module.css'
+import styles from '@/styles/blog.module.scss'
 import heart from '@/assets/heart.svg'
+import chiiLikes from '@/assets/chiiLike.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import { DatePicker, Space,Modal } from 'antd'
 import blogCategory from '@/data/blog/BlogCategory.json'
 import BS5Pagination from '@/components/common/bs5-pagination';
+
 const { RangePicker } = DatePicker
 const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryModal'), {
   ssr: false,
@@ -17,7 +19,7 @@ export default function Blog() {
   const initialCate = blogCategory.map((v, i) => {
     return { ...v, checked: false }
   })
-  console.log(initialCate)
+  // console.log(initialCate)
 
   const [blogs, setBlogs] = useState([])
   const [total, setTotal] = useState(0) //總筆數
@@ -38,6 +40,9 @@ export default function Blog() {
   const [visible, setVisible] = useState(false);
 
   const[getSuccess,setGetSuccess]=useState(false)
+
+  // const [favoriteBlogs, setFavoriteBlogs] = useState([]);
+  const [hoveredBlogId, setHoveredBlogId] = useState(null);
 
   let params = {
     page,
@@ -162,6 +167,21 @@ export default function Blog() {
     }
   };
 
+  const handleClickStar = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`)
+    const resData = await res.json()
+    console.log(resData.action)
+  }
+
+
+  const handleMouseEnter = (id) => {
+    setHoveredBlogId(id);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredBlogId(null);
+  };
+
   useEffect(() => {
     //  建立搜尋參數物件
   
@@ -242,9 +262,15 @@ export default function Blog() {
         <div className="row" id="card-container"></div>
       </div>
       <div className="container">
+      
         {blogs.map((v, i) => {
           return (
-            <div className={`row `} id="card-container" key={v.id}>
+            <div className={`row ${styles.blogBodyHead}`} id="card-container" key={v.id} onMouseEnter={() => handleMouseEnter(v.id)}
+            onMouseLeave={handleMouseLeave}>
+           
+            <div onClick={()=>{handleClickStar(v.id)}}>
+      <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />
+      </div>
               {/* 卡片内容会在这里动态生成 */}
               <div
                 className={`card col-md-12 ${styles.cardWrapper} ${styles.blogBody} col-lg-9 ${
