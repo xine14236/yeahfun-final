@@ -119,3 +119,47 @@
 .blogBody{
   background: rgb(255, 255, 255);
 }
+.blogBodyHead{
+  position: relative;
+  padding-top: 50px;
+}
+.starBox{
+  z-index: 1;
+  /* width: 40px; */
+  position: absolute;
+  top: 30px;
+  right: 50%;
+  // display: none;
+  /* background-color: rgba(182, 0, 0, 0.8); */
+  border: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* padding: 5px; */
+  /* border-radius: 50%; */
+  cursor: pointer;
+  @media (max-width: 768px){
+
+    right: calc(50% - 25px)
+  }
+}
+
+.starBoxShow {
+  z-index: 1;
+  /* width: 40px; */
+  position: absolute;
+  top: 30px;
+  right: 50%;
+  // display: none;
+  /* background-color: rgba(182, 0, 0, 0.8); */
+  border: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  /* padding: 5px; */
+  /* border-radius: 50%; */
+  cursor: pointer;
+  @media (max-width: 768px){
+
+    right: calc(50% - 25px)
+  }
+ 
+}
