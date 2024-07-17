@@ -99,6 +99,60 @@ export default function DetailTest() {
         </div>
         {/* </div> */}
       </div>
+      <div>
+        <div className=" campGallery">
+          <div className="gridRow">
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery1.jpg"
+              alt="Camping scene with tents"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery2.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery3.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery4.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery5.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+        </div>
+      </div>
       <div className="row storeNormalInfo">
         <div className="col-md-6 ">
           <h3 className="campSubtitle">營主叮嚀</h3>
@@ -171,7 +225,7 @@ export default function DetailTest() {
           </table>
         </div>
       </div>
-      
+
       <hr />
       <select value={peopleFilter} onChange={handlePeopleFilterChange}>
         <option value="">選擇人數</option>
@@ -361,6 +415,20 @@ export default function DetailTest() {
           .campTags {
             padding-block: 20px;
           }
+          .campGallery {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            margin-block: 20px;
+          }
+          .gridRow {
+            grid-row: span 2;
+          }
+          .gridItem {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
           .campPrecaution {
             display: flex;
             justify-content: space-between;
@@ -370,12 +438,6 @@ export default function DetailTest() {
           .campSubtitle {
             display: flex;
             padding-bottom: 10px;
-             {
-              /* justify-content: center; */
-            }
-             {
-              /* align-items: center; */
-            }
             gap: 10px;
           }
           .campTable {
