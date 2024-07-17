@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, React } from 'react'
 import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart-hook'
 import Image from 'next/image'
+import { DatePicker, Space } from 'antd'
 
 export default function DetailTest() {
   const router = useRouter()
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
+  const { RangePicker } = DatePicker
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -58,7 +60,7 @@ export default function DetailTest() {
 
   return (
     <>
-      {/* <h1>商品詳細頁</h1> */}
+      {/* 基本資訊 */}
       <div>
         <h4>基本資訊</h4>
         <p>露營地名稱: {store.name}</p>
@@ -71,7 +73,14 @@ export default function DetailTest() {
         <p>高度: {store.altitude}m</p>
       </div>
       <hr />
-      <select value={peopleFilter} onChange={handlePeopleFilterChange}>
+      <Space direction="vertical" size={12}>
+        <RangePicker />
+      </Space>
+      <select
+        className="selectPeople"
+        value={peopleFilter}
+        onChange={handlePeopleFilterChange}
+      >
         <option value="">選擇人數</option>
         <option value="1">1人</option>
         <option value="2">2人</option>
@@ -139,6 +148,9 @@ export default function DetailTest() {
       </div>
       <style jsx>
         {`
+          .selectPeople {
+            margin: 10px;
+          }
           .cardContainer {
             display: flex;
             flex-wrap: wrap;
