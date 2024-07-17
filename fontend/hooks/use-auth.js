@@ -92,6 +92,7 @@ export function AuthProvider({ children }) {
         setAuth(nextAuth)
 
         alert('登入成功')
+        router.push('/')
       }
     } catch (e) {
       console.error(e)

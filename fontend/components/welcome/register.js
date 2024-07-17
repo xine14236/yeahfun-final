@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import styles from '@/components/welcome/login.module.scss'
 import { MdOutlineRemoveRedEye } from 'react-icons/md'
 
@@ -16,7 +17,7 @@ export default function Register() {
     confirmPassword: '',
     agree: '', // 呈現錯誤訊息用字串
   })
-
+  const router = useRouter()
   // checkbox 呈現密碼用
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -84,7 +85,8 @@ export default function Register() {
       const resData = await res.json()
       console.log(resData)
 
-      alert('送到伺服器去')
+      alert('註冊成功，回到登入頁面。')
+      router.push('/welcome/login')
     } catch (e) {
       console.error(e)
     }

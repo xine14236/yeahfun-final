@@ -126,13 +126,6 @@ export default function Login() {
                 >
                   暫時登出鍵
                 </button>
-                <button
-                  type="button"
-                  className={styles.loginButton}
-                  onClick={handleCheck}
-                >
-                  授權檢查
-                </button>
                 <Link
                   href="/customer"
                   type="button"
@@ -168,15 +161,14 @@ export default function Login() {
               </div>
               <div>
                 還沒有帳號嗎?
-                <a
-                  className={styles.link}
-                  href="http://localhost:3001/welcome/register"
-                >
+                <Link href="/welcome/register" className={styles.link}>
                   註冊
-                </a>
+                </Link>
               </div>
               <div>
-                <a className={styles.link}>忘記密碼</a>
+                <Link href="" className={styles.link}>
+                  忘記密碼
+                </Link>
               </div>
             </div>
           </div>
