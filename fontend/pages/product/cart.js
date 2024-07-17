@@ -6,7 +6,7 @@ import { FaLocationDot, FaStar, FaCommentDots, FaMinus } from 'react-icons/fa6'
 import { useRouter } from 'next/router'
 
 export default function Cart() {
-  const { cart, removeFromCart } = useCart()
+  const { cartItems, removeFromCart } = useCart()
 
   const handleRemove = (rooms_campsites_id) => {
     removeFromCart(rooms_campsites_id)
@@ -43,12 +43,12 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    if (router.isReady && cart.length > 0) {
-      cart.forEach((item) => {
+    if (router.isReady && cartItems.length > 0) {
+      cartItems.forEach((item) => {
         getStoreInformation(item.id)
       })
     }
-  }, [router.isReady, cart])
+  }, [router.isReady, cartItems])
 
   return (
     <>
@@ -59,12 +59,12 @@ export default function Cart() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {cart.length === 0 ? (
+      {cartItems.length === 0 ? (
         <div className="emptyCart">
           <h2>尚未有物品加入購物車</h2>
         </div>
       ) : (
-        cart.map((store, index) => (
+        cartItems.map((store, index) => (
           <div key={index} className="wrap mt-5">
             <div className="cartBox">
               <div className="cartInfoImage">
@@ -139,7 +139,7 @@ export default function Cart() {
       <div className="checkoutButton">
         <button
           className="btn btn-primary btn-lg mt-5 checkout"
-          disabled={cart.length === 0}
+          disabled={cartItems.length === 0}
         >
           結帳
         </button>
