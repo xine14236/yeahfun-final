@@ -82,13 +82,6 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
                   className="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
-                  style={
-                    {
-                      // borderRadius: 10,
-                      // border: '1px solid var(--primary-1, #389B87)',
-                      // background: '#FFF',
-                    }
-                  }
                 >
                   詳細內容
                 </button>
