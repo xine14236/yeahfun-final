@@ -5,6 +5,7 @@ import Link from 'next/link'
 import StoreTitleWrap from '@/components/product//detail/storeTitleWrap'
 import StoreNormalInfo from '@/components/product/detail/storeNormalInfo'
 import CampAreaSearchBar from '@/components/product/detail/campAreaSearchBar'
+import CampGallery from '@/components/product/detail/campGallery.js'
 // import CampAreasList from '@/components/product/detail/campAreasList'
 // import AttractionsNearby from '@/components/product/detail/attractionsNearby'
 
@@ -12,6 +13,7 @@ export default function Detail() {
   return (
     <>
       <StoreTitleWrap />
+      <CampGallery />
       <StoreNormalInfo />
       <CampAreaSearchBar />
       {/* <CampAreasList /> */}
