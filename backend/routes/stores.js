@@ -71,13 +71,13 @@ router.get('/', async function (req, res) {
        GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ',') AS tag_name,
        ROUND(AVG(comment.comment_star), 1) AS comment_star, 
        MAX(stores_img.img_name) AS img_name, 
-       MIN(room_campsite.normal_price) AS lowest_normal_price
+       MIN(rooms_campsites.normal_price) AS lowest_normal_price
         FROM store AS s
         LEFT JOIN comment ON s.stores_id = comment.stores_id
         LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-        LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
-        INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
-        INNER JOIN tag AS t ON t.tag_id = st.tag_id
+        LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
+        LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
+        LEFT JOIN tag AS t ON t.tag_id = st.tag_id
         ${where}
         GROUP BY s.stores_id, s.name, s.address
         ${having}
@@ -98,14 +98,14 @@ router.get('/', async function (req, res) {
             store AS s
             LEFT JOIN comment ON s.stores_id = comment.stores_id
             LEFT JOIN stores_img ON s.stores_id = stores_img.stores_id
-            LEFT JOIN room_campsite ON s.stores_id = room_campsite.stores_id
-            INNER JOIN store_tag AS st ON st.stores_id = s.stores_id
-            INNER JOIN tag AS t ON t.tag_id = st.tag_id
+            LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
+            LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
+            LEFT JOIN tag AS t ON t.tag_id = st.tag_id
             ${where}
         GROUP BY 
             s.stores_id, s.name, s.address
         HAVING
-            COUNT(DISTINCT CASE WHEN room_campsite.normal_price BETWEEN ${lowest_normal_price_gte} AND ${lowest_normal_price_lte} THEN s.stores_id END) > 0
+            COUNT(DISTINCT CASE WHEN rooms_campsites.normal_price BETWEEN ${lowest_normal_price_gte} AND ${lowest_normal_price_lte} THEN s.stores_id END) > 0
     ) AS subquery;
      `
   )

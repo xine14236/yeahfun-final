@@ -1,6 +1,5 @@
 import React from 'react'
 import ListNavbar from './home-navbar'
-import ListForm from '@/components/list/list-form'
 import WhiteLogo from '@/components/icons/white-logo'
 import styles from '@/components/layout/home-layout/header.module.scss'
 import HomeSearch from '@/components/home/home-search'

@@ -6,9 +6,11 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
   //路徑
   const router = useRouter()
   //更新購物車鉤子的狀態
-  const { setCartItems } = useCart()
+  const { setCartItems, addCart } = useCart()
   //取得商店內的商品
   const [storeDetail, setStoreDetail] = useState([])
+
+  const [stores, setStores] = useState([])
 
   const getStore = async (id, type, people) => {
     const url = `http://localhost:3005/api/store/${id}/${type}/${people}`
@@ -37,6 +39,8 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }
 
+  // const handleAddToCart = () => {}
+
   useEffect(() => {
     if (router.isReady && pid) {
       //console.log("Router is ready, query:", router.query);
@@ -44,9 +48,9 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
     }
   }, [router.isReady, pid, type, people])
 
-  const addToCart = (detail) => {
-    setCartItems((prevItems) => [...prevItems, detail])
-  }
+  // const addToCart = (detail) => {
+  //   setCartItems((prevItems) => [...prevItems, detail])
+  // }
 
   return (
     <>
@@ -72,16 +76,58 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
             <div className="campInfo" style={{ border: '1px solid orange' }}>
               <div className="" style={{ border: '1px solid yellow' }}>
                 <h5 className="card-title">{detail.name}</h5>
+
                 <button
-                  className="btn-square"
-                  style={{
-                    borderRadius: 10,
-                    border: '1px solid var(--primary-1, #389B87)',
-                    background: '#FFF',
-                  }}
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
                 >
                   詳細內容
                 </button>
+                {/* Modal */}
+                <div
+                  className="modal fade  modal-xl "
+                  id="exampleModal"
+                  tabIndex={-1}
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          {detail.name}
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        />
+                      </div>
+                      <div className="modal-body">
+                        <div className="modal-body">
+                          <div className="container-fluid">
+                            <div className="row">
+                              <div className="col-md-8">
+                                <img
+                                  className="w-100"
+                                  src={`/productDetail/${detail.img}`}
+                                />
+                              </div>
+                              <div className="col-md-4">
+                                <div>尺寸：{detail.square_meters}</div>
+                                <div>詳細介紹：</div>
+                                <div>{detail.introduction}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="campPrice" style={{ border: '1px solid yellow' }}>
@@ -97,7 +143,7 @@ export default function StoreDetail({ title = '', type = '', pid, people }) {
                   />
                   <div className="form-item"></div>
                   <div className="form-item">
-                    <button type="button" onClick={() => addToCart(detail)}>
+                    <button type="button" onClick={() => addCart(detail)}>
                       加入訂房
                     </button>
                   </div>

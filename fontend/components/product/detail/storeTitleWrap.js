@@ -21,6 +21,7 @@ export default function StoreTitleWrap() {
     altitude: '',
     precautions: '',
     introduction: '',
+    created_at: '',
     update_time: '',
   })
 

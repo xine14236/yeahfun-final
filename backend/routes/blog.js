@@ -62,11 +62,16 @@ const getBlogData= async (req)=>{
   const sort = req.query.sort || 'id' //預設的排序資料庫欄位
 
   const order = req.query.order || 'asc'
-  const sortList = ['id', 'author']
+  const sortList = ['id', 'author','favorite_count','likes_count']
   const orderList = ['asc', 'desc']
   let orderby = ''
   if (orderList.includes(order) && sortList.includes(sort)) {
-    orderby = `ORDER BY b.${sort} ${order}`
+    if(sort=='favorite_count' || sort=='likes_count' ){
+orderby = `ORDER BY ${sort} ${order} ,b.id DESC`
+    }else{
+
+      orderby = `ORDER BY b.${sort} ${order}`
+    }
   }
 
 
@@ -85,8 +90,8 @@ const getBlogData= async (req)=>{
   
 
 
-
-  const sql0 =`SELECT COUNT(DISTINCT b.id)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where} ${orderby} LIMIT ${limit} OFFSET ${offset}`;
+  const sql0 =`SELECT COUNT(DISTINCT b.id)  totalRows FROM blog b LEFT JOIN blog_category bc ON b.id=bc.blog_id  ${where}  `;
+  console.log(sql0)
   const [[{totalRows}]] = await db.query(sql0);
   
   let totalPages = 0; //總頁數，預設值設定為0
@@ -114,6 +119,7 @@ let keyword = req.query.keyword || ''; //相當於預設值
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`;
   const [rows]= await db.query(sql);
+ 
 
   rows.forEach((r) => {
 r.date=''
@@ -125,6 +131,8 @@ r.date=''
       r.date=moment(r.create_at, dateFormat1).format(dateFormat2);
     }
   })
+  // const sql1 ='SELECT * FROM `blog_category_name` WHERE parent >0'
+  // const[rows3]= await db.query(sql1)
 
   const output={
     success:true,
@@ -135,6 +143,11 @@ r.date=''
   }
  
 return(output)
+}else{
+  return{
+    success:false,
+     info:"沒有找到資料"
+  }
 }
 
 }
