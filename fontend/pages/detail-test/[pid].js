@@ -96,14 +96,63 @@ export default function DetailTest() {
                     height={200}
                   />
                 </div>
-                <p>房型介紹: {campsite.rooms_campsites_introduction}</p>
                 <p>平日價格: ${campsite.normal_price}</p>
                 <p>假日價格: ${campsite.holiday_price}</p>
                 <p>夜衝價格: ${campsite.night_price}</p>
                 <p>房型數量: {campsite.amount}</p>
-                <p>房型坪數: {campsite.square_meters}</p>
                 <p>房型最多人數: {campsite.people}</p>
-                <p>房型型別: {campsite.type}</p>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  詳細內容
+                </button>
+                {/* Modal */}
+                <div
+                  className="modal fade  modal-xl "
+                  id="exampleModal"
+                  tabIndex={-1}
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          {campsite.rooms_campsites_name}
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        />
+                      </div>
+                      <div className="modal-body">
+                        <div className="modal-body">
+                          <div className="container-fluid">
+                            <div className="row">
+                              <div className="col-md-8">
+                                <img
+                                  className="w-100"
+                                  src={`/productDetail/${campsite.img}`}
+                                />
+                              </div>
+                              <div className="col-md-4">
+                                <div>房型型別: {campsite.type}</div>
+                                <div>房型坪數: {campsite.square_meters}</div>
+                                <div>詳細介紹：</div>
+                                <div>{campsite.rooms_campsites_introduction}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
         </div>
@@ -152,7 +201,7 @@ export default function DetailTest() {
                     <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">
-                          {detail.name}
+                          {campsite.rooms_campsites_name}
                         </h5>
                         <button
                           type="button"
