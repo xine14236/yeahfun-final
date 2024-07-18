@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart-hook'
 import Image from 'next/image'
+import styles from '@/styles/detail.module.css'
 
 export default function DetailTest() {
   const router = useRouter()
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
+  const [tag, setTag] = useState([])
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
 
   const getCampsitesInformation = async (pid) => {
@@ -32,14 +34,35 @@ export default function DetailTest() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
+      console.log(store) //[]
 
       if (resData.status === 'success') {
         setStore(resData.data.store)
+        setTag(resData.data.tag)
       }
     } catch (e) {
       console.error(e)
     }
   }
+  // 將取得tag資料map
+  const tags = tag.map((item, index) => {
+    return (
+      <>
+        <span style={{ color: 'grey' }} key={index}>
+          #{item.tag_name}
+        </span>
+        <br />
+      </>
+    )
+  })
+
+  // TODO
+  // 將取得precautions資料map
+  // const precautionsElements = store.precautions
+  //   .split(',')
+  //   .map((item, index) => {
+  //     return <p key={index}>{item}</p>
+  //   })
 
   useEffect(() => {
     if (router.isReady) {
@@ -58,18 +81,151 @@ export default function DetailTest() {
 
   return (
     <>
-      {/* <h1>商品詳細頁</h1> */}
-      <div>
-        <h4>基本資訊</h4>
-        <p>露營地名稱: {store.name}</p>
-        <p>Location: {store.address}</p>
-        <p>mobile: {store.mobile}</p>
-        <p>露營地介紹: {store.introduction}</p>
-        <p>注意事項: {store.precautions}</p>
-        <p>經度: {store.latitude}°E</p>
-        <p>緯度: {store.longitude}°N</p>
-        <p>高度: {store.altitude}m</p>
+      <div className="row storeTitleWrap">
+        <div className="col-12 storeTitle">
+          <h2>{store.name}</h2>
+          <div className="storeShare">
+            <button>share</button>
+            <button>add</button>
+          </div>
+        </div>
+        {/* <div className="row storeIntroduce"> */}
+        <div className="col-6 briefIntroduce ">
+          <p>{store.introduction}</p>
+        </div>
+        <div className="col-6 campTags ">
+          <p>{store.address}</p>
+          {tags}
+        </div>
+        {/* </div> */}
       </div>
+      <div>
+        <div className=" campGallery">
+          <div className="gridRow">
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery1.jpg"
+              alt="Camping scene with tents"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery2.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery3.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery4.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery5.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+        </div>
+      </div>
+      <div className="row storeNormalInfo">
+        <div className="col-md-6 ">
+          <h3 className="campSubtitle">營主叮嚀</h3>
+          {/* {precautionsElements} */}
+          <div className="campPrecaution">{store.precautions}</div>
+        </div>
+        <div className="col-md-6">
+          <h3 className="campSubtitle">營地資訊</h3>
+          <table className="campTable">
+            <tbody>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">GPS座標</div>
+                </td>
+                <td className=" td_cell">
+                  <div className="div_cell">
+                    {store.longitude}°N, {store.latitude}°E
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">提供夜衝</div>
+                </td>
+                <td>
+                  <div className="div_cell">是</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">夜衝入場</div>
+                </td>
+                <td>
+                  <div className="div_cell">18:00</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">入營時間</div>
+                </td>
+                <td>
+                  <div className="div_cell">11:00</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">離營時間</div>
+                </td>
+                <td>
+                  <div className="div_cell">12:00</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">海拔</div>
+                </td>
+                <td>
+                  <div className="div_cell">{store.altitude}m</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="td_cell">
+                  <div className="div_cell">聯絡電話</div>
+                </td>
+                <td>
+                  <div className="div_cell">{store.mobile}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <hr />
       <select value={peopleFilter} onChange={handlePeopleFilterChange}>
         <option value="">選擇人數</option>
@@ -144,7 +300,9 @@ export default function DetailTest() {
                                 <div>房型型別: {campsite.type}</div>
                                 <div>房型坪數: {campsite.square_meters}</div>
                                 <div>詳細介紹：</div>
-                                <div>{campsite.rooms_campsites_introduction}</div>
+                                <div>
+                                  {campsite.rooms_campsites_introduction}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -174,7 +332,7 @@ export default function DetailTest() {
                     height={200}
                   />
                 </div>
-                
+
                 <p>平日價格: ${campsite.normal_price}</p>
                 <p>假日價格: ${campsite.holiday_price}</p>
                 <p>夜衝價格: ${campsite.night_price}</p>
@@ -224,7 +382,9 @@ export default function DetailTest() {
                                 <div>房型型別: {campsite.type}</div>
                                 <div>房型坪數: {campsite.square_meters}</div>
                                 <div>詳細介紹：</div>
-                                <div>{campsite.rooms_campsites_introduction}</div>
+                                <div>
+                                  {campsite.rooms_campsites_introduction}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -239,6 +399,63 @@ export default function DetailTest() {
       </div>
       <style jsx>
         {`
+          .storeTitle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+          }
+          .storeIntroduce {
+            /* 包含.briefIntroduce .campTags */
+            display: flex;
+          }
+          .briefIntroduce {
+            padding-block: 20px;
+          }
+          .campTags {
+            padding-block: 20px;
+          }
+          .campGallery {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            margin-block: 20px;
+          }
+          .gridRow {
+            grid-row: span 2;
+          }
+          .gridItem {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          .campPrecaution {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-self: stretch;
+          }
+          .campSubtitle {
+            display: flex;
+            padding-bottom: 10px;
+            gap: 10px;
+          }
+          .campTable {
+            display: table;
+            width: 100%;
+          }
+          .campTable td {
+            border: 1px dotted grey;
+            text-align: left;
+          }
+          .td_cell {
+            padding-block: 10px;
+          }
+          .div_cell {
+            display: flex;
+            align-items: center;
+            padding-inline: 10px;
+          }
           .cardContainer {
             display: flex;
             flex-wrap: wrap;
