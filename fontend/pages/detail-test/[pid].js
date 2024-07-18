@@ -104,7 +104,7 @@ export default function DetailTest() {
 
   return (
     <>
-      <div className="row storeTitleWrap">
+      <div className="row storeIntroduce">
         <div className="row storeTitle">
           <h1>{store.name}</h1>
           <div className="storeShare">
@@ -129,8 +129,8 @@ export default function DetailTest() {
               src={`/detail/${imgArray[0]}`}
               alt="Camping scene with tents"
               width={500} // 圖片的實際寬度
-              height={100} // 圖片的實際高度
-              layout="responsive" // 新增這行
+              height={300} // 圖片的實際高度
+              sizes="(max-width: 500px) 100vw, 500px"
               style={{
                 borderRadius: '5px',
               }}
@@ -144,7 +144,7 @@ export default function DetailTest() {
                 alt="Camping scene"
                 width={500}
                 height={300}
-                layout="responsive"
+                sizes="(max-width: 500px) 100vw, 500px"
                 style={{ borderRadius: '5px' }}
               />
             </div>
