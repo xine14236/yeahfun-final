@@ -265,9 +265,9 @@ if (req.files) {
   if(rows.length<1){
     const sql2 =`INSERT INTO blog_img(img_name, blog_id) VALUES (?, ${bid2})`
     const [result] = await db.query(sql2,[pictureNameString])
-    output.success=true
+    output.success=!!result.affectedRows
     output.result=result;
-    output.info='123'
+    output.info='圖片上傳成功'
   }else{
     const check=rows[0].img_name+','+pictureNameString
     const sql3 = `UPDATE blog_img SET img_name=? where blog_id=?`
