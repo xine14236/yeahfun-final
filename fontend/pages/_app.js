@@ -1,10 +1,14 @@
 import { useEffect } from 'react'
 // 樣式
 import '@/styles/globals.scss'
-import '@/styles/product.scss'
+// import '@/styles/product.scss'
 import '@/styles/cart.scss'
 import '@/styles/loader.scss'
 import '@/styles/react-paginate.scss'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import '@/styles/swiper.scss'
+
 import { ConfigProvider } from 'antd'
 import theme from '@/theme/themeConfig'
 // 載入購物車context
@@ -33,14 +37,15 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <CartProviderNew>
-   <ConfigProvider theme={theme}>
-     <AuthProvider>
-      <LoaderProvider close={2} CustomLoader={CatLoader}>
-        <CartProvider>{getLayout(<Component {...pageProps} />)}</CartProvider>
-      </LoaderProvider>
-     </AuthProvider>
-    </ConfigProvider>
+      <ConfigProvider theme={theme}>
+        <AuthProvider>
+          <LoaderProvider close={2} CustomLoader={CatLoader}>
+            <CartProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </CartProvider>
+          </LoaderProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </CartProviderNew>
-    
   )
 }

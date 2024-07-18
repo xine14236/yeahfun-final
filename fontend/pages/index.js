@@ -4,10 +4,11 @@ import PlaceholderText from '@/components/common/placeholder-text'
 import styles from '@/styles/homepage02.module.scss'
 import HomeLayout from '@/components/layout/home-layout'
 import { useState } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
+import { Pagination, Navigation } from 'swiper/modules'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
@@ -18,6 +19,33 @@ export default function Home() {
   const [tag, setTag] = useState([])
   const [tag2, setTag2] = useState([])
   const [tag3, setTag3] = useState([])
+  const [swiperInstance, setSwiperInstance] = useState(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const tags = [
+    {
+      data: tag,
+      name: '櫻花祭',
+    },
+    {
+      data: tag2,
+      name: '親子共遊',
+    },
+    {
+      data: tag3,
+      name: '森林系',
+    },
+  ]
+
+  const handleSlideChange = (swiper) => {
+    setActiveIndex(swiper.realIndex)
+  }
+
+  const handleButtonClick = (index) => {
+    if (swiperInstance) {
+      swiperInstance.slideToLoop(index)
+    }
+  }
 
   const getProducts = async () => {
     const url = 'http://localhost:3005/api/home'
@@ -86,7 +114,7 @@ export default function Home() {
         // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
         // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.tag)) {
-          setTag(resData.data.tag)
+          setTag2(resData.data.tag)
         }
       }
     } catch (e) {
@@ -105,7 +133,7 @@ export default function Home() {
         // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
         // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.tag)) {
-          setTag(resData.data.tag)
+          setTag3(resData.data.tag)
         }
       }
     } catch (e) {
@@ -114,12 +142,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getProducts(), getBlog(), getTag()
+    getProducts(), getBlog(), getTag(), getTag2(), getTag3()
   }, [])
 
   return (
     <>
-      <div className="myCardList section02">
+      <div className={`${styles.myCardList} ${styles.section02}`}>
         {/* 代辦事項:hover like */}
         <div className="title">
           <Image
@@ -237,7 +265,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={styles.myCardList}>
+      <div className={`${styles.myCardList} ${styles.section04}`}>
         {/* 代辦事項: like hover，輪播動畫*/}
         <div className="title">
           <Image
@@ -246,67 +274,83 @@ export default function Home() {
             width={66}
             height={33}
           />
-          <div className="titleContent">
+          <div className={`titleContent  ${styles.titleTheme}`}>
             <h3 className="titleText">theme</h3>
-            <div className="d-flex align-items-center justify-content-center">
-              <a href="#/" className={styles.theme}>
-                櫻花祭
-              </a>
-              <a href="#/" className={styles.theme}>
-                親子共遊
-              </a>
-              <a href="#/" className={styles.theme1}>
-                主題二營地
-              </a>
-            </div>
+            <div className="d-flex align-items-center justify-content-center"></div>
           </div>
         </div>
-        <div className="container">
-          <div className="cards">
-            <div className={`row ${styles.myRow}`}>
-              {tag.map((v, i) => {
-                return (
-                  <div className="col-12 col-sm-4" key={i}>
-                    <div className="card">
-                      <a href="#/">
-                        {/* <svg className={styles.iconLike}>
-                      <use href="#like" />
-                    </svg> */}
-                      </a>
-                      <Link href="#/">
-                        <Image
-                          src="/images/homepage/tent13.jpg"
-                          className={styles.cardImage}
-                          alt="Image 2"
-                          width={300}
-                          height={200}
-                          style={{ width: '100%', height: 'auto' }}
-                        />
-                      </Link>
-                      <div className={styles.cardBody}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
+
+        <div className={styles.paginationButtons}>
+          {tags.map((tagSet, index) => (
+            <button
+              key={index}
+              className={
+                index === activeIndex ? styles.themeBtnActive : styles.themeBtn
+              }
+              onClick={() => handleButtonClick(index)}
+            >
+              {tagSet.name}
+            </button>
+          ))}
+        </div>
+        <Swiper
+          onSwiper={setSwiperInstance}
+          slidesPerView={1}
+          loop={true}
+          onSlideChange={handleSlideChange}
+          navigation={true}
+          modules={[Pagination, Navigation]}
+          className="mySwiper"
+        >
+          {tags.map((tagSet, idx) => (
+            <SwiperSlide key={idx}>
+              <div className="container">
+                <div className={styles.cards}>
+                  <div className={`row ${styles.myRow}`}>
+                    {tagSet.data.map((v, i) => (
+                      <div className="col-12 col-sm-4" key={i}>
+                        <div className="card">
+                          <a href="#/">
+                            {/* <svg className={styles.iconLike}>
+                            <use href="#like" />
+                          </svg> */}
+                          </a>
+                          <Link href="#/">
+                            <Image
+                              src="/images/homepage/tent13.jpg"
+                              className={styles.cardImage}
+                              alt="Image 2"
+                              width={300}
+                              height={200}
+                              style={{ width: '100%', height: 'auto' }}
+                            />
+                          </Link>
+                          <div className={styles.cardBody}>
+                            <div className={styles.cardTags}>
+                              <div className={styles.cardTagLocation}>
+                                <Location className={styles.iconLocation} />
+                                <p>{v.address}</p>
+                              </div>
+                              <div className={styles.cardTagStar}>
+                                <Star className={styles.iconStar} />
+                                <p>{v.comment_star}</p>
+                              </div>
+                            </div>
+                            <div className={styles.cardTitle}>
+                              <h4>
+                                <Link href="#/">{v.name}</Link>
+                              </h4>
+                            </div>
                           </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
-                          </div>
-                        </div>
-                        <div className={styles.cardTitle}>
-                          <h4>
-                            <Link href="#/">{v.name}</Link>
-                          </h4>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
 
       <div className={styles.section05}>

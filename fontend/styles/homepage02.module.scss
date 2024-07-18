@@ -195,30 +195,26 @@
 // section04
 .section04 {
   position: relative;
+  gap: 15px;
 }
-.theme1 {
-  border: transparent;
-  padding-inline: 10px;
+
+.paginationButtons {
+  display: flex;
+  gap: 20px;
 }
-.theme {
-  border-right: 2px solid var(--black);
-  padding-inline: 10px;
+.themeBtn {
+  background: transparent;
+  border: none;
 }
-.iconRightSolid {
-  position: absolute;
-  right: 75px;
-  bottom: 425px;
-}
-.iconLeftSolid {
-  position: absolute;
-  left: 75px;
-  bottom: 425px;
+.themeBtnActive {
+  background: transparent;
+  border: none;
+  color: var(--primary-1);
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--primary-1);
+  box-sizing: border-box;
 }
 @media (max-width: 576px) {
-  .iconRightSolid,
-  .iconLeftSolid {
-    display: none;
-  }
   .theme1 {
     font-size: var(--h6);
   }

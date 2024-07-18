@@ -11,6 +11,7 @@ router.get('/', async function (req, res) {
     s.stores_id, 
     s.name, 
     s.address,
+        tag_name,
     ROUND(AVG(comment.comment_star), 1) AS comment_star,
     MAX(stores_img.img_name) AS img_name 
 FROM 
