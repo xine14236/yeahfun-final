@@ -11,16 +11,11 @@ export default function DetailTest() {
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
   const [tag, setTag] = useState([])
+  const [img, setImg] = useState([])
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
   const [dateRange, setDateRange] = useState([])
   const { addCart } = useCart()
-
   const { RangePicker } = DatePicker
-  const DatePickerApp = () => (
-    <Space direction="vertical" size={12}>
-      <RangePicker />
-    </Space>
-  )
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -45,11 +40,11 @@ export default function DetailTest() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
-      console.log(store) //[]
 
       if (resData.status === 'success') {
         setStore(resData.data.store)
         setTag(resData.data.tag)
+        setImg(resData.data.img)
       }
     } catch (e) {
       console.error(e)
@@ -88,6 +83,9 @@ export default function DetailTest() {
 
   // 將 precautions 字串拆分成陣列
   const precautionsArray = store.precautions ? store.precautions.split(',') : []
+
+  // 將取得img資料字串拆分成陣列
+  const imgArray = img.img_name ? img.img_name.split(',') : []
 
   useEffect(() => {
     if (router.isReady) {
@@ -128,7 +126,7 @@ export default function DetailTest() {
         <div className=" campGallery">
           <figure className="gridItem">
             <Image
-              src="../../detail/campGallery4.jpg"
+              src={`/detail/${imgArray[0]}`}
               alt="Camping scene with tents"
               width={500} // 圖片的實際寬度
               height={100} // 圖片的實際高度
@@ -138,19 +136,21 @@ export default function DetailTest() {
               }}
             />
           </figure>
-          <div style={{ display: 'flex' }}>
-            <Image
-              src="../../detail/campGallery1.jpg"
-              alt="Camping scene"
-              width={500} // 圖片的實際寬度
-              height={300} // 圖片的實際高度
-              layout="responsive" // 新增這行
-              style={{
-                borderRadius: '5px',
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex' }}>
+
+          {imgArray.slice(1, 5).map((img, index) => (
+            <div style={{ display: 'flex' }} key={index}>
+              <Image
+                src={`/detail/${img}`}
+                alt="Camping scene"
+                width={500}
+                height={300}
+                layout="responsive"
+                style={{ borderRadius: '5px' }}
+              />
+            </div>
+          ))}
+
+          {/* <div style={{ display: 'flex' }}>
             <Image
               className="gridImage"
               src="../../detail/campGallery3.jpg"
@@ -188,7 +188,7 @@ export default function DetailTest() {
                 borderRadius: '5px',
               }}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="row storeNormalInfo">
