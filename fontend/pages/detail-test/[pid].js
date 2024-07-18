@@ -34,7 +34,7 @@ export default function DetailTest() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
-      console.log(store)//[]
+      console.log(store) //[]
 
       if (resData.status === 'success') {
         setStore(resData.data.store)
@@ -81,68 +81,151 @@ export default function DetailTest() {
 
   return (
     <>
-      <div className="storeTitleWrap">
-        <div className="row storeTitle">
-          <h1>{store.name}</h1>
+      <div className="row storeTitleWrap">
+        <div className="col-12 storeTitle">
+          <h2>{store.name}</h2>
           <div className="storeShare">
             <button>share</button>
             <button>add</button>
           </div>
         </div>
-        <div className="row storeIntroduce">
-          <div className="col-6 briefIntroduce ">
-            <p>{store.introduction}</p>
+        {/* <div className="row storeIntroduce"> */}
+        <div className="col-6 briefIntroduce ">
+          <p>{store.introduction}</p>
+        </div>
+        <div className="col-6 campTags ">
+          <p>{store.address}</p>
+          {tags}
+        </div>
+        {/* </div> */}
+      </div>
+      <div>
+        <div className=" campGallery">
+          <div className="gridRow">
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery1.jpg"
+              alt="Camping scene with tents"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
           </div>
-          <div className="col-2 campTags ">
-            <h5>{store.address}</h5>
-            {tags}
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery2.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery3.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery4.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
+          </div>
+          <div>
+            <Image
+              className="gridItem"
+              src="../../detail/campGallery5.jpg"
+              alt="Camping scene"
+              width={500} // 圖片的實際寬度
+              height={300} // 圖片的實際高度
+              layout="responsive" // 新增這行
+            />
           </div>
         </div>
       </div>
       <div className="row storeNormalInfo">
-        <div className="col-md-6 campPrecaution">
+        <div className="col-md-6 ">
           <h3 className="campSubtitle">營主叮嚀</h3>
-          {precautionsElements}
+          {/* {precautionsElements} */}
+          <div className="campPrecaution">{store.precautions}</div>
         </div>
         <div className="col-md-6">
           <h3 className="campSubtitle">營地資訊</h3>
           <table className="campTable">
-            <colgroup span={2} />
             <tbody>
               <tr>
-                <th>GPS座標</th>
-                <td>
-                  {store.longitude}°N, {store.latitude}°E
+                <td className="td_cell">
+                  <div className="div_cell">GPS座標</div>
+                </td>
+                <td className=" td_cell">
+                  <div className="div_cell">
+                    {store.longitude}°N, {store.latitude}°E
+                  </div>
                 </td>
               </tr>
               <tr>
-                <th>提供夜衝</th>
-                <td>是</td>
+                <td className="td_cell">
+                  <div className="div_cell">提供夜衝</div>
+                </td>
+                <td>
+                  <div className="div_cell">是</div>
+                </td>
               </tr>
               <tr>
-                <th>夜衝入場</th>
-                <td>18:00</td>
+                <td className="td_cell">
+                  <div className="div_cell">夜衝入場</div>
+                </td>
+                <td>
+                  <div className="div_cell">18:00</div>
+                </td>
               </tr>
               <tr>
-                <th>入營時間</th>
-                <td>11:00</td>
+                <td className="td_cell">
+                  <div className="div_cell">入營時間</div>
+                </td>
+                <td>
+                  <div className="div_cell">11:00</div>
+                </td>
               </tr>
               <tr>
-                <th>拔營時間</th>
-                <td>12:00</td>
+                <td className="td_cell">
+                  <div className="div_cell">離營時間</div>
+                </td>
+                <td>
+                  <div className="div_cell">12:00</div>
+                </td>
               </tr>
               <tr>
-                <th>海拔</th>
-                <td> {store.altitude}m</td>
+                <td className="td_cell">
+                  <div className="div_cell">海拔</div>
+                </td>
+                <td>
+                  <div className="div_cell">{store.altitude}m</div>
+                </td>
               </tr>
               <tr>
-                <th>聯絡電話</th>
-                <td> {store.mobile}</td>
+                <td className="td_cell">
+                  <div className="div_cell">聯絡電話</div>
+                </td>
+                <td>
+                  <div className="div_cell">{store.mobile}</div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
       <hr />
       <select value={peopleFilter} onChange={handlePeopleFilterChange}>
         <option value="">選擇人數</option>
@@ -325,17 +408,26 @@ export default function DetailTest() {
           .storeIntroduce {
             /* 包含.briefIntroduce .campTags */
             display: flex;
-            width: 100%;
-            height: 229px;
-            justify-content: space-between;
-            align-items: center;
           }
-          .campSubtitle {
-            display: flex;
-            padding: 10px;
-            justify-content: center;
-            align-items: center;
+          .briefIntroduce {
+            padding-block: 20px;
+          }
+          .campTags {
+            padding-block: 20px;
+          }
+          .campGallery {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
             gap: 10px;
+            margin-block: 20px;
+          }
+          .gridRow {
+            grid-row: span 2;
+          }
+          .gridItem {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
           .campPrecaution {
             display: flex;
@@ -343,16 +435,26 @@ export default function DetailTest() {
             align-items: center;
             align-self: stretch;
           }
-          .campTable {
+          .campSubtitle {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            padding-bottom: 10px;
             gap: 10px;
-            border-collapse: collapse; /* 這行會讓格線更整齊 */
           }
-          .campTable th,
+          .campTable {
+            display: table;
+            width: 100%;
+          }
           .campTable td {
-            border: 1px solid black;
+            border: 1px dotted grey;
+            text-align: left;
+          }
+          .td_cell {
+            padding-block: 10px;
+          }
+          .div_cell {
+            display: flex;
+            align-items: center;
+            padding-inline: 10px;
           }
           .cardContainer {
             display: flex;
