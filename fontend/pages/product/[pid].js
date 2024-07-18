@@ -4,29 +4,23 @@ import Link from 'next/link'
 
 import StoreTitleWrap from '@/components/product//detail/storeTitleWrap'
 import StoreNormalInfo from '@/components/product/detail/storeNormalInfo'
-// import CampAreaSearchBar from '@/components/product/detail/campAreaSearchBar'
+import CampAreaSearchBar from '@/components/product/detail/campAreaSearchBar'
+import CampGallery from '@/components/product/detail/campGallery.js'
 // import CampAreasList from '@/components/product/detail/campAreasList'
-import StoreDetail from '@/components/product/storeDetail'
 // import AttractionsNearby from '@/components/product/detail/attractionsNearby'
 
 export default function Detail() {
-  const router = useRouter()
-  const { pid } = router.query
-
-  const [people, setPeople] = useState(1)
-
-  const peopleOptions = new Array(12).fill().map((_, i) => i + 1)
-
   return (
     <>
       <StoreTitleWrap />
+      <CampGallery />
       <StoreNormalInfo />
-      {/* <CampAreaSearchBar /> */}
+      <CampAreaSearchBar />
       {/* <CampAreasList /> */}
       {/* <AttractionsNearby /> */}
       <Link href="/product/cart">我是購物車請點擊我</Link>
       {/* 輸入日期、人數 */}
-      
+
       <div className="campAreaSearchBar" style={{ border: '1px solid red' }}>
         <form className="inputDateAndNumber" action="">
           <div className="inputDate">
