@@ -21,7 +21,7 @@ LEFT JOIN
     stores_img ON s.stores_id = stores_img.stores_id
     LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
     LEFT JOIN tag AS t ON t.tag_id = st.tag_id
-    WHERE t.tag_id = 5
+    WHERE t.tag_id = 4
 GROUP BY 
     s.stores_id, 
     s.name, 
