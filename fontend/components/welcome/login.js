@@ -158,14 +158,16 @@ export default function Login() {
                     width={60}
                     height={60}
                   />
-                </span>
-                <span className={styles.icon}>
-                  <Image
-                    src="/google.svg"
-                    alt="Google Icon"
-                    width={60}
-                    height={60}
-                  />
+                  <Link href="/test/user/google-login">
+                    <span className={styles.icon}>
+                      <Image
+                        src="/google.svg"
+                        alt="Google Icon"
+                        width={60}
+                        height={60}
+                      />
+                    </span>
+                  </Link>
                 </span>
               </div>
               <div>
