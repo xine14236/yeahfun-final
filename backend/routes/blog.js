@@ -105,16 +105,21 @@ const getBlogData = async (req) => {
     //   };
     //
     const sql = `SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
-    COALESCE(lb.likes_count, 0) AS likes_count
+    COALESCE(lb.likes_count, 0) AS likes_count, bi.img_name
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
    Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
-   Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
+   Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id
+   Left join blog_img bi on b.id=bi.blog_id
+     ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`
     const [rows] = await db.query(sql)
 
     rows.forEach((r) => {
       r.date = ''
+      if(r.img_name){
+        r.img_name=r.img_name.split(',')[0]
+      }
       // "JS 的Date 類型 轉換成日期格式的字串"
       if (r.create_at) {
         r.create_at = moment(r.create_at).format(dateFormat1)
@@ -244,7 +249,7 @@ router.post('/add', async (req, res) => {
 
 
 router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
-  const bid2 = router.params.bid || 1
+  const bid2 = req.params.bid 
 let pictureNameArray=[]
 const output={
   success:false,
