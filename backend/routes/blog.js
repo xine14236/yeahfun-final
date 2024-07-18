@@ -266,7 +266,7 @@ LIMIT 5 `
 const dateFormat3 = 'YYYYMMDD'
   const [row2]=await db.query(sql2)
   row2.forEach((r) => {
-    r.date = ''
+   
     // "JS 的Date 類型 轉換成日期格式的字串"
     if (r.create_at) {
       r.create_at = moment(r.create_at).format(dateFormat3)
