@@ -1,9 +1,18 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 // 1. 建立與導出它
 // defaultValue是在套用context失敗時才會出現的值，可以使用有意義的預設值，或使用null(目的是為了除錯)。
 const AuthContext = createContext(null)
+
+export const initUserData = {
+  id: 0,
+  // username: '',
+  google_uid: '',
+  // line_uid: '',
+  name: '',
+  email: '',
+}
 
 // 2. 建立一個Context Provider元件
 // 目的: 將所有要共享狀態集中統一管理，提供給上層元件(_app.js)使用
@@ -15,10 +24,11 @@ export function AuthProvider({ children }) {
   // 會員使用的認証&授權狀態
   const [auth, setAuth] = useState({
     isAuth: false,
-    userData: {
-      id: 0,
-      email: '',
-    },
+    userData: initUserData,
+    // {
+    //   id: 0,
+    //   email: '',
+    // },
   })
   // 解析accessToken用的函式
   const parseJwt = (token) => {
