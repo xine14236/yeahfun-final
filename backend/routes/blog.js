@@ -258,15 +258,22 @@ if (req.files) {
     
   }
   const pictureNameString=pictureNameArray.join(',')
-  const sql=`select * from blog_img where id=${bid2}`
+  const sql=`select img_name  from blog_img where blog_id=${bid2}`
   const [rows] = await db.query(sql)
   console.log(rows.length)
+  
   if(rows.length<1){
     const sql2 =`INSERT INTO blog_img(img_name, blog_id) VALUES (?, ${bid2})`
     const [result] = await db.query(sql2,[pictureNameString])
     output.success=true
     output.result=result;
     output.info='123'
+  }else{
+    const check=rows[0].img_name+','+pictureNameString
+    const sql3 = `UPDATE blog_img SET img_name=? where blog_id=?`
+    const [result]= await db.query(sql3,[check,bid2])
+    output.success=!!(result.affectedRows && result.changedRows)
+    output.info='更新成功'
   }
 }
 
