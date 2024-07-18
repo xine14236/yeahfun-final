@@ -52,17 +52,37 @@ export default function blogDetail() {
 
   return (
     <>
-      <div className="row">
+      <div className="row ">
         <Carousel />
       </div>
-      <div className="row">
+      <div className="row " >
         <div className="col-12 col-md-9 border">
         <div className="col-12">
       <h2>{blog.title}</h2>
+      <div className="col-12 mt-4">
+<div className="">
+  <p > 
+  <span>
+
+  <FaRegClock className='me-3'/>
+  </span>
+  <span className='lh-sm me-5'>
+  {blog.create_at}
+ 
+  
+  </span>
+  <span>BY</span>
+  {blog.author} 
+  </p>
+</div>
+<div className="col-12 mt-4">
+{blog.content}
+</div>
+      </div>
       </div>
         </div>
     
-        <div className="col-12 col-md-3 border">
+        <div className="col-12 col-md-3 border ">
         <div className="container ">
         <div className="div text-center">
 
