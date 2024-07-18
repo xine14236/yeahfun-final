@@ -48,6 +48,9 @@ export default function DetailTest() {
     }
   }
 
+  // 將 precautions 字串拆分成陣列
+  const precautionsArray = store.precautions ? store.precautions.split(',') : []
+
   const handlePeopleFilterChange = (e) => {
     setPeopleFilter(e.target.value)
   }
@@ -90,7 +93,14 @@ export default function DetailTest() {
         <p>Location: {store.address}</p>
         <p>mobile: {store.mobile}</p>
         <p>露營地介紹: {store.introduction}</p>
-        <p>注意事項: {store.precautions}</p>
+        <ul>
+          <p>注意事項:</p>
+          {precautionsArray.map((precaution, index) => (
+            <li key={index} className="precautionList">
+              {precaution}
+            </li>
+          ))}
+        </ul>
         <p>經度: {store.latitude}°E</p>
         <p>緯度: {store.longitude}°N</p>
         <p>高度: {store.altitude}m</p>
@@ -189,6 +199,9 @@ export default function DetailTest() {
         {`
           .selectPeople {
             margin: 10px;
+          }
+          .precautionList {
+            list-style-type: disc;
           }
           .cardContainer {
             display: flex;
