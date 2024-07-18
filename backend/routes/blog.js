@@ -244,22 +244,35 @@ router.post('/add', async (req, res) => {
 
 
 router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
-  const bid2 = router.param.bid || 1
+  const bid2 = router.params.bid || 1
 let pictureNameArray=[]
+const output={
+  success:false,
+  
+
+}
+output.data=req.files
 if (req.files) {
   for (const file of req.files) {
     pictureNameArray.push(file.filename);
+    
+  }
+  const pictureNameString=pictureNameArray.join(',')
+  const sql=`select * from blog_img where id=${bid2}`
+  const [rows] = await db.query(sql)
+  console.log(rows.length)
+  if(rows.length<1){
+    const sql2 =`INSERT INTO blog_img(img_name, blog_id) VALUES (?, ${bid2})`
+    const [result] = await db.query(sql2,[pictureNameString])
+    output.success=true
+    output.result=result;
+    output.info='123'
   }
 }
-const pictureNameString=JSON.stringify(pictureNameArray)
-// const sql=`select count(1) from blog_img where id=${bid2}`
-// const rows = await db.query(sql)
-// if(rows<1){
-//   const sql2 =`INSERT INTO blog_img(${}, blog_id) VALUES ()`
-// }
+
 
   // filename
-  res.json({ success: true, data: req.files ,filenames:pictureNameArray})
+  res.json(output)
 
 
 })
