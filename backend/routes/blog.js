@@ -2,6 +2,7 @@ import express, { Router } from 'express'
 import moment from 'moment-timezone'
 import db from './../utils/connect-mysql.js'
 import upload from './../utils/upload-img-blog.js'
+import upload2 from './../utils/upload-img-blogComment.js'
 
 const router = express.Router()
 
@@ -105,16 +106,21 @@ const getBlogData = async (req) => {
     //   };
     //
     const sql = `SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
-    COALESCE(lb.likes_count, 0) AS likes_count
+    COALESCE(lb.likes_count, 0) AS likes_count, bi.img_name
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
    Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
-   Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  ${where} 
+   Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id
+   Left join blog_img bi on b.id=bi.blog_id
+     ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`
     const [rows] = await db.query(sql)
 
     rows.forEach((r) => {
       r.date = ''
+      if(r.img_name){
+        r.img_name=r.img_name.split(',')[0]
+      }
       // "JS 的Date 類型 轉換成日期格式的字串"
       if (r.create_at) {
         r.create_at = moment(r.create_at).format(dateFormat1)
@@ -244,22 +250,82 @@ router.post('/add', async (req, res) => {
 
 
 router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
-  const bid2 = router.param.bid || 1
+  const bid2 = req.params.bid 
 let pictureNameArray=[]
+const output={
+  success:false,
+  
+
+}
+output.data=req.files
 if (req.files) {
   for (const file of req.files) {
     pictureNameArray.push(file.filename);
+    
+  }
+  const pictureNameString=pictureNameArray.join(',')
+  const sql=`select img_name  from blog_img where blog_id=${bid2}`
+  const [rows] = await db.query(sql)
+  console.log(rows.length)
+  
+  if(rows.length<1){
+    const sql2 =`INSERT INTO blog_img(img_name, blog_id) VALUES (?, ${bid2})`
+    const [result] = await db.query(sql2,[pictureNameString])
+    output.success=!!result.affectedRows
+    output.result=result;
+    output.info='圖片上傳成功'
+  }else{
+    const check=rows[0].img_name+','+pictureNameString
+    const sql3 = `UPDATE blog_img SET img_name=? where blog_id=?`
+    const [result]= await db.query(sql3,[check,bid2])
+    output.success=!!(result.affectedRows && result.changedRows)
+    output.info='更新成功'
   }
 }
-const pictureNameString=JSON.stringify(pictureNameArray)
-// const sql=`select count(1) from blog_img where id=${bid2}`
-// const rows = await db.query(sql)
-// if(rows<1){
-//   const sql2 =`INSERT INTO blog_img(${}, blog_id) VALUES ()`
-// }
+
 
   // filename
-  res.json({ success: true, data: req.files ,filenames:pictureNameArray})
+  res.json(output)
+
+
+})
+router.post('/Cuploads/:bid', upload2.array('photos', 3),  async (req, res) => {
+  const bid2 = req.params.bid 
+let pictureNameArray=[]
+const output={
+  success:false,
+  
+
+}
+output.data=req.files
+if (req.files) {
+  for (const file of req.files) {
+    pictureNameArray.push(file.filename);
+    
+  }
+  const pictureNameString=pictureNameArray.join(',')
+  const sql=`select img_name  from blog_comment_img where blog_comment_id =${bid2}`
+  const [rows] = await db.query(sql)
+  console.log(rows.length)
+  
+  if(rows.length<1){
+    const sql2 =`INSERT INTO blog_comment_img (img_name, blog_comment_id) VALUES (?, ?)`
+    const [result] = await db.query(sql2,[pictureNameString,bid2])
+    output.success=!!result.affectedRows
+    output.result=result;
+    output.info='圖片上傳成功'
+  }else{
+    const check=rows[0].img_name+','+pictureNameString
+    const sql3 = `UPDATE blog_comment_img SET img_name=? where blog_comment_id=?`
+    const [result]= await db.query(sql3,[check,bid2])
+    output.success=!!(result.affectedRows && result.changedRows)
+    output.info='更新成功'
+  }
+}
+
+
+  // filename
+  res.json(output)
 
 
 })
