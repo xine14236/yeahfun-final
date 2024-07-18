@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useCart } from '@/hooks/cart-hook'
 import { FaLocationDot, FaStar, FaCommentDots, FaMinus } from 'react-icons/fa6'
 import { useRouter } from 'next/router'
+import { differenceInDays, parseISO } from 'date-fns'
 
 export default function Cart() {
   const { cartItems, removeFromCart } = useCart()
@@ -45,7 +46,7 @@ export default function Cart() {
   useEffect(() => {
     if (router.isReady && cartItems.length > 0) {
       cartItems.forEach((item) => {
-        getStoreInformation(item.id)
+        getStoreInformation(item.stores_id)
       })
     }
   }, [router.isReady, cartItems])
@@ -76,24 +77,25 @@ export default function Cart() {
                 />
               </div>
               <div className="cartInfoContent px-5">
-                <h3 className="py-2">{store.name}</h3>
+                <h3 className="py-2">{store.store_name}</h3>
                 <div>
                   <div className="cartInfoText py-1">
                     <FaLocationDot />
                     <h5 className="iconText">
-                      {storeInformation[store.id]?.address}
+                      {storeInformation[store.stores_id]?.address}
                     </h5>
                   </div>
                   <div className="cartInfoText py-1">
                     <FaStar />
                     <h5 className="iconText">
-                      {storeInformation[store.id]?.comment_star}
+                      {storeInformation[store.stores_id]?.comment_star}
                     </h5>
                   </div>
                   <div className="cartInfoText py-1">
                     <FaCommentDots />
                     <h5 className="iconText">
-                      {storeInformation[store.id]?.commentCounts} comments
+                      {storeInformation[store.stores_id]?.commentCounts}{' '}
+                      comments
                     </h5>
                   </div>
                 </div>
@@ -102,15 +104,17 @@ export default function Cart() {
                 <div className="content">
                   <div className="contentDetailSite">
                     <h3 className="my-1">
-                      {store.rooms_campsites_name} x {store.qty}
+                      {store.rooms_campsites_name} x{' '}
+                      {store.rooms_campsites_amount}
                     </h3>
                     <div className="my-1">
                       <p className="py-2" style={{ margin: 0 }}>
                         預訂日期: {store.startDate} ~ {store.endDate}
                       </p>
                       <p className="py-2" style={{ margin: 0 }}>
-                        價格: NT${store.rooms_campsites_price} * {store.days} 晚
-                        * {store.qty} 間
+                        價格: NT${store.normal_price}{' '}
+                        {differenceInDays(store.endDate, store.startDate)} 晚{' '}
+                        {store.rooms_campsites_amount} 間
                       </p>
                     </div>
                   </div>
@@ -126,9 +130,7 @@ export default function Cart() {
                 <div className="detailPrice">
                   {/* <input type="checkbox" className="" />
                 coupon */}
-                  <h3 className="mx-2">
-                    NT$ {store.rooms_campsites_price * store.days * store.qty}
-                  </h3>
+                  <h3 className="mx-2">NT$ {store.normal_price}</h3>
                 </div>
               </div>
             </div>

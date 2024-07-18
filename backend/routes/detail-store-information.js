@@ -30,13 +30,28 @@ router.get('/:stores_id', async function (req, res) {
   )
   const tag = tagRows
 
+  // 取得圖片
+  const [imgRows] = await db.query(
+    `SELECT
+      store.stores_id,
+      store.name,
+      stores_img.img_name
+    FROM
+      store
+    JOIN stores_img 
+    ON store.stores_id = stores_img.stores_id
+    WHERE store.stores_id = ?`,
+    [id]
+  )
+  const img = imgRows[0]
+
   // const [rows2] = await db.query(
   //   'SELECT stores_id, COUNT(*) as commentCounts FROM `comment` WHERE stores_id = ? GROUP BY stores_id',
   //   [id]
   // )
   // const commentCount = rows2[0]
 
-  return res.json({ status: 'success', data: { store, tag } })
+  return res.json({ status: 'success', data: { store, tag, img } })
 })
 
 export default router
