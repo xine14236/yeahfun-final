@@ -6,7 +6,7 @@
 .myCardList {
   width: 100%;
   display: flex;
-  padding: 80px 0;
+  padding: 60px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -36,13 +36,12 @@
 .types {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 .price input {
   width: 100%;
 }
-.keyword input {
-  width: 100%;
-}
+
 /* .cards {
   display: flex;
   flex-direction: column;
@@ -143,6 +142,8 @@
 }
 .searchBarSort {
   display: none;
+  width: 100%;
+  gap: 20px;
 }
 .productSearchForm {
   display: flex;
@@ -153,12 +154,16 @@
   align-self: stretch;
   color: var(--white);
 }
-.goWhereTeam,
+
 .calendarTeam {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
+}
+.goWhereTeam {
+  display: flex;
+  flex-direction: column;
 }
 .btnGreenPc {
   padding: 10px 30px;
@@ -201,6 +206,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: start;
+    gap: 10px;
   }
   .searchBarSort {
     flex-direction: column;
@@ -212,10 +218,8 @@
     font-weight: var(--h4h5-weight);
   }
   .orderByNone {
-    display: flex;
-    margin-block: 10px;
-    justify-content: end;
-    gap: 5px;
+    display: block;
+
   }
   .keyword,
   .price {
@@ -270,6 +274,11 @@
   }
   .keyword,
   .price {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .types {
     display: flex;
     flex-direction: column;
     gap: 10px;

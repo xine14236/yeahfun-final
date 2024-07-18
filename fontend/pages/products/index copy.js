@@ -29,7 +29,7 @@ export default function Products() {
 
   // 查詢條件用(這裡用的初始值都與伺服器的預設值一致)
   const [dateRange, setDateRange] = useState([])
-  const [nameLike, setNameLike] = useState('')
+  const [nameLike, setNameLike] = useState(router.query.nameLike || '')
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([])
   const [priceRange, setPriceRange] = useState([0, 5000])
@@ -72,15 +72,15 @@ export default function Products() {
   }
 
   // 將陣列分成小塊的函數
-  // const chunkArray = (array, size) => {
-  //   const chunkedArr = []
-  //   for (let i = 0; i < array.length; i += size) {
-  //     chunkedArr.push(array.slice(i, i + size))
-  //   }
-  //   return chunkedArr
-  // }
+  const chunkArray = (array, size) => {
+    const chunkedArr = []
+    for (let i = 0; i < array.length; i += size) {
+      chunkedArr.push(array.slice(i, i + size))
+    }
+    return chunkedArr
+  }
   // 將 products 分成每組三個的小塊
-  // const productChunks = chunkArray(products, 3)
+  const productChunks = chunkArray(products, 3)
 
   const disabledDate = (current) => {
     return current && current < dayjs().endOf('day')
@@ -115,30 +115,20 @@ export default function Products() {
     setDateRange(e)
   }
 
-  const handleChangeSelect1 = (value) => {
+  const handleChangeSelect = (value) => {
     if (value === '全台灣') {
       setLocation([])
     } else {
       setLocation(value)
     }
   }
-
-  // const handleChangeSelect = (value) => {
-  //   if (value === '全台灣') {
-  //     setLocation([])
-  //   } else {
-  //     setLocation(value)
-  //   }
-  // }
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
     const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
 
-    router.push(
-      `?name_like=${nameLike}&location=${location}&tag=${tag}&startDate=${startDate}&endDate=${endDate}`
-    )
+    // router.push(`?startDate=${startDate}&endDate=${endDate}`)
   }
 
   // 按下搜尋按鈕
@@ -150,6 +140,8 @@ export default function Products() {
       perpage,
       sort: sort,
       order: order,
+      startDate: dateRange[0]?.format('YYYY-MM-DD'),
+      endDate: dateRange[1]?.format('YYYY-MM-DD'),
       name_like: nameLike,
       location: location,
       tag: tag.join(','),
@@ -159,35 +151,23 @@ export default function Products() {
 
     getProducts(params)
   }
-  // 初始和頁數或每頁數變化時獲取數據
-  // useEffect(() => {
-  //   if (!router.isReady) return
-  //   const params = { page, perpage, sort, order }
-  //   getProducts(params)
-  // }, [page, perpage, sort, order, router])
 
+  // 初始和頁數或每頁數變化時獲取數據
   useEffect(() => {
-    if (
-      query.location ||
-      query.name_like ||
-      query.tag ||
-      query.startDate ||
-      query.endDate
-    ) {
-      fetch(
-        `http://localhost:3005/api/stores?name_like=${query.name_like}&location=${query.location}&tag=${query.tag}`
-      )
-        .then((response) => response.json())
-        .then((resData) => {
-          setProducts(resData.data.stores)
-          setPageCount(resData.data.pageCount)
-        })
-        .catch((error) => console.error('Error fetching data:', error))
-    } else {
-      const params = { page, perpage, sort, order }
-      getProducts(params)
+    if (!router.isReady) return
+    // const { location, tag, startDate, endDate, nameLike } = router.query
+    if (router.query.tag) {
+      setTag(router.query.tag.split(','))
     }
-  }, [page, perpage, sort, order, query])
+    if (router.query.startDate && router.query.endDate) {
+      setDateRange([
+        dayjs(router.query.startDate, 'YYYY-MM-DD'),
+        dayjs(router.query.endDate, 'YYYY-MM-DD'),
+      ])
+    }
+    const params = { page, perpage, sort, order }
+    getProducts(params)
+  }, [page, perpage, sort, order, router])
 
   return (
     <>
@@ -195,71 +175,21 @@ export default function Products() {
         <form
           className={styles.productSearchForm}
           action=""
-          onSubmit={handleSubmit}
+          onSubmit={handleSearch}
           id="productSearchForm"
         >
-          <div className={styles.keyword}>
-            <label htmlFor="search" className={styles.formTitle}>
-              <h5>關鍵字搜尋</h5>
-            </label>
-            <Input
-              value={nameLike}
-              onChange={(e) => {
-                setNameLike(e.target.value)
-              }}
-            />
-          </div>
-          <div className={styles.goWhereTeam}>
-            <label className={styles.formTitle} htmlFor="goWhere">
-              <p>你想去哪裡?</p>
-            </label>
-            <Select
-              defaultValue="全台灣"
-              style={{ width: '100%' }}
-              onChange={handleChangeSelect1}
-              options={locationOptions.map((value, i) => ({
-                key: i,
-                value: value,
-                label: value,
-              }))}
-            />
-          </div>
           <div className={styles.calendarTeam}>
             <label htmlFor="date" className={styles.formTitle}>
               <h5>入住日期區間</h5>
             </label>
             <RangePicker
+              value={dateRange}
               disabledDate={disabledDate}
               onChange={handleDateChange}
             />
           </div>
-          <div className={styles.types}>
-            <h5>類型</h5>
-            <div className="row">
-              {tagOptions.map((v, i) => {
-                return (
-                  <div className="col-6" key={i}>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        id={v}
-                        type="checkbox"
-                        value={v}
-                        checked={tag.includes(v)}
-                        onChange={handleTagChecked}
-                      />
-                      <label className="form-check-label" htmlFor={v}>
-                        {v}
-                      </label>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
           <div className={styles.searchBarSort}>
-            {/* <div className={styles.keyword}>
+            <div className={styles.keyword}>
               <label htmlFor="search" className={styles.formTitle}>
                 <h5>關鍵字搜尋</h5>
               </label>
@@ -269,7 +199,7 @@ export default function Products() {
                   setNameLike(e.target.value)
                 }}
               />
-            </div> */}
+            </div>
             <div className={styles.price}>
               <label htmlFor="range">
                 <h5>價格區間</h5>
@@ -288,8 +218,7 @@ export default function Products() {
             </div>
             <div className={styles.types}>
               <h5>類型</h5>
-
-              {/* <div className="row">
+              <div className="row">
                 {tagOptions.map((v, i) => {
                   return (
                     <div className="col-6" key={i}>
@@ -309,12 +238,12 @@ export default function Products() {
                     </div>
                   )
                 })}
-              </div> */}
+              </div>
             </div>
           </div>
           <button
             className={`btnGreenPc styles.transition`}
-            // onClick={handleSearch}
+            onClick={handleSearch}
           >
             開始探索
           </button>
@@ -378,12 +307,12 @@ export default function Products() {
                     ]}
                   />
                 </div>
-                {/* <div className={styles.goWhereTeam}>
+                <div className={styles.goWhereTeam}>
                   <label className={styles.formTitle} htmlFor="goWhere">
                     <p>你想去哪裡?</p>
                   </label>
                   <Select
-                    defaultValue="全台灣"
+                    defaultValue={router.query.location || '全台灣'}
                     style={{ width: '100%' }}
                     onChange={handleChangeSelect}
                     options={locationOptions.map((value, i) => ({
@@ -392,12 +321,13 @@ export default function Products() {
                       label: value,
                     }))}
                   />
-                </div> */}
+                </div>
                 <div className="keyword">
                   <label htmlFor="search" className={styles.formTitle}>
                     <p>關鍵字搜尋</p>
                   </label>
                   <Input
+                    // defaultValue="123"
                     value={nameLike}
                     onChange={(e) => {
                       setNameLike(e.target.value)
@@ -421,7 +351,7 @@ export default function Products() {
                 <div className={styles.types}>
                   <p>類型</p>
 
-                  {/* {tagOptions.map((v, i) => {
+                  {tagOptions.map((v, i) => {
                     return (
                       <div className="form-check" key={i}>
                         <input
@@ -437,7 +367,7 @@ export default function Products() {
                         </label>
                       </div>
                     )
-                  })} */}
+                  })}
 
                   <div>
                     <button className="btnGreenPc" onClick={handleSearch}>
@@ -448,41 +378,41 @@ export default function Products() {
               </form>
             </div>
             <div className="col-sm-10 col-12">
-              {/* {productChunks.map((chunk, chunkIndex) => ( */}
-              <div className="row">
-                {products.map((v) => (
-                  <div className="col-12 col-sm-4" key={v.id}>
-                    <div className={`card ${styles.productCard}`}>
-                      <Link href="#">
-                        <img
-                          src="/images/homepage/tent13.jpg"
-                          className={styles.cardImage}
-                          alt="tents"
-                        />
-                      </Link>
-                      <div className={`card-body ${styles.cardBody}`}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
+              {productChunks.map((chunk, chunkIndex) => (
+                <div className="row" key={chunkIndex}>
+                  {chunk.map((v) => (
+                    <div className="col-12 col-sm-4" key={v.id}>
+                      <div className={`card ${styles.productCard}`}>
+                        <Link href="#">
+                          <img
+                            src="/images/homepage/tent13.jpg"
+                            className={styles.cardImage}
+                            alt="tents"
+                          />
+                        </Link>
+                        <div className={`card-body ${styles.cardBody}`}>
+                          <div className={styles.cardTags}>
+                            <div className={styles.cardTagLocation}>
+                              <Location className={styles.iconLocation} />
+                              <p>{v.address}</p>
+                            </div>
+                            <div className={styles.cardTagStar}>
+                              <Star className={styles.iconStar} />
+                              <p>{v.comment_star}</p>
+                            </div>
                           </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
+                          <div className={`card-title ${styles.cardTitle}`}>
+                            <h4>
+                              <Link href="#">{v.name}</Link>
+                            </h4>
+                            <h6>${v.lowest_normal_price}</h6>
                           </div>
-                        </div>
-                        <div className={`card-title ${styles.cardTitle}`}>
-                          <h4>
-                            <Link href="#">{v.name}</Link>
-                          </h4>
-                          <h6>${v.lowest_normal_price}</h6>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {/* ))} */}
+                  ))}
+                </div>
+              ))}
             </div>
             <div
               aria-label="Page navigation example"
