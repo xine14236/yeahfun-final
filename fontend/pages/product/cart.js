@@ -143,6 +143,22 @@ export default function Cart() {
         ))
       )}
 
+      {cartItems.length > 0 && (
+        <div className="totalMount m-2">
+          <h3>
+            Total : NT${' '}
+            {cartItems.reduce(
+              (acc, store) =>
+                acc +
+                store.normal_price *
+                  differenceInDays(store.endDate, store.startDate) *
+                  store.rooms_campsites_amount,
+              0
+            )}
+          </h3>
+        </div>
+      )}
+
       <div className="checkoutButton">
         <button
           className="btn btn-primary btn-lg mt-5 checkout"
@@ -227,6 +243,10 @@ export default function Cart() {
           }
           .checkout {
             padding: 10px 80px;
+          }
+          .totalMount {
+            display: flex;
+            justify-content: flex-end;
           }
         `}
       </style>
