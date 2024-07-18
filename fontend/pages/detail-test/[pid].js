@@ -3,13 +3,18 @@ import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart-hook'
 import Image from 'next/image'
 import { DatePicker, Space } from 'antd'
+import Link from 'next/link'
+import { FaCartShopping } from 'react-icons/fa6'
 
 export default function DetailTest() {
+  const { RangePicker } = DatePicker
+
+  const { addCart } = useCart()
   const router = useRouter()
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
-  const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
-  const { RangePicker } = DatePicker
+  const [peopleFilter, setPeopleFilter] = useState('') // 狀態篩選值
+  const [dateRange, setDateRange] = useState([])
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -43,13 +48,6 @@ export default function DetailTest() {
     }
   }
 
-  useEffect(() => {
-    if (router.isReady) {
-      getCampsitesInformation(router.query.pid)
-      getStoreInformation(router.query.pid)
-    }
-  }, [router.isReady, router.query.pid])
-
   const handlePeopleFilterChange = (e) => {
     setPeopleFilter(e.target.value)
   }
@@ -57,6 +55,31 @@ export default function DetailTest() {
   const filteredCampsites = peopleFilter
     ? campsites.filter((campsite) => campsite.people >= peopleFilter)
     : campsites
+
+  const handleAddToCart = (store) => {
+    if (dateRange.length === 0) {
+      alert('請輸入日期')
+      return
+    }
+
+    addCart({
+      stores_id: store.stores_id,
+      rooms_campsites_id: store.rooms_campsites_id,
+      store_name: store.store_name,
+      rooms_campsites_name: store.rooms_campsites_name,
+      normal_price: store.normal_price,
+      rooms_campsites_amount: store.amount,
+      startDate: dateRange[0].format('YYYY-MM-DD'),
+      endDate: dateRange[1].format('YYYY-MM-DD'),
+    })
+  }
+
+  useEffect(() => {
+    if (router.isReady) {
+      getCampsitesInformation(router.query.pid)
+      getStoreInformation(router.query.pid)
+    }
+  }, [router.isReady, router.query.pid])
 
   return (
     <>
@@ -74,7 +97,7 @@ export default function DetailTest() {
       </div>
       <hr />
       <Space direction="vertical" size={12}>
-        <RangePicker />
+        <RangePicker onChange={setDateRange} />
       </Space>
       <select
         className="selectPeople"
@@ -90,6 +113,10 @@ export default function DetailTest() {
         <option value="6">6人以上</option>
       </select>
       <div>
+        <Link href="/product/cart">
+          這是一個購物車
+          <FaCartShopping />
+        </Link>
         <h4>床區</h4>
         <div className="cardContainer">
           {filteredCampsites
@@ -113,6 +140,12 @@ export default function DetailTest() {
                 <p>房型坪數: {campsite.square_meters}</p>
                 <p>房型最多人數: {campsite.people}</p>
                 <p>房型型別: {campsite.type}</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleAddToCart(campsite)}
+                >
+                  加入訂房
+                </button>
               </div>
             ))}
         </div>
@@ -142,6 +175,12 @@ export default function DetailTest() {
                 <p>房型坪數: {campsite.square_meters}</p>
                 <p>房型最多人數: {campsite.people}</p>
                 <p>房型型別: {campsite.type}</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleAddToCart(campsite)}
+                >
+                  加入訂房
+                </button>
               </div>
             ))}
         </div>
