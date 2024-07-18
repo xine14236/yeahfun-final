@@ -104,7 +104,7 @@ export default function DetailTest() {
 
   return (
     <>
-      <div className="storeTitleWrap">
+      <div className="row storeTitleWrap">
         <div className="row storeTitle">
           <h1>{store.name}</h1>
           <div className="storeShare">
@@ -123,7 +123,7 @@ export default function DetailTest() {
         {/* </div> */}
       </div>
       <div>
-        <div className=" campGallery">
+        <div className="campGallery">
           <figure className="gridItem">
             <Image
               src={`/detail/${imgArray[0]}`}
