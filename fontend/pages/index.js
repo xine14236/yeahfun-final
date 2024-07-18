@@ -276,7 +276,7 @@ export default function Home() {
           />
           <div className={`titleContent  ${styles.titleTheme}`}>
             <h3 className="titleText">theme</h3>
-            <div className="d-flex align-items-center justify-content-center"></div>
+            <p>主題營地</p>
           </div>
         </div>
 
