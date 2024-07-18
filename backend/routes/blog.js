@@ -238,11 +238,30 @@ router.get('/like/:b_id', async (req, res) => {
 })
 
 // 新增 還沒有連接會員
-router.post('/add', async (req, res) => {})
+router.post('/add', async (req, res) => {
+  
+})
 
-router.post('/uploads', upload.array('photos', 10), (req, res) => {
+
+router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
+  const bid2 = router.param.bid || 1
+let pictureNameArray=[]
+if (req.files) {
+  for (const file of req.files) {
+    pictureNameArray.push(file.filename);
+  }
+}
+const pictureNameString=JSON.stringify(pictureNameArray)
+// const sql=`select count(1) from blog_img where id=${bid2}`
+// const rows = await db.query(sql)
+// if(rows<1){
+//   const sql2 =`INSERT INTO blog_img(${}, blog_id) VALUES ()`
+// }
+
   // filename
-  res.json({ success: true, data: req.files })
+  res.json({ success: true, data: req.files ,filenames:pictureNameArray})
+
+
 })
 
 router.get('/:bid', async (req, res) => {
@@ -253,8 +272,17 @@ router.get('/:bid', async (req, res) => {
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  where b.id=${req.params.bid} 
   GROUP BY b.id `
+  const dateFormat1 = 'YYYY-MM-DD HH:mm:ss'
 
-  const [row1] = await db.query(sql)
+  const [rows1] = await db.query(sql)
+  rows1.forEach((r)=>{
+    if (r.create_at) {
+
+      r.create_at = moment(r.create_at).format(dateFormat1)
+    }
+
+  })
+  const row1 = rows1[0]
 
   const sql2 = `SELECT   b.id, b.title, b.create_at, 
     COALESCE(lb.likes_count, 0) AS likes_count
