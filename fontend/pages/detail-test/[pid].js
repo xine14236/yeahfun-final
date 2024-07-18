@@ -104,9 +104,9 @@ export default function DetailTest() {
 
   return (
     <>
-      <div className="row storeTitleWrap">
-        <div className="col-12 storeTitle">
-          <h2>{store.name}</h2>
+      <div className="storeTitleWrap">
+        <div className="row storeTitle">
+          <h1>{store.name}</h1>
           <div className="storeShare">
             <button>share</button>
             <button>add</button>
@@ -192,7 +192,7 @@ export default function DetailTest() {
         </div>
       </div>
       <div className="row storeNormalInfo">
-        <div className="col-md-6 ">
+        <div className="col-md-6 campPrecaution">
           <h3 className="campSubtitle">營主叮嚀</h3>
           {/* {precautionsElements} */}
           <div className="campPrecaution">
@@ -206,64 +206,37 @@ export default function DetailTest() {
         <div className="col-md-6">
           <h3 className="campSubtitle">營地資訊</h3>
           <table className="campTable">
+            <colgroup span={2} />
             <tbody>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">GPS座標</div>
-                </td>
-                <td className=" td_cell">
-                  <div className="div_cell">
-                    {store.longitude}°N, {store.latitude}°E
-                  </div>
+                <th>GPS座標</th>
+                <td>
+                  {store.longitude}°N, {store.latitude}°E
                 </td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">提供夜衝</div>
-                </td>
-                <td>
-                  <div className="div_cell">是</div>
-                </td>
+                <th>提供夜衝</th>
+                <td>是</td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">夜衝入場</div>
-                </td>
-                <td>
-                  <div className="div_cell">18:00</div>
-                </td>
+                <th>夜衝入場</th>
+                <td>18:00</td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">入營時間</div>
-                </td>
-                <td>
-                  <div className="div_cell">11:00</div>
-                </td>
+                <th>入營時間</th>
+                <td>11:00</td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">離營時間</div>
-                </td>
-                <td>
-                  <div className="div_cell">12:00</div>
-                </td>
+                <th>拔營時間</th>
+                <td>12:00</td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">海拔</div>
-                </td>
-                <td>
-                  <div className="div_cell">{store.altitude}m</div>
-                </td>
+                <th>海拔</th>
+                <td> {store.altitude}m</td>
               </tr>
               <tr>
-                <td className="td_cell">
-                  <div className="div_cell">聯絡電話</div>
-                </td>
-                <td>
-                  <div className="div_cell">{store.mobile}</div>
-                </td>
+                <th>聯絡電話</th>
+                <td> {store.mobile}</td>
               </tr>
             </tbody>
           </table>
@@ -479,16 +452,16 @@ export default function DetailTest() {
           .storeIntroduce {
             /* 包含.briefIntroduce .campTags */
             display: flex;
+            width: 100%;
+            height: 229px;
+            justify-content: space-between;
+            align-items: center;
           }
-          .briefIntroduce {
-            padding-block: 20px;
-          }
-          .campTags {
-            padding-block: 20px;
-          }
-          .campGallery {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+          .campSubtitle {
+            display: flex;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
             gap: 10px;
             margin-block: 20px;
           }
@@ -503,15 +476,14 @@ export default function DetailTest() {
             align-items: center;
             align-self: stretch;
           }
-          .campSubtitle {
-            display: flex;
-            padding-bottom: 10px;
-            gap: 10px;
-          }
           .campTable {
-            display: table;
-            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            border-collapse: collapse; /* 這行會讓格線更整齊 */
           }
+          .campTable th,
           .campTable td {
             border: 1px dotted grey;
             text-align: left;
