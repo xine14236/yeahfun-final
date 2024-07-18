@@ -4,7 +4,7 @@ import Image from 'next/image'
 export default function CampGallery() {
   return (
     <div>
-      <div className="campGallery">
+      <div className="campGallery" style={{ border: '1px solid red' }}>
         <div
           style={{
             display: 'grid',

@@ -121,6 +121,15 @@ export default function Login() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => {
+                    setCustomer({ email: 'lee@test.com', password: '11111' })
+                  }}
+                  className={styles.loginButton}
+                >
+                  一鍵輸入
+                </button>
+                <button
+                  type="button"
                   className={styles.loginButton}
                   onClick={handleLogout}
                 >
