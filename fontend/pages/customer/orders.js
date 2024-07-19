@@ -34,13 +34,21 @@ export default function Index() {
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
-    { href: '', icon: '/icon/user.svg', text: '個人資訊' },
-    { href: '', icon: '/icon/shopping-bag.svg', text: '我的行程' },
-    { href: '', icon: '/icon/star.svg', text: '口袋名單' },
-    { href: '', icon: '/icon/comment.svg', text: '我的評價' },
-    { href: '', icon: '/icon/coupon.svg', text: 'Fun優惠' },
-    { href: '', icon: '/icon/tent.svg', text: 'FUN部落' },
-    { href: '', icon: '/icon/tree-1.svg', text: 'FUN成就' },
+    { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
+    {
+      href: '/customer/orders',
+      icon: '/icon/shopping-bag.svg',
+      text: '我的行程',
+    },
+    { href: '/customer/collect', icon: '/icon/star.svg', text: '口袋名單' },
+    { href: '/customer/comments', icon: '/icon/comment.svg', text: '我的評價' },
+    { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
+    { href: '/customer/blogs', icon: '/icon/tent.svg', text: 'FUN部落' },
+    {
+      href: '/customer/achievement',
+      icon: '/icon/tree-1.svg',
+      text: 'FUN成就',
+    },
   ]
 
   const handleClick = (index) => {
