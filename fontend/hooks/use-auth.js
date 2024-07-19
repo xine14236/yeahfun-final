@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+// import { checkAuth, getFavs } from '@/services/user'
 
 // 1. 建立與導出它
 // defaultValue是在套用context失敗時才會出現的值，可以使用有意義的預設值，或使用null(目的是為了除錯)。
@@ -7,11 +8,10 @@ const AuthContext = createContext(null)
 
 export const initUserData = {
   id: 0,
-  // username: '',
+  email: '',
+  name: '',
   google_uid: '',
   // line_uid: '',
-  name: '',
-  email: '',
 }
 
 // 2. 建立一個Context Provider元件
@@ -28,7 +28,10 @@ export function AuthProvider({ children }) {
     // {
     //   id: 0,
     //   email: '',
-    // },
+    //   name: '',
+    //   google_uid: '',
+    //   // line_uid: '',
+    // }
   })
   // 解析accessToken用的函式
   const parseJwt = (token) => {
