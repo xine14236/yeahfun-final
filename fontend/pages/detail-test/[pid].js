@@ -6,6 +6,7 @@ import { DatePicker, Space } from 'antd'
 import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
 import Favor from '@/components/icons/favor'
+import Share from '@/components/icons/share'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -72,6 +73,18 @@ export default function DetailTest() {
     })
   }
 
+  //收藏功能：擴充商店資料，多一個代表是否已收藏的屬性fav(布林值，預設是false)
+  const initState =
+    Array.isArray(store) && store.length === 0
+      ? store.map((v) => ({ ...v, fav: false }))
+      : []
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [favor, setFavor] = useState(initState)
+
+  if (Array.isArray(store)) {
+    console.log('store is not an array')
+  }
+
   // 將取得tag資料map
   const tags = tag.map((item, index) => {
     return (
@@ -111,7 +124,7 @@ export default function DetailTest() {
         <div className="col-12 storeTitle">
           <h1>{store.name}</h1>
           <div className="storeShare">
-            <button>share</button>
+            <Share color={'#feaf18'} size={30} />
             <Favor color={'#feaf18'} size={30} />
           </div>
         </div>
