@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import styles from '@/styles/blogDetail.module.scss'
 import Carousel from '@/components/blog/carousel'
 import { useRouter } from 'next/router'
 import { FaRegClock } from "react-icons/fa6";
+
 
 import Image from 'next/image'
 import heart from '@/assets/heart.svg'
@@ -11,6 +13,7 @@ export default function blogDetail() {
     id: 0,
     title: '',
     author: '',
+    name:'',
     content: '',
     create_at: '2024-01-01T00:00:00.000Z',
     category_ids: '0',
@@ -56,7 +59,7 @@ export default function blogDetail() {
         <Carousel />
       </div>
       <div className="row " >
-        <div className="col-12 col-md-9 border">
+        <div className={`col-12 col-md-9 border ${styles.cc} `}>
         <div className="col-12">
       <h2>{blog.title}</h2>
       <div className="col-12 mt-4">
@@ -72,11 +75,29 @@ export default function blogDetail() {
   
   </span>
   <span>BY</span>
-  {blog.author} 
+  {blog.name} 
   </p>
 </div>
-<div className="col-12 mt-4">
+<div className="col-12 mt-4 ">
+<div className="px-md-5">
+
 {blog.content}
+</div>
+
+<div className={`col-12 border likeContainer ${styles.likeContainer}`}>
+  <span className={`${styles.span1} fs-3 me-5 ms-md-5 ms-3 `}>
+
+   <Image src={heart} height={20} width={20} className='me-2'/>{blog.likes_count}
+  </span>
+  <span className={`${styles.span1} fs-3`}>
+
+   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.likes_count}
+  </span>
+ 
+  
+</div>
+<hr />
+<div className="col-12"></div>
 </div>
       </div>
       </div>

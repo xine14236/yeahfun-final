@@ -12,19 +12,6 @@ export default function HomeSearch() {
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([])
 
-  const tagOptions1 = [
-    '草地',
-    '遠景',
-    '獨立包區',
-    '森林系',
-    '櫻花祭',
-    '親子同遊',
-    '雨棚',
-    '小木屋',
-    '山景雲海',
-    '海景',
-  ]
-
   const tagOptions = [
     { label: '草地', value: '草地' },
     { label: '遠景', value: '遠景' },
@@ -38,7 +25,14 @@ export default function HomeSearch() {
     { label: '海景', value: '海景' },
   ]
 
-  const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
+  const locationOptions = [
+    '全台灣',
+    '苗栗縣',
+    '南投縣',
+    '嘉義縣',
+    '屏東縣',
+    '花蓮縣',
+  ]
 
   const handleChange = (value) => {
     setTag(value)
@@ -84,6 +78,15 @@ export default function HomeSearch() {
               label: v,
             }))}
           />
+          <label htmlFor="date" className={styles.formTitle}>
+            <h5>入住日期區間</h5>
+          </label>
+          <RangePicker
+            disabledDate={disabledDate}
+            onChange={(e) => {
+              setDateRange(e)
+            }}
+          />
           <label htmlFor="type" className={styles.formTitle}>
             <h5>營地類型</h5>
           </label>
@@ -105,19 +108,11 @@ export default function HomeSearch() {
             })}
           />
 
-          <label htmlFor="date" className={styles.formTitle}>
-            <h5>入住日期區間</h5>
-          </label>
-          <RangePicker
-            disabledDate={disabledDate}
-            onChange={(e) => {
-              setDateRange(e)
-            }}
-          />
-          <label htmlFor="date" className={styles.formTitle}>
+          {/* <label htmlFor="date" className={styles.formTitle}>
             <h5>關鍵字搜尋</h5>
-          </label>
+          </label> */}
           <Input
+            placeholder="輸入關鍵字"
             value={nameLike}
             onChange={(e) => {
               setNameLike(e.target.value)
