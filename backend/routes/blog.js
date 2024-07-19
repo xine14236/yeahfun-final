@@ -54,6 +54,8 @@ const getBlogData = async (req) => {
       ? categories.map((v) => `bc.blog_category_id='${v}'`).join(' OR ')
       : ''
 
+      conditions[3] = `b.title is not null`
+
   const cvs = conditions.filter((v) => v)
   // 2.用AMD串接所有從句
   const where =
@@ -105,13 +107,14 @@ const getBlogData = async (req) => {
     //     }
     //   };
     //
-    const sql = `SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
+    const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count, bi.img_name
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
    Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id
    Left join blog_img bi on b.id=bi.blog_id
+   left join customer c on b.author=c.id
      ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`
     const [rows] = await db.query(sql)
@@ -331,9 +334,10 @@ if (req.files) {
 })
 
 router.get('/:bid', async (req, res) => {
-  const sql = `SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
+  const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
+   left join customer c on b.author=c.id
    Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  where b.id=${req.params.bid} 
@@ -354,6 +358,7 @@ router.get('/:bid', async (req, res) => {
     COALESCE(lb.likes_count, 0) AS likes_count
    FROM blog b 
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  
+   Where b.title is not null
   GROUP BY b.id ORDER BY likes_count DESC ,b.id DESC
 LIMIT 5 `
 
