@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { DatePicker, Space } from 'antd'
 import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
+import Favor from '@/components/icons/favor'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -109,7 +110,7 @@ export default function DetailTest() {
           <h1>{store.name}</h1>
           <div className="storeShare">
             <button>share</button>
-            <button>add</button>
+            <Favor color={'#feaf18'} size={30} />
           </div>
         </div>
         {/* <div className="row storeIntroduce"> */}
