@@ -31,6 +31,18 @@
   gap: 10px;
   align-self: stretch;
   background: var(--white, #fff);
+  transition: background-color 0.3s, color 0.3s;
+}
+.memberAsideList.clicked {
+  display: flex;
+  height: 50.626px;
+  padding: 5px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  background: var(--primary-1, #389b87); /* 點擊後的顏色，可以根據需要修改 */
+  color: var(--white, #fff);;
 }
 .ListTop {
   display: flex;
@@ -56,6 +68,12 @@
   border-radius: 0px 0px 10px 10px;
   // background: var(--primary-1, #389B87);
 }
+.memberAsideList.clicked .memberAsideListIcon {
+  filter: brightness(0) invert(1); 
+}
+.memberAsideList.clicked .memberAsideListText {
+  color:var(--white, #fff); /* 點擊後的文字顏色 */
+}
 .memberAsideListIcon {
   display: flex;
   width: 30px;
@@ -63,6 +81,7 @@
   padding: 0px 1px;
   align-items: flex-start;
   gap: 10px;
+  transition: filter 0.3s;
 }
 .memberAsideListText {
   font-family: Inter;
@@ -72,6 +91,7 @@
   line-height: normal;
   color: var(--primary-1, #389b87);
   text-decoration: none;
+  transition: color 0.3s;
 }
 
 .memberFrame {
