@@ -122,8 +122,8 @@ export default function DetailTest() {
         <div className="col-12 storeTitle">
           <h1>{store.name}</h1>
           <div className="storeShare">
-            <Share color={'#feaf18'} size={30} />
-            <Favor color={'#feaf18'} size={30} />
+            <Share />
+            <Favor />
           </div>
         </div>
         {/* <div className="row storeIntroduce"> */}
@@ -137,7 +137,7 @@ export default function DetailTest() {
         {/* </div> */}
       </div>
       <div>
-        <div className=" campGallery">
+        <div className="campGallery">
           <figure className="gridItem">
             <Image
               src={`/detail/${imgArray[0]}`}
@@ -489,6 +489,10 @@ export default function DetailTest() {
             justify-content: space-between;
             align-items: center;
             width: 100%;
+          }
+          .storeShare {
+            display: flex;
+            gap: 10px;
           }
           .storeIntroduce {
             /* 包含.briefIntroduce .campTags */
