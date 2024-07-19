@@ -11,6 +11,7 @@ export default function blogDetail() {
     id: 0,
     title: '',
     author: '',
+    name:'',
     content: '',
     create_at: '2024-01-01T00:00:00.000Z',
     category_ids: '0',
@@ -72,7 +73,7 @@ export default function blogDetail() {
   
   </span>
   <span>BY</span>
-  {blog.author} 
+  {blog.name} 
   </p>
 </div>
 <div className="col-12 mt-4">

@@ -323,7 +323,7 @@ export default function Blog() {
                           </div>
                         </div>
                         <p className="card-text text-muted mb-md-5">
-                          <small className="text-muted">{v.author}</small>
+                          <small className="text-muted">{v.name}</small>
                         </p>
                         <div
                           className={`card-content mb-md-3 ${styles.textTruncate4}`}
