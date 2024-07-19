@@ -223,35 +223,6 @@ export default function Home() {
                             </SwiperSlide>
                           ))}
                         </Swiper>
-                        {/* <Swiper
-                          spaceBetween={30}
-                          centeredSlides={true}
-                          loop={true}
-                          autoplay={
-                            autoplay
-                              ? { delay: 2500, disableOnInteraction: false }
-                              : false
-                          }
-                          modules={[Autoplay]}
-                          className="mySwiper"
-                        >
-                          {v.img_name.split(',').map((img, index) => (
-                            <SwiperSlide key={index}>
-                              <Image
-                                src={`/detail/${img}`}
-                                className={styles.cardImage}
-                                alt="tents"
-                                width={300}
-                                height={200}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  objectFit: 'contain',
-                                }}
-                              />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper> */}
                       </Link>
                       <div className={styles.cardBody}>
                         <div className={styles.cardTags}>
@@ -310,7 +281,53 @@ export default function Home() {
           style={{ width: '100%' }}
         />
         <div className={`row justify-content-center ${styles.rowActivity}`}>
-          {blog.map((v, i) => {
+          <Swiper
+            loop={true}
+            spaceBetween={0}
+            centeredSlides={true}
+            slidesPerView={4}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: true,
+            }}
+            modules={[Autoplay]}
+            className="mySwiper2"
+          >
+            {blog.map((v, i) => {
+              return (
+                <div
+                  className={`col-12 col-sm-3 p-0 ${styles.customCol}`}
+                  key={i}
+                >
+                  <SwiperSlide>
+                    <Link href={`/blog/${v.id}`}>
+                      <div className={`card ${styles.activityCard}`}>
+                        <Image
+                          src="/images/homepage/tent02.jpg"
+                          className={styles.activityImg}
+                          alt="blog"
+                          width={400}
+                          height={800}
+                          style={{ width: '100%', height: '100%' }}
+                        />
+                        <div className={`card-body ${styles.cardBody}`}>
+                          <h4 className={`card-title m-0 ${styles.cardTitle}`}>
+                            {v.title}
+                          </h4>
+                          <Link href={`/blog/${v.id}`}>
+                            <h6 className={`card-text ${styles.cardText}`}>
+                              {v.content}
+                            </h6>
+                          </Link>
+                        </div>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                </div>
+              )
+            })}
+          </Swiper>
+          {/* {blog.map((v, i) => {
             return (
               <div
                 className={`col-12 col-sm-3 p-0 ${styles.customCol}`}
@@ -340,7 +357,7 @@ export default function Home() {
                 </Link>
               </div>
             )
-          })}
+          })} */}
         </div>
       </div>
 
