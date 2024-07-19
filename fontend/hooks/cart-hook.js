@@ -17,9 +17,21 @@ export function CartProviderNew({ children }) {
     )
   }
 
+  const processCheckout = (cartItems, totalAmount) => {
+    // 在這裡處理結帳邏輯
+    console.log('Cart Items:', cartItems)
+    console.log('Total Amount:', totalAmount)
+  }
+
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, addCart, removeFromCart }}
+      value={{
+        cartItems,
+        setCartItems,
+        addCart,
+        removeFromCart,
+        processCheckout,
+      }}
     >
       {children}
     </CartContext.Provider>

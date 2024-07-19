@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { differenceInDays, parseISO } from 'date-fns'
 
 export default function Cart() {
-  const { cartItems, removeFromCart } = useCart()
+  const { cartItems, removeFromCart, processCheckout } = useCart()
 
   const handleRemove = (rooms_campsites_id) => {
     removeFromCart(rooms_campsites_id)
@@ -35,6 +35,7 @@ export default function Cart() {
             address: resData.data.store.address,
             comment_star: resData.data.store.comment_star,
             commentCounts: resData.data.commentCount.commentCounts,
+            storeImage: resData.data.store.img_name.split(',')[0],
           },
         }))
       }
@@ -50,6 +51,21 @@ export default function Cart() {
       })
     }
   }, [router.isReady, cartItems])
+
+  // 新增 checkout 函數
+  const checkout = () => {
+    // 你可以在這裡調用鉤子並傳遞所需的參數
+    // 假設你想傳遞 cartItems 和總金額
+    const totalAmount = cartItems.reduce(
+      (acc, store) =>
+        acc +
+        store.normal_price *
+          differenceInDays(store.endDate, store.startDate) *
+          store.rooms_campsites_amount,
+      0
+    )
+    processCheckout(cartItems, totalAmount)
+  }
 
   return (
     <>
@@ -70,7 +86,9 @@ export default function Cart() {
             <div className="cartBox">
               <div className="cartInfoImage">
                 <Image
-                  src="/productDetail/tent05.jpg"
+                  src={`/detail/${
+                    storeInformation[store.stores_id]?.storeImage
+                  }`}
                   alt="Picture of the author"
                   width={450}
                   height={300}
@@ -163,6 +181,7 @@ export default function Cart() {
         <button
           className="btn btn-primary btn-lg mt-5 checkout"
           disabled={cartItems.length === 0}
+          onClick={checkout}
         >
           結帳
         </button>
