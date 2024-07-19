@@ -1,10 +1,14 @@
 import { useEffect } from 'react'
 // 樣式
 import '@/styles/globals.scss'
-import '@/styles/product.scss'
+// import '@/styles/product.scss'
 import '@/styles/cart.scss'
 import '@/styles/loader.scss'
 import '@/styles/react-paginate.scss'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import '@/styles/swiper.scss'
+
 import { ConfigProvider } from 'antd'
 import theme from '@/theme/themeConfig'
 // 載入購物車context

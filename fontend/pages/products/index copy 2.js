@@ -1,0 +1,470 @@
+import ListLayout from '@/components/layout/list-layout'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import styles from '@/styles/list.module.scss'
+import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
+const { RangePicker } = DatePicker
+import ReactPaginate from 'react-paginate'
+import LeftArrow from '@/components/icons/left-arrow'
+import RightArrow from '@/components/icons/right-arrow'
+import Link from 'next/link'
+import Location from '@/components/icons/location'
+import Star from '@/components/icons/star'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
+
+import Image from 'next/image'
+
+export default function Products() {
+  const router = useRouter()
+  const query = router.query
+  const [products, setProducts] = useState([])
+  const [total, setTotal] = useState(0) // 總筆數
+  const [pageCount, setPageCount] = useState(0) // 總頁數
+  const [page, setPage] = useState(1) // 起始頁
+  const [perpage, setPerpage] = useState(12) // 每頁12筆
+  const [sort, setSort] = useState('id')
+  const [order, setOrder] = useState('asc')
+
+  // 查詢條件用(這裡用的初始值都與伺服器的預設值一致)
+  const [dateRange, setDateRange] = useState([])
+  const [nameLike, setNameLike] = useState('')
+  const [location, setLocation] = useState('')
+  const [tag, setTag] = useState([])
+  const [priceRange, setPriceRange] = useState([0, 5000])
+
+  const tagOptions = [
+    '草地',
+    '遠景',
+    '獨立包區',
+    '森林系',
+    '櫻花祭',
+    '親子同遊',
+    '雨棚',
+    '小木屋',
+    '山景雲海',
+    '海景',
+  ]
+  const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
+
+  // 獲取產品數據
+  const getProducts = async (params = {}) => {
+    const baseUrl = 'http://localhost:3005/api/stores'
+    const searchParams = new URLSearchParams(params)
+    const qs = searchParams.toString()
+    const url = `${baseUrl}?${qs}`
+
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+
+      if (resData.status === 'success') {
+        setPageCount(resData.data.pageCount)
+        setTotal(resData.data.total)
+        if (Array.isArray(resData.data.stores)) {
+          setProducts(resData.data.stores)
+        }
+      }
+    } catch (e) {
+      console.error('Fetch error:', e)
+    }
+  }
+
+  // 將陣列分成小塊的函數
+  // const chunkArray = (array, size) => {
+  //   const chunkedArr = []
+  //   for (let i = 0; i < array.length; i += size) {
+  //     chunkedArr.push(array.slice(i, i + size))
+  //   }
+  //   return chunkedArr
+  // }
+  // 將 products 分成每組三個的小塊
+  // const productChunks = chunkArray(products, 3)
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day')
+  }
+
+  const handleChange = (value) => {
+    const [sortValue, orderValue] = value.split(',')
+    setSort(sortValue)
+    setOrder(orderValue)
+  }
+
+  // const handleTagChecked = (e) => {
+  //   // 宣告方便使用的tv名稱，取得觸發事件物件的目標值
+  //   const tv = e.target.value
+  //   // 判斷是否有在陣列中
+  //   if (tag.includes(tv)) {
+  //     // 如果有===>移出陣列
+  //     const nextTag = tag.filter((v) => v !== tv)
+  //     setTag(nextTag)
+  //   } else {
+  //     // 否則===>加入陣列
+  //     const nextTag = [...tag, tv]
+  //     setTag(nextTag)
+  //   }
+  // }
+
+  const handleTagChange = (value) => {
+    setTag(value)
+  }
+  const handleDateChange = (e) => {
+    setDateRange(e)
+  }
+
+  const handleChangeSelect1 = (value) => {
+    if (value === '全台灣') {
+      setLocation([])
+    } else {
+      setLocation(value)
+    }
+  }
+
+  // const handleChangeSelect = (value) => {
+  //   if (value === '全台灣') {
+  //     setLocation([])
+  //   } else {
+  //     setLocation(value)
+  //   }
+  // }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault()
+
+  //   const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
+  //   const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
+
+  //   router.push(
+  //     `?name_like=${nameLike}&location=${location}&tag=${tag}&startDate=${startDate}&endDate=${endDate}`
+  //   )
+  // }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
+    const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
+
+    const queryParams = {
+      name_like: nameLike,
+      location,
+      tag: tag.join(','),
+      startDate,
+      endDate,
+      page: 1,
+      perpage,
+    }
+
+    const queryString = new URLSearchParams(queryParams).toString()
+    router.push(`?${queryString}`)
+
+    // setPage(1)
+  }
+
+  const handlePageClick = (event) => {
+    const newPage = event.selected + 1
+    setPage(newPage)
+
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  }
+  // 按下搜尋按鈕
+  const handleSearch = () => {
+    // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁
+    setPage(1)
+    const params = {
+      // page: 1, // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁，向伺服器要第1頁的資料
+      // perpage,
+      sort: sort,
+      order: order,
+      // name_like: nameLike,
+      // location: location,
+      // tag: tag.join(','),
+      lowest_normal_price_gte: priceRange[0],
+      lowest_normal_price_lte: priceRange[1],
+    }
+
+    getProducts(params)
+  }
+  // 初始和頁數或每頁數變化時獲取數據
+  // useEffect(() => {
+  //   if (!router.isReady) return
+  //   const params = { page, perpage, sort, order }
+  //   getProducts(params)
+  // }, [page, perpage, sort, order, router])
+
+  useEffect(() => {
+    if (query.name_like) setNameLike(query.name_like)
+    if (query.location) setLocation(query.location)
+    if (query.tag) setTag(query.tag.split(',')) // Convert tag string to array
+    if (query.startDate && query.endDate) {
+      setDateRange([dayjs(query.startDate), dayjs(query.endDate)])
+    }
+
+    if (
+      query.location ||
+      query.name_like ||
+      query.tag ||
+      query.startDate ||
+      query.endDate
+    ) {
+      fetch(
+        `http://localhost:3005/api/stores?name_like=${query.name_like}&location=${query.location}&tag=${query.tag}`
+      )
+        .then((response) => response.json())
+        .then((resData) => {
+          setProducts(resData.data.stores)
+          setPageCount(resData.data.pageCount)
+        })
+        .catch((error) => console.error('Error fetching data:', error))
+    } else {
+      const params = { page, perpage, sort, order }
+      getProducts(params)
+    }
+  }, [page, perpage, sort, order, query])
+
+  return (
+    <>
+      <div className={styles.searchBar}>
+        <form
+          className={styles.productSearchForm}
+          action=""
+          onSubmit={handleSubmit}
+          id="productSearchForm"
+        >
+          <div className={styles.goWhereTeam}>
+            <label className={styles.formTitle} htmlFor="goWhere">
+              <h5>你想去哪裡?</h5>
+            </label>
+            <Select
+              // defaultValue={query.location || '全台灣'}
+              defaultValue={'全台灣'}
+              style={{ width: '100%' }}
+              onChange={handleChangeSelect1}
+              options={locationOptions.map((value, i) => ({
+                key: i,
+                value: value,
+                label: value,
+              }))}
+            />
+          </div>
+          <div className={styles.calendarTeam}>
+            <label htmlFor="date" className={styles.formTitle}>
+              <h5>入住日期區間</h5>
+            </label>
+            <RangePicker
+              // defaultValue={
+              //   query.startDate && query.endDate
+              //     ? [dayjs(query.startDate), dayjs(query.endDate)]
+              //     : [dayjs(), dayjs().add(1, 'day')]
+              // }
+              disabledDate={disabledDate}
+              onChange={handleDateChange}
+            />
+          </div>
+          <div className={styles.types}>
+            <h5>類型</h5>
+            <Select
+              className={styles.typesSelect}
+              // defaultValue={tag || []}
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="請選擇"
+              value={tag}
+              maxTagCount="responsive"
+              onChange={handleTagChange}
+              options={tagOptions.map((value) => ({
+                value: value,
+                label: value,
+              }))}
+            />
+          </div>
+          <div className={styles.keyword}>
+            <Input
+              placeholder="輸入關鍵字"
+              value={nameLike}
+              onChange={(e) => {
+                setNameLike(e.target.value)
+              }}
+            />
+          </div>
+
+          <div className={styles.searchBarSort}>
+            <div className={styles.price}>
+              <label htmlFor="range">
+                <h5>價格區間</h5>
+              </label>
+              <Slider
+                range
+                value={priceRange}
+                defaultValue={[0, 3000]}
+                min={0}
+                max={5000}
+                step={100}
+                onChange={(value) => {
+                  setPriceRange(value)
+                }}
+              />
+            </div>
+          </div>
+          <button
+            className={`btnGreenPc transition`}
+            // onClick={handleSearch}
+          >
+            開始探索
+          </button>
+        </form>
+      </div>
+      <div className={`${styles.myCardList} ${styles.section02}`}>
+        <div className="title">
+          <img src="/images/homepage/title-tree.png" alt="" />
+          <div className="titleContent">
+            <h3 className="titleText">List</h3>
+            <p>目錄</p>
+          </div>
+        </div>
+        <div className={`container-fluid ${styles.listContainer}`}>
+          <div className={styles.orderByNone}>
+            <Select
+              defaultValue="排序-價格-低到高排序"
+              style={{
+                width: '100%',
+              }}
+              onChange={handleChange}
+              options={[
+                {
+                  value: 'lowest_normal_price,asc',
+                  label: '排序-價格-低到高排序',
+                },
+                {
+                  value: 'lowest_normal_price,desc',
+                  label: '排序-價格-高到低排序',
+                },
+              ]}
+            />
+          </div>
+          <div className="row">
+            <div className="col-sm-2 col-12">
+              <form
+                className={styles.sort}
+                onSubmit={(e) => {
+                  e.preventDefault()
+                }}
+              >
+                <div className={styles.orderBys}>
+                  <label htmlFor="orderBy" className={styles.formTitle}>
+                    <p>排序方式</p>
+                  </label>
+                  <Select
+                    defaultValue="價格-低到高排序"
+                    style={{
+                      width: '100%',
+                    }}
+                    onChange={handleChange}
+                    options={[
+                      {
+                        value: 'lowest_normal_price,asc',
+                        label: '價格-低到高排序',
+                      },
+                      {
+                        value: 'lowest_normal_price,desc',
+                        label: '價格-高到低排序',
+                      },
+                    ]}
+                  />
+                </div>
+                <div className={styles.price}>
+                  <label htmlFor="range">價格區間</label>
+                  <Slider
+                    range
+                    value={priceRange}
+                    defaultValue={[0, 3000]}
+                    min={0}
+                    max={5000}
+                    step={100}
+                    onChange={(value) => {
+                      setPriceRange(value)
+                    }}
+                  />
+                </div>
+                <div>
+                  <button className="btnGreenPc" onClick={handleSearch}>
+                    搜尋
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="col-sm-10 col-12">
+              {/* {productChunks.map((chunk, chunkIndex) => ( */}
+              <div className="row">
+                {products.map((v) => (
+                  <div className="col-12 col-sm-4" key={v.id}>
+                    <div className={`card ${styles.productCard}`}>
+                      <Link href="#">
+                        <img
+                          src={`/productDetail/${v.img_name}`}
+                          className={styles.cardImage}
+                          alt="tents"
+                        />
+                      </Link>
+                      <div className={`card-body ${styles.cardBody}`}>
+                        <div className={styles.cardTags}>
+                          <div className={styles.cardTagLocation}>
+                            <Location className={styles.iconLocation} />
+                            <p>{v.address}</p>
+                          </div>
+                          <div className={styles.cardTagStar}>
+                            <Star className={styles.iconStar} />
+                            <p>{v.comment_star}</p>
+                          </div>
+                        </div>
+                        <div className={`card-title ${styles.cardTitle}`}>
+                          <h4>
+                            <Link href="#">{v.name}</Link>
+                          </h4>
+                          <h5>${v.lowest_normal_price}/每晚</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* ))} */}
+            </div>
+            <div
+              aria-label="Page navigation example"
+              className={styles.pageBtn}
+            >
+              <ReactPaginate
+                pageCount={pageCount}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={2}
+                onPageChange={handlePageClick}
+                forcePage={page - 1} // Force current page to be active
+                nextLabel={<RightArrow size={13} />}
+                previousLabel={<LeftArrow size={13} />}
+                breakLabel="..."
+                containerClassName={'pagination'}
+                pageClassName={'pageItem item'}
+                pageLinkClassName={'pageLink link'}
+                previousClassName={'previousItem item'}
+                previousLinkClassName={'previousLink link'}
+                nextClassName={'nextItem item'}
+                nextLinkClassName={'nextLink link'}
+                breakClassName={'breakItem item'}
+                breakLinkClassName={'breakLink link'}
+                activeClassName={'active'}
+                disabledClassName={'disabledItem'}
+                disabledLinkClassName={'disabledLink link'}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+Products.getLayout = function (page) {
+  return <ListLayout>{page}</ListLayout>
+}

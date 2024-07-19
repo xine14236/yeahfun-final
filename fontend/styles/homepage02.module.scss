@@ -1,0 +1,372 @@
+.section02,
+.myCardList {
+  position: relative;
+  width: 100%;
+  display: flex;
+  padding: 50px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  align-self: stretch;
+}
+.section02DecorateTop {
+  position: absolute;
+  top: -35px;
+  width: 100%;
+}
+.cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  align-self: stretch;
+}
+
+.card {
+  --bs-card-bg: transparent;
+  --bs-card-border-color: transparent;
+}
+
+.cardImage {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.cardBody {
+  display: flex;
+  padding: 15px 15px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  align-self: stretch;
+}
+
+.cardBody a {
+  text-decoration: none;
+  color: var(--black);
+}
+
+.cardBody a:hover {
+  color: var(--secondary-3);
+}
+
+.cardTags {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.cardTagLocation {
+  color: var(--white);
+  border-radius: 10px;
+  background: var(--primary-1, #389b87);
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+  align-items: center;
+  gap: 5px;
+}
+
+.cardTagStar {
+  height: 34px;
+  color: var(--white);
+  display: flex;
+  padding: 5px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--primary-1, #389b87);
+}
+
+.myCardList .card .cardTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.decorateIndex {
+  width: 100%;
+  position: absolute;
+  top: 920px;
+}
+
+// section03
+
+.section03 {
+  padding: 50px 0px;
+  position: relative;
+  width: 100%;
+}
+.section03 .title {
+  margin-top: 100px;
+}
+
+.section03Bg {
+  width: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  height: 703px;
+  opacity: 0.3;
+  position: absolute;
+  top: 0px;
+  z-index: -1;
+}
+
+.rowActivity {
+  margin: 80px 0;
+  width: 100%;
+}
+.customCol {
+  max-width: 420px;
+}
+
+.activityCard {
+  position: relative;
+  width: 100%;
+  height: 618px;
+  border: 0px;
+}
+.activityImg {
+  width: 100%;
+
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.section03 .cardBody {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  padding: 24px 36px;
+  flex-direction: column;
+  gap: 18px;
+  align-self: stretch;
+}
+.section03 .cardTitle,
+.section03 .cardText {
+  color: var(--white, #fff);
+}
+.section03 .cardTitle:hover,
+.section03 .cardText:hover {
+  color: var(--secondary-3);
+}
+
+.section03 .cardText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+}
+
+.section03DecorateTop {
+  width: 100%;
+  position: absolute;
+  top: 5px;
+}
+
+.section03DecorateBottom {
+  width: 100%;
+  position: absolute;
+  bottom: 280px;
+  z-index: -1;
+}
+@media (max-width: 576px) {
+  .section03 {
+    padding: 30px 0px;
+    position: relative;
+    width: 100%;
+  }
+  .section03DecorateTop {
+    display: none;
+  }
+  .title {
+    margin-top: 0px;
+  }
+  .section03Bg {
+    display: none;
+  }
+  .rowActivity {
+    margin: 40px 0 0 0;
+  }
+  .customCol {
+    max-width: 330px;
+    margin-bottom: 30px;
+  }
+  .activityImg {
+    height: 430px;
+    object-fit: cover;
+    overflow: hidden;
+  }
+}
+
+// section04
+.section04 {
+  position: relative;
+  gap: 15px;
+}
+.section04DecorateTop {
+  width: 100%;
+  position: absolute;
+  top: -50px;
+}
+
+.paginationButtons {
+  display: flex;
+  gap: 20px;
+}
+.themeBtn {
+  background: transparent;
+  border: none;
+}
+.themeBtnActive {
+  background: transparent;
+  border: none;
+  color: var(--primary-1);
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--primary-1);
+  box-sizing: border-box;
+}
+@media (max-width: 576px) {
+  .theme1 {
+    font-size: var(--h6);
+  }
+  .theme {
+    font-size: var(--h6);
+  }
+}
+
+//  section05
+.section05 {
+  display: flex;
+  padding: 150px 0;
+  margin-top: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  align-self: stretch;
+  position: relative;
+}
+
+.section05Bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  /* bottom: 104px; */
+  opacity: 0.5;
+  z-index: -1;
+  object-fit: cover;
+}
+
+.aboutCard {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-inline: 50px;
+}
+.stone {
+  width: 100%;
+  /* height: 290px; */
+}
+
+.aboutCardBody {
+  display: flex;
+  /* width: 360px; */
+  padding: 30px;
+  /* margin-top: -30px; */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.aboutCardTitle {
+  width: 100%;
+  text-align: center;
+}
+.aboutCardText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  align-self: stretch;
+}
+.aboutCardTitleA,
+.aboutCardTextA {
+  color: var(--black);
+}
+.aboutCardTextA:hover,
+.aboutCardTitleA:hover {
+  color: var(--primary-1);
+}
+
+.section05DecorateTop {
+  width: 100%;
+  position: absolute;
+  top: -50px;
+}
+@media (max-width: 576px) {
+  .section05 {
+    padding: 50px 0;
+    gap: 50px;
+  }
+  .containerFluid {
+    flex-direction: column;
+    padding-inline: 48px;
+  }
+  .section05Bg {
+    height: 100%;
+  }
+  .stone {
+    width: 300px;
+    height: 250px;
+  }
+  .aboutRow {
+    display: flex;
+    gap: 30px;
+  }
+  .aboutCard {
+    margin-inline: 25px;
+  }
+  .aboutCardBody {
+    padding: 20px;
+  }
+  .aboutCardTitle {
+    font-size: var(--h5);
+  }
+  .aboutCardText {
+    font-size: var(--p);
+  }
+  .section05DecorateTop {
+    display: none;
+  }
+}
+.section04 {
+  position: relative;
+}
+.theme1 {
+  border: transparent;
+  padding-inline: 10px;
+}
+.theme {
+  border-right: 2px solid var(--black);
+  padding-inline: 10px;
+}
+@media (max-width: 576px) {
+  .theme1 {
+    font-size: var(--h6);
+  }
+  .theme {
+    font-size: var(--h6);
+  }
+}

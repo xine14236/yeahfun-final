@@ -1,0 +1,49 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--gray-800); /* 更改導航按鈕的顏色 */
+  transition: 0.5s;
+  padding-inline: 50px;
+}
+
+/* 添加 hover 效果 */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: var(--gray-400); /* 更改為鼠標懸停時的顏色 */
+}
+
+@media (max-width: 576px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+  .mySwiper2 {
+    display: none;
+  }
+}
