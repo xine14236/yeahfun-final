@@ -296,6 +296,7 @@ LEFT JOIN
     comment ON s.stores_id = comment.stores_id
 LEFT JOIN 
     stores_img ON s.stores_id = stores_img.stores_id
+    
 GROUP BY 
     s.stores_id, 
     s.name, 

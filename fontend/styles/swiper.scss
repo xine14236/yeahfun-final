@@ -38,27 +38,9 @@
   color: var(--gray-400); /* 更改為鼠標懸停時的顏色 */
 }
 
-/* 調整導航按鈕的圖標大小 */
-.swiper-button-next::after,
-.swiper-button-prev::after {
+@media (max-width: 576px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
 }
-// .paginationButtons {
-//   display: flex;
-//   justify-content: center;
-//   margin-bottom: 1rem; /* 與 Swiper 之間的間距 */
-// }
-
-// .paginationButtons button {
-//   margin: 0 5px;
-//   padding: 0.5rem 1rem;
-//   background-color: #fff;
-//   border: 1px solid #ccc;
-//   cursor: pointer;
-//   transition: background-color 0.3s;
-// }
-
-// .paginationButtons button.active,
-// .paginationButtons button:hover {
-//   background-color: #007bff;
-//   color: #fff;
-// }
