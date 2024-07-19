@@ -64,9 +64,11 @@ export default function DetailTest() {
       store_name: store.store_name,
       rooms_campsites_name: store.rooms_campsites_name,
       normal_price: store.normal_price,
+      holiday_price: store.holiday_price,
       rooms_campsites_amount: store.amount,
       startDate: dateRange[0].format('YYYY-MM-DD'),
       endDate: dateRange[1].format('YYYY-MM-DD'),
+      storeImage: store.img,
     })
   }
 
