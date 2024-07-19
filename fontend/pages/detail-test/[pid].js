@@ -329,14 +329,14 @@ export default function DetailTest() {
                 <p>房型最多人數: {campsite.people}</p>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary btnGreenPc"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                 >
                   詳細內容
                 </button>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btnOrangePc"
                   onClick={() => {
                     handleAddToCart(campsite)
                   }}
@@ -418,14 +418,14 @@ export default function DetailTest() {
 
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary btnGreenPc"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                 >
                   詳細內容
                 </button>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btnOrangePc"
                   onClick={() => {
                     handleAddToCart(campsite)
                   }}
