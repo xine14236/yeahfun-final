@@ -123,7 +123,7 @@ export default function DetailTest() {
           <h1>{store.name}</h1>
           <div className="storeShare">
             <Share color={'#feaf18'} size={30} />
-            <Favor color={'#feaf18'} size={30} />
+            <Favor />
           </div>
         </div>
         {/* <div className="row storeIntroduce"> */}
@@ -137,7 +137,7 @@ export default function DetailTest() {
         {/* </div> */}
       </div>
       <div>
-        <div className=" campGallery">
+        <div className="campGallery">
           <figure className="gridItem">
             <Image
               src={`/detail/${imgArray[0]}`}
