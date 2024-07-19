@@ -78,6 +78,7 @@ router.get('/', async function (req, res) {
         LEFT JOIN rooms_campsites ON s.stores_id = rooms_campsites.stores_id
         LEFT JOIN store_tag AS st ON st.stores_id = s.stores_id
         LEFT JOIN tag AS t ON t.tag_id = st.tag_id
+        LEFT JOIN favorite ON s.stores_id = favorite.pid
         ${where}
         GROUP BY s.stores_id, s.name, s.address
         ${having}
@@ -115,58 +116,26 @@ router.get('/', async function (req, res) {
   // 計算總頁數
   const pageCount = Math.ceil(count / perpage)
 
-  // 標準回傳JSON
   return res.json({
     status: 'success',
-    data: {
-      total: count, // 總筆數
-      pageCount, // 總頁數
-      page, // 目前頁
-      perpage, // 每頁筆數
-      stores,
-    },
+    total: count, // 總筆數
+    pageCount, // 總頁數
+    page, // 目前頁
+    perpage, // 每頁筆數
+    stores,
   })
-})
 
-// GET - 得到單筆資料(注意，有動態參數時要寫在GET區段最後面)
-router.get('/:id', async function (req, res) {
-  // 轉為數字
-  const id = Number(req.params.id)
-
-  const [rows] = await db.query(
-    `SELECT 
-        store.stores_id, 
-        store.name, 
-        store.address, 
-        st.tag_id AS my_tag_id,
-        t.tag_name,
-        ROUND(c.comment_star, 1) AS comment_star, 
-        si.img_name,
-        rc.lowest_normal_price
-      FROM 
-        store
-      LEFT JOIN 
-        store_tag st ON store.stores_id = st.stores_id
-      LEFT JOIN 
-        tag t ON st.tag_id = t.tag_id
-      LEFT JOIN 
-        (SELECT stores_id, AVG(comment_star) AS comment_star
-         FROM comment
-         GROUP BY stores_id) c ON store.stores_id = c.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MAX(img_name) AS img_name
-         FROM stores_img
-         GROUP BY stores_id) si ON store.stores_id = si.stores_id
-      LEFT JOIN 
-        (SELECT stores_id, MIN(normal_price) AS lowest_normal_price
-         FROM room_campsite
-         GROUP BY stores_id) rc ON store.stores_id = rc.stores_id'
-        WHERE store.stores_id = ?`,
-    [id]
-  )
-  const product = rows[0]
-
-  return res.json({ status: 'success', data: { product } })
+  // 標準回傳JSON
+  // return res.json({
+  //   status: 'success',
+  //   data: {
+  //     total: count, // 總筆數
+  //     pageCount, // 總頁數
+  //     page, // 目前頁
+  //     perpage, // 每頁筆數
+  //     stores,
+  //   },
+  // })
 })
 
 export default router

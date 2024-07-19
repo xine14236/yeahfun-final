@@ -29,18 +29,12 @@
   color: var(--white);
   font-weight: 600;
 }
-.orderBys {
-  display: flex;
-  flex-direction: column;
-}
-.types {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.price input {
-  width: 100%;
-}
+// .orderBys {
+//   display: flex;
+//   height: 100%;
+//   justify-content: end;
+//   flex-direction: column;
+// }
 
 /* .cards {
   display: flex;
@@ -132,14 +126,17 @@
 }
 .searchBar {
   display: flex;
+  position: sticky;
+  top: 0px; /* 根據需要調整 */
   justify-content: center;
   width: 100%;
   background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
   // background: var(--secondary-3, #ffb998);
   /* border-radius: 10px; */
-
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 }
+
 .searchBarSort {
   display: none;
   width: 100%;
@@ -147,24 +144,44 @@
 }
 .productSearchForm {
   display: flex;
-  padding: 15px 40px;
+  padding: 15px 0;
   justify-content: center;
   align-items: center;
-  gap: 40px;
-  align-self: stretch;
+  gap: 30px;
   color: var(--white);
+  width: 100%;
 }
 
-.calendarTeam {
+.calendarTeam,
+.goWhereTeam,
+.types,
+.keyword,
+.orderBys {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-.goWhereTeam {
-  display: flex;
+  justify-content: start;
   flex-direction: column;
+  align-items: start;
+  gap: 5px;
+  white-space: nowrap;
 }
+.price {
+  width: 180px;
+}
+.price input {
+  width: 100%;
+}
+//  {
+//   height: 100%;
+//   display: flex;
+//   justify-content: end;
+//   align-items: end;
+// }
+.types,
+.keyword {
+  width: 150px;
+  flex-shrink: 0;
+}
+
 .btnGreenPc {
   padding: 10px 30px;
   border: 1px solid var(--white);
@@ -200,62 +217,30 @@
     gap: 20px;
     padding: 40px 30px;
   }
-
+  .orderByNone {
+    display: block;
+  }
   .calendarTeam,
-  .goWhereTeam {
+  .goWhereTeam,
+  .keyword,
+  .types {
+    display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: start;
     gap: 10px;
-  }
-  .searchBarSort {
-    flex-direction: column;
-    display: flex;
-  }
-  .searchBarSort p,
-  .searchBarSort label {
-    font-size: var(--h5);
-    font-weight: var(--h4h5-weight);
-  }
-  .orderByNone {
-    display: block;
-
-  }
-  .keyword,
-  .price {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    width: 100%;
   }
 
   .listContainer {
     width: 100%;
     padding: 0px 15px;
   }
-  .searchBarSort {
-    display: flex;
-  }
   .sort {
     display: none;
   }
   .searchBar {
     justify-content: start;
-  }
-  .productSearchForm {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-    justify-content: start;
-    align-items: start;
-    gap: 20px;
-    padding: 40px 30px;
-  }
-
-  .calendarTeam,
-  .goWhereTeam {
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
   }
   .searchBarSort {
     flex-direction: column;
@@ -271,16 +256,5 @@
     margin-block: 10px;
     justify-content: end;
     gap: 5px;
-  }
-  .keyword,
-  .price {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .types {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 }

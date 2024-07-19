@@ -11,7 +11,7 @@ export default function Header() {
         <div className={`${styles.kv} d-flex flex-column`}>
           <ListNavbar />
           <div
-            className={`${styles.indexHeadings} d-flex justify-content-center flex-column gap-4`}
+            className={`${styles.indexHeadings} d-flex justify-content-center flex-column `}
           >
             <WhiteLogo width={195} className={styles.homeLogoBig} />
             <div className={styles.indexHeading}>
