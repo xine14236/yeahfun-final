@@ -12,6 +12,8 @@ export default function Favor({ size, color, className }) {
     <>
       <div
         className={`favor ${isFavor ? 'favor-active' : ''}`}
+        onMouseEnter={() => setIsFavor(true)}
+        onMouseLeave={() => setIsFavor(false)}
         onClick={toggleFavor}
         onKeyDown={toggleFavor}
         role="button"
