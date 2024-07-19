@@ -350,3 +350,13 @@ Link {
 a {
   text-decoration: none;
 }
+
+.goTop {
+  position: fixed;
+  bottom: 70px;
+  right: 100px;
+  color: var(--secondary-3);
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 2;
+}

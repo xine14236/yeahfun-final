@@ -6,13 +6,16 @@ import HomeLayout from '@/components/layout/home-layout'
 import { useState } from 'react'
 import { useEffect, useRef } from 'react'
 
+import { motion } from 'framer-motion'
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
-import { set } from 'lodash'
+
+import GoTop from '@/components/home/go-top'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -22,8 +25,8 @@ export default function Home() {
   const [tag3, setTag3] = useState([])
   const [swiperInstance, setSwiperInstance] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  // const [autoplay, setAutoplay] = useState(false)
-  // const swiperRef = useRef(null)
+  const swiperRef = useRef(null)
+  const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
 
   const tags = [
     {
@@ -144,22 +147,6 @@ export default function Home() {
     }
   }
 
-  // const handleMouseEnter = () => {
-  //   setAutoplay(true)
-  //   if (swiperRef.current) {
-  //     swiperRef.current.swiper.autoplay.start()
-  //   }
-  //   console.log('enter')
-  // }
-
-  // const handleMouseLeave = () => {
-  //   setAutoplay(false)
-  //   if (swiperRef.current) {
-  //     swiperRef.current.swiper.autoplay.stop()
-  //   }
-  //   console.log('leave')
-  // }
-
   useEffect(() => {
     getProducts(), getBlog(), getTag(), getTag2(), getTag3()
   }, [])
@@ -205,7 +192,7 @@ export default function Home() {
                       </Link>*/}
                       <Link href={`/detail-test/${v.stores_id}`}>
                         <Swiper
-                          // ref={swiperRef}
+                          ref={swiperRef}
                           spaceBetween={30}
                           centeredSlides={true}
                           loop={true}
@@ -214,7 +201,7 @@ export default function Home() {
                             disableOnInteraction: false,
                           }}
                           modules={[Autoplay]}
-                          className="mySwiper"
+                          className="mySwiper1"
                         >
                           {v.img_name.split(',').map((img, index) => (
                             <SwiperSlide key={index}>
@@ -290,17 +277,16 @@ export default function Home() {
           height={1080}
           style={{ width: '100%' }}
         />
-        <div className={`row justify-content-center ${styles.rowActivity}`}>
+        <div className={`row justify-content-center ${styles.rowActivity1}`}>
           <Swiper
             loop={true}
-            spaceBetween={0}
-            centeredSlides={true}
+            watchSlidesProgress={true}
             slidesPerView={4}
             autoplay={{
-              delay: 4000,
-              disableOnInteraction: true,
+              delay: 5000,
+              disableOnInteraction: false,
             }}
-            modules={[Autoplay]}
+            modules={[Autoplay, Navigation]}
             className="mySwiper2"
           >
             {blog.map((v, i) => {
@@ -337,23 +323,24 @@ export default function Home() {
               )
             })}
           </Swiper>
-          {/* {blog.map((v, i) => {
+        </div>
+        <div className={`row justify-content-center ${styles.rowActivity2}`}>
+          {blog.map((v, i) => {
             return (
               <div
                 className={`col-12 col-sm-3 p-0 ${styles.customCol}`}
                 key={i}
               >
                 <Link href={`/blog/${v.id}`}>
-                  <div className={`card ${styles.activityCard}`}>
+                  <div className={`card ${styles.activityCard} `}>
                     <Image
                       src="/images/homepage/tent02.jpg"
                       className={styles.activityImg}
                       alt="blog"
                       width={400}
                       height={600}
-                      style={{ width: 'auto', height: '600px' }}
                     />
-                    <div className={`card-body ${styles.cardBody}`}>
+                    <div className={`card-body  ${styles.cardBody} `}>
                       <h4 className={`card-title m-0 ${styles.cardTitle}`}>
                         {v.title}
                       </h4>
@@ -367,7 +354,7 @@ export default function Home() {
                 </Link>
               </div>
             )
-          })} */}
+          })}
         </div>
       </div>
 
@@ -406,7 +393,7 @@ export default function Home() {
           onSlideChange={handleSlideChange}
           navigation={true}
           modules={[Pagination, Navigation]}
-          className="mySwiper"
+          className="mySwiper3"
         >
           {tags.map((tagSet, idx) => (
             <SwiperSlide key={idx}>
@@ -506,7 +493,13 @@ export default function Home() {
                     height={300}
                   />
                 </a>
-                <div className={`card-body ${styles.aboutCardBody}`}>
+
+                <motion.div
+                  className={`card-body ${styles.aboutCardBody}`}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                >
+                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
                       <a href="#/" className={styles.aboutCardTitleA}>
@@ -519,7 +512,8 @@ export default function Home() {
                       減碳慢活不僅是一種生活方式的選擇，更是對當前全球環境挑戰的一種積極回應。通過實踐這些原則，每個人都能為減少碳足跡、保護地球做出自己的貢獻，同時享受到更加豐富和有意義的生活。
                     </a>
                   </p>
-                </div>
+                  {/* </div> */}
+                </motion.div>
               </div>
             </div>
             <div className="col-12 col-sm-4 p-0">
@@ -533,7 +527,12 @@ export default function Home() {
                     height={300}
                   />
                 </a>
-                <div className={`card-body ${styles.aboutCardBody}`}>
+                <motion.div
+                  className={`card-body ${styles.aboutCardBody}`}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                >
+                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
                       <a href="#/" className={styles.aboutCardTitleA}>
@@ -546,7 +545,8 @@ export default function Home() {
                       守護自然，從我做起，無痕山林不僅是一種環保行為，更是一種生活態度。每個人都應該從自身做起，響應無痕山林的號召，在享受大自然美景的同時，保護我們共同的家園。讓我們一起行動，守護地球的未來！
                     </a>
                   </p>
-                </div>
+                  {/* </div> */}
+                </motion.div>
               </div>
             </div>
             <div className="col-12 col-sm-4 p-0">
@@ -560,7 +560,12 @@ export default function Home() {
                     height={300}
                   />
                 </a>
-                <div className={`card-body ${styles.aboutCardBody}`}>
+                <motion.div
+                  className={`card-body ${styles.aboutCardBody}`}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                >
+                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
                       <a href="#/" className={styles.aboutCardTitleA}>
@@ -573,12 +578,14 @@ export default function Home() {
                       親子探索教育是一種寓教於樂的教育方式，通過豐富多樣的活動，讓孩子在親身體驗中學習和成長。不僅促進了親子關係，還培養了孩子的各種素質和能力。讓我們一起參與到親子探索教育中來，與孩子一起探索世界，共同成長。
                     </a>
                   </p>
-                </div>
+                  {/* </div> */}
+                </motion.div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <GoTop />
     </>
   )
 }

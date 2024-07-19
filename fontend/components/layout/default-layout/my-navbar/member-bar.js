@@ -10,9 +10,7 @@ export default function BemberBar() {
       <div
         className={`d-flex justify-content-start align-items-center gap-4 ${styles.navbarActions}`}
       >
-        <button className={`btnOrangePc transition ${styles.btnOrangePc}`}>
-          登入/註冊
-        </button>
+        <button className={`btnOrangePc transition`}>登入/註冊</button>
 
         <Link href="/customer" className={styles.iconOpensuseA}>
           <Opensuse size={70} className={styles.iconOpensuse} />
