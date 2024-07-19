@@ -109,12 +109,12 @@
   height: 703px;
   opacity: 0.3;
   position: absolute;
-  top: 50px;
+  top: 0px;
   z-index: -1;
 }
 
 .rowActivity {
-  margin-top: 150px;
+  margin: 80px 0;
   width: 100%;
 }
 .customCol {
@@ -178,7 +178,7 @@
     position: relative;
     width: 100%;
   }
-  .section02DecorateTop {
+  .section03DecorateTop {
     display: none;
   }
   .title {
@@ -206,6 +206,11 @@
   position: relative;
   gap: 15px;
 }
+.section04DecorateTop {
+  width: 100%;
+  position: absolute;
+  top: -50px;
+}
 
 .paginationButtons {
   display: flex;
@@ -230,6 +235,7 @@
   .theme {
     font-size: var(--h6);
   }
+
 }
 
 //  section05

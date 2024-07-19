@@ -29,14 +29,12 @@
   color: var(--white);
   font-weight: 600;
 }
-.orderBys {
-  display: flex;
-  flex-direction: column;
-}
-
-.price input {
-  width: 100%;
-}
+// .orderBys {
+//   display: flex;
+//   height: 100%;
+//   justify-content: end;
+//   flex-direction: column;
+// }
 
 /* .cards {
   display: flex;
@@ -146,7 +144,7 @@
   padding: 15px 0;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
   color: var(--white);
   width: 100%;
 }
@@ -154,15 +152,30 @@
 .calendarTeam,
 .goWhereTeam,
 .types,
-.keyword {
+.keyword,
+.orderBys {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+  justify-content: start;
+  flex-direction: column;
+  align-items: start;
+  gap: 5px;
   white-space: nowrap;
 }
-.types {
-  width: 250px;
+.price {
+  width: 180px;
+}
+.price input {
+  width: 100%;
+}
+//  {
+//   height: 100%;
+//   display: flex;
+//   justify-content: end;
+//   align-items: end;
+// }
+.types,
+.keyword {
+  width: 150px;
   flex-shrink: 0;
 }
 

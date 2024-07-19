@@ -175,19 +175,23 @@ export default function Home() {
                 return (
                   <div className="col-12 col-sm-4" key={i}>
                     <div className="card">
-                      <a href="#/">
+                      <Link href={`/detail-test/${v.stores_id}`}>
                         {/* <svg className={styles.iconLike}>
                       <use href="#like" />
                     </svg> */}
-                      </a>
-                      <Link href="#/">
+                      </Link>
+                      <Link href={`/detail-test/${v.stores_id}`}>
                         <Image
-                          src="/images/homepage/tent13.jpg"
+                          src={`/detail/${v.img_name.split(',')[0]}`}
                           className={styles.cardImage}
-                          alt="Image 2"
+                          alt="tents"
                           width={300}
                           height={200}
-                          style={{ width: '100%', height: 'auto' }}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            objectFit: 'contain',
+                          }}
                         />
                       </Link>
                       <div className={styles.cardBody}>
@@ -203,7 +207,9 @@ export default function Home() {
                         </div>
                         <div className={styles.cardTitle}>
                           <h4>
-                            <Link href="#/">{v.name}</Link>
+                            <Link href={`/detail-test/${v.stores_id}`}>
+                              {v.name}
+                            </Link>
                           </h4>
                         </div>
                       </div>
@@ -217,6 +223,13 @@ export default function Home() {
       </div>
 
       <div className={styles.section03}>
+        <Image
+          className={styles.section04DecorateTop}
+          src="/images/homepage/decorate.png"
+          alt="decorate"
+          width={1920}
+          height={80}
+        />
         <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
@@ -244,28 +257,28 @@ export default function Home() {
                 className={`col-12 col-sm-3 p-0 ${styles.customCol}`}
                 key={i}
               >
-                <div className={`card ${styles.activityCard}`}>
-                  <Image
-                    src="/images/homepage/tent02.jpg"
-                    className={styles.activityImg}
-                    alt="blog"
-                    width={400}
-                    height={600}
-                    style={{ width: 'auto', height: '600px' }}
-                  />
-                  <div className={`card-body ${styles.cardBody}`}>
-                    <a href="#/">
+                <Link href={`/blog/${v.id}`}>
+                  <div className={`card ${styles.activityCard}`}>
+                    <Image
+                      src="/images/homepage/tent02.jpg"
+                      className={styles.activityImg}
+                      alt="blog"
+                      width={400}
+                      height={600}
+                      style={{ width: 'auto', height: '600px' }}
+                    />
+                    <div className={`card-body ${styles.cardBody}`}>
                       <h4 className={`card-title m-0 ${styles.cardTitle}`}>
                         {v.title}
                       </h4>
-                    </a>
-                    <a href="#/">
-                      <h6 className={`card-text ${styles.cardText}`}>
-                        {v.content}
-                      </h6>
-                    </a>
+                      <Link href={`/blog/${v.id}`}>
+                        <h6 className={`card-text ${styles.cardText}`}>
+                          {v.content}
+                        </h6>
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             )
           })}
@@ -317,19 +330,23 @@ export default function Home() {
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
                         <div className="card">
-                          <a href="#/">
+                          <Link href="#/">
                             {/* <svg className={styles.iconLike}>
                             <use href="#like" />
                           </svg> */}
-                          </a>
-                          <Link href="#/">
+                          </Link>
+                          <Link href={`/detail-test/${v.stores_id}`}>
                             <Image
-                              src="/images/homepage/tent13.jpg"
+                              src={`/detail/${v.img_name.split(',')[0]}`}
                               className={styles.cardImage}
-                              alt="Image 2"
+                              alt="tents"
                               width={300}
                               height={200}
-                              style={{ width: '100%', height: 'auto' }}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain',
+                              }}
                             />
                           </Link>
                           <div className={styles.cardBody}>
@@ -345,7 +362,9 @@ export default function Home() {
                             </div>
                             <div className={styles.cardTitle}>
                               <h4>
-                                <Link href="#/">{v.name}</Link>
+                                <Link href={`/detail-test/${v.stores_id}`}>
+                                  {v.name}
+                                </Link>
                               </h4>
                             </div>
                           </div>

@@ -31,7 +31,7 @@ export default function Products() {
   })
   const [sort, setSort] = useState('id')
   const [order, setOrder] = useState('asc')
-  const [nameLike, setNameLike] = useState('')
+  const [nameLike, setNameLike] = useState(query.name_like || '')
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([])
   const [dateRange, setDateRange] = useState([])
@@ -49,7 +49,14 @@ export default function Products() {
     '山景雲海',
     '海景',
   ]
-  const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
+  const locationOptions = [
+    '全台灣',
+    '苗栗縣',
+    '南投縣',
+    '嘉義縣',
+    '屏東縣',
+    '花蓮縣',
+  ]
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -145,7 +152,7 @@ export default function Products() {
               <h5>你想去哪裡?</h5>
             </label>
             <Select
-              defaultValue={'全台灣'}
+              defaultValue={query.location || '全台灣'}
               style={{ width: '100%' }}
               onChange={handleChangeSelect1}
               options={locationOptions.map((value, i) => ({
@@ -160,20 +167,20 @@ export default function Products() {
               <h5>入住日期區間</h5>
             </label>
             <RangePicker
-              // defaultValue={
-              //   query.startDate && query.endDate
-              //     ? [dayjs(query.startDate), dayjs(query.endDate)]
-              //     : [dayjs(), dayjs().add(1, 'day')]
-              // }
+              defaultValue={
+                query.startDate && query.endDate
+                  ? [dayjs(query.startDate), dayjs(query.endDate)]
+                  : [dayjs(), dayjs().add(1, 'day')]
+              }
               disabledDate={disabledDate}
               onChange={handleDateChange}
             />
           </div>
           <div className={styles.types}>
-            {/* <h5>類型</h5> */}
+            <h5>類型</h5>
             <Select
               className={styles.typesSelect}
-              // defaultValue={tag || []}
+              defaultValue={query.tag || []}
               mode="multiple"
               allowClear
               style={{ width: '100%' }}
@@ -188,8 +195,10 @@ export default function Products() {
             />
           </div>
           <div className={styles.keyword}>
+            <h5>搜尋</h5>
             <Input
               placeholder="輸入關鍵字"
+              // defaultValue={query.name_like || ''}
               value={nameLike}
               onChange={(e) => {
                 setNameLike(e.target.value)
@@ -216,9 +225,9 @@ export default function Products() {
             </div>
           </div> */}
           <div className={styles.orderBys}>
-            {/* <label htmlFor="orderBy" className={styles.formTitle}>
-              <p>排序方式</p>
-            </label> */}
+            <label htmlFor="orderBy" className={styles.formTitle}>
+              <h5>排序方式</h5>
+            </label>
             <Select
               defaultValue="價格-低到高排序"
               style={{
@@ -355,14 +364,17 @@ export default function Products() {
                 {products.stores.map((v) => (
                   <div className="col-12 col-sm-4" key={v.stores_id}>
                     <div className={`card ${styles.productCard}`}>
-                      <Link href="#/">
+                      <Link href={`/detail-test/${v.stores_id}`}>
                         <Image
-                          src={`/productDetail/${v.img_name[0]}`}
+                          src={`/detail/${v.img_name.split(',')[0]}`}
                           className={styles.cardImage}
                           alt="tents"
                           width={300}
                           height={200}
-                          style={{ width: '100%', height: 'auto' }}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                          }}
                         />
                       </Link>
                       <div className={`card-body ${styles.cardBody}`}>
@@ -378,7 +390,9 @@ export default function Products() {
                         </div>
                         <div className={`card-title ${styles.cardTitle}`}>
                           <h4>
-                            <Link href="#/">{v.name}</Link>
+                            <Link href={`/detail-test/${v.stores_id}`}>
+                              {v.name}
+                            </Link>
                           </h4>
                           <h5>${v.lowest_normal_price}/每晚</h5>
                         </div>
