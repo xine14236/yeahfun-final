@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/cart-hook'
 import { FaLocationDot, FaStar, FaCommentDots, FaMinus } from 'react-icons/fa6'
 import { useRouter } from 'next/router'
 import { differenceInDays, parseISO } from 'date-fns'
+import Link from 'next/link'
 
 export default function Cart() {
   const { cartItems, removeFromCart, processCheckout } = useCart()
@@ -185,6 +186,9 @@ export default function Cart() {
         >
           結帳
         </button>
+        <Link href="#/" className="mt-5">
+          前往結帳頁面
+        </Link>
       </div>
       <style jsx>
         {`
