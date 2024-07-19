@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import ReactQuill from 'react-quill'
+
 // import 'react-quill/dist/quill.bubble.css'
 import 'react-quill/dist/quill.snow.css'
 
@@ -59,5 +60,15 @@ export default function MyComponent() {
   };
 
   // theme="bubble"
-  return <ReactQuill ref={reactQuillRef} theme="snow" value={value} onChange={setValue} modules={modules} />
+  return (<>
+ <style>
+        {`
+          .ql-editor img {
+             max-width: 500px;
+            max-height: 350px;
+          }
+        `}
+      </style>
+  <ReactQuill ref={reactQuillRef} theme="snow" value={value} onChange={setValue} modules={modules} />
+  </>)
 }
