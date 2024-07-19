@@ -81,7 +81,11 @@ export default function Products() {
       lowest_normal_price_lte: priceRange[1],
     }
     const queryString = new URLSearchParams(queryParams).toString()
-    router.push(`?${queryString}`)
+    // router.push(`?${queryString}`)
+    router.push(`?${queryString}`).then(() => {
+      // Scroll to 300px from the top
+      window.scrollTo({ top: 300, behavior: 'smooth' })
+    })
   }
   const handleChangeSelect1 = (e) => {
     setLocation(e)

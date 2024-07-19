@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-import { Pagination, Navigation } from 'swiper/modules'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
@@ -21,6 +21,7 @@ export default function Home() {
   const [tag3, setTag3] = useState([])
   const [swiperInstance, setSwiperInstance] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [autoplay, setAutoplay] = useState(false)
 
   const tags = [
     {
@@ -141,6 +142,14 @@ export default function Home() {
     }
   }
 
+  const handleMouseEnter = () => {
+    setAutoplay(true)
+  }
+
+  const handleMouseLeave = () => {
+    setAutoplay(false)
+  }
+
   useEffect(() => {
     getProducts(), getBlog(), getTag(), getTag2(), getTag3()
   }, [])
@@ -174,25 +183,75 @@ export default function Home() {
               {products.map((v, i) => {
                 return (
                   <div className="col-12 col-sm-4" key={i}>
-                    <div className="card">
-                      <Link href={`/detail-test/${v.stores_id}`}>
-                        {/* <svg className={styles.iconLike}>
+                    <div
+                      className="card"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      {/*<Link>
+                         <svg className={styles.iconLike}>
                       <use href="#like" />
-                    </svg> */}
-                      </Link>
+                    </svg> 
+                      </Link>*/}
                       <Link href={`/detail-test/${v.stores_id}`}>
-                        <Image
-                          src={`/detail/${v.img_name.split(',')[0]}`}
-                          className={styles.cardImage}
-                          alt="tents"
-                          width={300}
-                          height={200}
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            objectFit: 'contain',
-                          }}
-                        />
+                        <Swiper
+                          spaceBetween={30}
+                          centeredSlides={true}
+                          loop={true}
+                          autoplay={
+                            autoplay
+                              ? { delay: 2500, disableOnInteraction: false }
+                              : false
+                          }
+                          modules={[Autoplay]}
+                          className="mySwiper"
+                        >
+                          {v.img_name.split(',').map((img, index) => (
+                            <SwiperSlide key={index}>
+                              <Image
+                                src={`/detail/${img}`}
+                                className={styles.cardImage}
+                                alt="tents"
+                                width={300}
+                                height={200}
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  objectFit: 'contain',
+                                }}
+                              />
+                            </SwiperSlide>
+                          ))}
+                        </Swiper>
+                        {/* <Swiper
+                          spaceBetween={30}
+                          centeredSlides={true}
+                          loop={true}
+                          autoplay={
+                            autoplay
+                              ? { delay: 2500, disableOnInteraction: false }
+                              : false
+                          }
+                          modules={[Autoplay]}
+                          className="mySwiper"
+                        >
+                          {v.img_name.split(',').map((img, index) => (
+                            <SwiperSlide key={index}>
+                              <Image
+                                src={`/detail/${img}`}
+                                className={styles.cardImage}
+                                alt="tents"
+                                width={300}
+                                height={200}
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  objectFit: 'contain',
+                                }}
+                              />
+                            </SwiperSlide>
+                          ))}
+                        </Swiper> */}
                       </Link>
                       <div className={styles.cardBody}>
                         <div className={styles.cardTags}>
