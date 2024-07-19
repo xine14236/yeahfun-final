@@ -22,8 +22,8 @@ export default function Home() {
   const [tag3, setTag3] = useState([])
   const [swiperInstance, setSwiperInstance] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  // const [autoplay, setAutoplay] = useState(false)
-  // const swiperRef = useRef(null)
+  const [autoplay, setAutoplay] = useState(false)
+  const swiperRef = useRef(null)
 
   const tags = [
     {
@@ -205,7 +205,7 @@ export default function Home() {
                       </Link>*/}
                       <Link href={`/detail-test/${v.stores_id}`}>
                         <Swiper
-                          // ref={swiperRef}
+                          ref={swiperRef}
                           spaceBetween={30}
                           centeredSlides={true}
                           loop={true}

@@ -13,16 +13,17 @@ export default function BemberBar() {
         <button className={`btnOrangePc transition ${styles.btnOrangePc}`}>
           登入/註冊
         </button>
-        <Link href="#/" className={styles.iconOpensuseA}>
+
+        <Link href="/customer" className={styles.iconOpensuseA}>
           <Opensuse size={70} className={styles.iconOpensuse} />
         </Link>
-        <Link href="#/" className={styles.navA}>
+        <Link href="/customer" className={styles.navA}>
           <h5>會員中心</h5>
         </Link>
         <Link href="#/" className={styles.navA}>
           <h5>登出</h5>
         </Link>
-        <Link href="#/" className={styles.iconShoppingCartA}>
+        <Link href={`/product/cart`} className={styles.iconShoppingCartA}>
           <ShoppingBag size={34} className={styles.iconShoppingCart} />
         </Link>
       </div>

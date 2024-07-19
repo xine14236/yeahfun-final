@@ -3,16 +3,14 @@ import Image from 'next/image'
 import PlaceholderText from '@/components/common/placeholder-text'
 import styles from '@/styles/homepage02.module.scss'
 import HomeLayout from '@/components/layout/home-layout'
-import { useState } from 'react'
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-import { Pagination, Navigation, Autoplay } from 'swiper/modules'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
-import { set } from 'lodash'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -22,8 +20,7 @@ export default function Home() {
   const [tag3, setTag3] = useState([])
   const [swiperInstance, setSwiperInstance] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  // const [autoplay, setAutoplay] = useState(false)
-  // const swiperRef = useRef(null)
+  const swiperRef = useRef(null)
 
   const tags = [
     {
@@ -52,15 +49,11 @@ export default function Home() {
 
   const getProducts = async () => {
     const url = 'http://localhost:3005/api/home'
-
-    // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
     try {
       const res = await fetch(url)
       const resData = await res.json()
 
       if (resData.status === 'success') {
-        // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
-        // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.stores)) {
           setProducts(resData.data.stores)
         }
@@ -88,15 +81,11 @@ export default function Home() {
 
   const getTag = async () => {
     const url = 'http://localhost:3005/api/home02'
-
-    // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
     try {
       const res = await fetch(url)
       const resData = await res.json()
 
       if (resData.status === 'success') {
-        // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
-        // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.tag)) {
           setTag(resData.data.tag)
         }
@@ -105,17 +94,14 @@ export default function Home() {
       console.error(e)
     }
   }
+
   const getTag2 = async () => {
     const url = 'http://localhost:3005/api/home03'
-
-    // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
     try {
       const res = await fetch(url)
       const resData = await res.json()
 
       if (resData.status === 'success') {
-        // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
-        // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.tag)) {
           setTag2(resData.data.tag)
         }
@@ -124,17 +110,14 @@ export default function Home() {
       console.error(e)
     }
   }
+
   const getTag3 = async () => {
     const url = 'http://localhost:3005/api/home04'
-
-    // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
     try {
       const res = await fetch(url)
       const resData = await res.json()
 
       if (resData.status === 'success') {
-        // 設定到狀態中 ===> 進入update階段，觸發重新渲染(re-render)，呈現資料
-        // 確定資料是陣列資料類型才設定到狀態中(最基本的保護)
         if (Array.isArray(resData.data.tag)) {
           setTag3(resData.data.tag)
         }
@@ -144,24 +127,24 @@ export default function Home() {
     }
   }
 
-  // const handleMouseEnter = () => {
-  //   setAutoplay(true)
-  //   if (swiperRef.current) {
-  //     swiperRef.current.swiper.autoplay.start()
-  //   }
-  //   console.log('enter')
-  // }
+  const handleMouseEnter = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.autoplay.start()
+    }
+  }
 
-  // const handleMouseLeave = () => {
-  //   setAutoplay(false)
-  //   if (swiperRef.current) {
-  //     swiperRef.current.swiper.autoplay.stop()
-  //   }
-  //   console.log('leave')
-  // }
+  const handleMouseLeave = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.autoplay.stop()
+    }
+  }
 
   useEffect(() => {
-    getProducts(), getBlog(), getTag(), getTag2(), getTag3()
+    getProducts()
+    getBlog()
+    getTag()
+    getTag2()
+    getTag3()
   }, [])
 
   return (
@@ -187,79 +170,73 @@ export default function Home() {
             <p>熱門營地</p>
           </div>
         </div>
+        {/* card輪播start */}
         <div className="container">
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
-              {products.map((v, i) => {
-                return (
-                  <div className="col-12 col-sm-4" key={i}>
-                    <div
-                      className="card"
-                      // onMouseEnter={handleMouseEnter}
-                      // onMouseLeave={handleMouseLeave}
-                    >
-                      {/*<Link>
-                         <svg className={styles.iconLike}>
-                      <use href="#like" />
-                    </svg> 
-                      </Link>*/}
-                      <Link href={`/detail-test/${v.stores_id}`}>
-                        <Swiper
-                          // ref={swiperRef}
-                          spaceBetween={30}
-                          centeredSlides={true}
-                          loop={true}
-                          autoplay={{
-                            delay: 2500,
-                            disableOnInteraction: false,
-                          }}
-                          modules={[Autoplay]}
-                          className="mySwiper"
-                        >
-                          {v.img_name.split(',').map((img, index) => (
-                            <SwiperSlide key={index}>
-                              <Image
-                                src={`/detail/${img}`}
-                                className={styles.cardImage}
-                                alt="tents"
-                                width={300}
-                                height={200}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  objectFit: 'contain',
-                                }}
-                              />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </Link>
-                      <div className={styles.cardBody}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
-                          </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
-                          </div>
+              {products.map((v, i) => (
+                <div className="col-12 col-sm-4" key={i}>
+                  <div className="card">
+                    <Link href={`/detail-test/${v.stores_id}`}>
+                      <Swiper
+                        ref={swiperRef}
+                        spaceBetween={30}
+                        centeredSlides={true}
+                        loop={true}
+                        autoplay={{
+                          delay: 2500,
+                          disableOnInteraction: false,
+                          pauseOnMouseEnter: false, // 初始狀態下不啟用
+                        }}
+                        modules={[Autoplay]}
+                        className="mySwiper"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {v.img_name.split(',').map((img, index) => (
+                          <SwiperSlide key={index}>
+                            <Image
+                              src={`/detail/${img}`}
+                              className={styles.cardImage}
+                              alt="tents"
+                              width={300}
+                              height={200}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain',
+                              }}
+                            />
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    </Link>
+                    <div className={styles.cardBody}>
+                      <div className={styles.cardTags}>
+                        <div className={styles.cardTagLocation}>
+                          <Location className={styles.iconLocation} />
+                          <p>{v.address}</p>
                         </div>
-                        <div className={styles.cardTitle}>
-                          <h4>
-                            <Link href={`/detail-test/${v.stores_id}`}>
-                              {v.name}
-                            </Link>
-                          </h4>
+                        <div className={styles.cardTagStar}>
+                          <Star className={styles.iconStar} />
+                          <p>{v.comment_star}</p>
                         </div>
+                      </div>
+                      <div className={styles.cardTitle}>
+                        <h4>
+                          <Link href={`/detail-test/${v.stores_id}`}>
+                            {v.name}
+                          </Link>
+                        </h4>
                       </div>
                     </div>
                   </div>
-                )
-              })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
+        {/* card輪播end */}
       </div>
 
       <div className={styles.section03}>
