@@ -123,19 +123,7 @@ export default function Index() {
       console.error(e)
     }
   }
-  useEffect(() => {
-    // console.log('userId:', userId);
-    console.log('auth:', auth)
-
-    if (userId) {
-      getCustomer()
-    } else {
-      console.log('need check')
-      handleCheck()
-      // console.og('e',auth.userData.id);
-      setUserId(auth.userData.id)
-    }
-  }, [auth])
+  // npm
 
   const display = (
     <>
@@ -162,103 +150,6 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
           <form
             name="form1"
             onSubmit={handleSubmit}
