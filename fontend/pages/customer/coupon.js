@@ -36,7 +36,7 @@ export default function Index() {
   const links = [
     { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
     {
-      href: '/customer/orders',
+      href: '/customer/order',
       icon: '/icon/shopping-bag.svg',
       text: '我的行程',
     },
