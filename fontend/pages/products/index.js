@@ -15,6 +15,8 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
 
+import GoTop from '@/components/home/go-top'
+
 import Image from 'next/image'
 import { set } from 'lodash'
 
@@ -467,6 +469,7 @@ export default function Products() {
           </div>
         </div>
       </div>
+      <GoTop />
     </>
   )
 }
