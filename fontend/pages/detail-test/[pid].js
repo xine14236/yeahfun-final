@@ -7,6 +7,7 @@ import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
 import Favor from '@/components/icons/favor'
 import Share from '@/components/icons/share'
+import FavStoreBtn from '@/components/icons/fav-store-btn'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -74,16 +75,46 @@ export default function DetailTest() {
   }
 
   //收藏功能：擴充商店資料，多一個代表是否已收藏的屬性fav(布林值，預設是false)
-  const initState =
-    Array.isArray(store) && store.length === 0
-      ? store.map((v) => ({ ...v, fav: false }))
-      : []
+  // const initState =
+  //   Array.isArray(store) && store.length === 0
+  //     ? store.map((v) => ({ ...v, fav: false }))
+  //     : []
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [favor, setFavor] = useState(initState)
+  // const [favor, setFavor] = useState(initState)
 
-  if (Array.isArray(store)) {
-    console.log('store is not an array')
+  // 加入或取消最愛
+  const handleFavor = async (store_id) => {
+    const url = 'http://localhost:3005/api/add-fav-store/' + store_id
+
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+
+      if (resData.status === 'success') {
+        const data = structuredClone(store) // 深層複製
+        // console.log(data)
+        if (data.stores_id === store_id) {
+          // 確認 stores_id 是否匹配 store_id
+          if (resData.data.output.action === 'add') {
+            data.like_id = true
+          } else {
+            data.like_id = false
+          }
+
+          setStore(data)
+        } else {
+          console.error('store_id 不匹配')
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
+
+  // if (Array.isArray(store)) {
+  //   console.log('store is not an array')
+  // }
 
   // 將取得tag資料map
   const tags = tag.map((item, index) => {
@@ -108,7 +139,7 @@ export default function DetailTest() {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
     }
-  }, [router.isReady, router.query.pid])
+  }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (e) => {
     setPeopleFilter(e.target.value)
@@ -125,7 +156,12 @@ export default function DetailTest() {
           <h1>{store.name}</h1>
           <div className="storeShare">
             <Share />
-            <Favor />
+            <FavStoreBtn
+              initFull={store.like_id}
+              handler={() => {
+                handleFavor(store.stores_id)
+              }}
+            />
           </div>
         </div>
         {/* <div className="row storeIntroduce"> */}
