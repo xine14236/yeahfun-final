@@ -15,10 +15,13 @@ router.get('/:stores_id', async function (req, res) {
       store.name,
       store.address,
       comment.comment_star,
-      comment.comment_content
+      comment.comment_content,
+      stores_img.img_name
     FROM store
     JOIN comment
     ON store.stores_id = comment.stores_id
+    JOIN stores_img 
+    ON store.stores_id = stores_img.stores_id
     WHERE
       store.stores_id = ?`,
     [id]
