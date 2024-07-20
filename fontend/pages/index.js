@@ -5,15 +5,12 @@ import styles from '@/styles/homepage02.module.scss'
 import HomeLayout from '@/components/layout/home-layout'
 import { useState } from 'react'
 import { useEffect, useRef } from 'react'
-
 import { motion } from 'framer-motion'
 import Favor from '@/components/icons/favor'
-
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
-
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
 
