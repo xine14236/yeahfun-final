@@ -72,6 +72,9 @@
     color: var(--gray-400); /* 更改為鼠標懸停時的顏色 */
   }
 }
+.swiper-pagination-bullet-active {
+  background: var(--secondary-4 );
+}
 
 /* 添加 hover 效果 */
 

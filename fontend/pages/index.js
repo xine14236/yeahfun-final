@@ -13,6 +13,7 @@ import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
+import Swal from 'sweetalert2'
 
 import GoTop from '@/components/home/go-top'
 import Header from '@/components/home/header'
@@ -183,6 +184,7 @@ export default function Home() {
   return (
     <>
       <Header />
+
       <div className={`${styles.myCardList} ${styles.section02}`}>
         <Image
           className={styles.section02DecorateTop}
@@ -540,7 +542,7 @@ export default function Home() {
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
-                  <a href="#/">
+                  <Link href="/about">
                     <Image
                       src="/images/homepage/stone3.png"
                       className={`card-img-top ${styles.stone}`}
@@ -548,7 +550,7 @@ export default function Home() {
                       width={300}
                       height={300}
                     />
-                  </a>
+                  </Link>
                 </motion.div>
 
                 <motion.div
@@ -559,15 +561,15 @@ export default function Home() {
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
+                      <Link href="/about" className={styles.aboutCardTitleA}>
                         減碳慢活
-                      </a>
+                      </Link>
                     </h3>
                   </div>
                   <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
+                    <Link href="/about" className={styles.aboutCardTextA}>
                       減碳慢活不僅是一種生活方式的選擇，更是對當前全球環境挑戰的一種積極回應。通過實踐這些原則，每個人都能為減少碳足跡、保護地球做出自己的貢獻，同時享受到更加豐富和有意義的生活。
-                    </a>
+                    </Link>
                   </p>
                   {/* </div> */}
                 </motion.div>
@@ -579,7 +581,7 @@ export default function Home() {
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
-                  <a href="#/">
+                  <Link href="/about">
                     <Image
                       src="/images/homepage/stone1.png"
                       className={`card-img-top ${styles.stone}`}
@@ -587,7 +589,7 @@ export default function Home() {
                       width={300}
                       height={300}
                     />
-                  </a>
+                  </Link>
                 </motion.div>
                 <motion.div
                   className={`card-body ${styles.aboutCardBody}`}
@@ -597,15 +599,15 @@ export default function Home() {
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
+                      <Link href="/about" className={styles.aboutCardTitleA}>
                         響應無痕山林
-                      </a>
+                      </Link>
                     </h3>
                   </div>
                   <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
+                    <Link href="/about" className={styles.aboutCardTextA}>
                       守護自然，從我做起，無痕山林不僅是一種環保行為，更是一種生活態度。每個人都應該從自身做起，響應無痕山林的號召，在享受大自然美景的同時，保護我們共同的家園。讓我們一起行動，守護地球的未來！
-                    </a>
+                    </Link>
                   </p>
                   {/* </div> */}
                 </motion.div>
@@ -613,19 +615,19 @@ export default function Home() {
             </div>
             <div className="col-12 col-sm-4 p-0">
               <div className={`card ${styles.aboutCard}`}>
-              <motion.div
+                <motion.div
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
-                <a href="#/">
-                  <Image
-                    src="/images/homepage/stone02.png"
-                    className={`card-img-top ${styles.stone}`}
-                    alt="親子探索教育"
-                    width={300}
-                    height={300}
-                  />
-                </a>
+                  <Link href="/about">
+                    <Image
+                      src="/images/homepage/stone02.png"
+                      className={`card-img-top ${styles.stone}`}
+                      alt="親子探索教育"
+                      width={300}
+                      height={300}
+                    />
+                  </Link>
                 </motion.div>
                 <motion.div
                   className={`card-body ${styles.aboutCardBody}`}
@@ -635,15 +637,15 @@ export default function Home() {
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
                     <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
+                      <Link href="/about" className={styles.aboutCardTitleA}>
                         親子探索教育
-                      </a>
+                      </Link>
                     </h3>
                   </div>
                   <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
+                    <Link href="/about" className={styles.aboutCardTextA}>
                       親子探索教育是一種寓教於樂的教育方式，通過豐富多樣的活動，讓孩子在親身體驗中學習和成長。不僅促進了親子關係，還培養了孩子的各種素質和能力。讓我們一起參與到親子探索教育中來，與孩子一起探索世界，共同成長。
-                    </a>
+                    </Link>
                   </p>
                   {/* </div> */}
                 </motion.div>
