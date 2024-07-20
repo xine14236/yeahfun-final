@@ -9,7 +9,10 @@ router.get('/:stores_id', async function (req, res) {
   // 轉為數字
   const id = +req.params.stores_id || 0
 
-  const [rows] = await db.query(`SELECT * FROM store WHERE stores_id = ?`, [id])
+  const [rows] = await db.query(
+    `SELECT store.*, fav.id as like_id FROM store LEFT JOIN (SELECT favorite.id, favorite.pid, favorite.uid FROM favorite WHERE uid = 1) fav ON store.stores_id = fav.pid WHERE stores_id = ?`,
+    [id]
+  )
   const store = rows[0]
 
   //取得 tag_name
