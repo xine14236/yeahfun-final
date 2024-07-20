@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 // 資料庫使用
-import sequelize from '#configs/db.js'
+import sequelize, { Purchase_Item } from '#configs/db.js'
 const { Purchase_Order } = sequelize.models
 
 // 中介軟體，存取隱私會員資料用
@@ -26,44 +26,71 @@ const linePayClient = createLinePayClient({
 // 在資料庫建立order資料(需要會員登入才能使用)
 router.post('/create-order', authenticate, async (req, res) => {
   // 會員id由authenticate中介軟體提供
-  const userId = req.user.id
+  const userId = req.body.userid
 
-  //產生 orderId與packageId
+  // 產生 orderId 與 packageId
   const orderId = uuidv4()
-  const packageId = uuidv4()
 
   // 要傳送給line pay的訂單資訊
   const order = {
     orderId: orderId,
     currency: 'TWD',
     amount: req.body.amount,
-    packages: [
-      {
-        id: packageId,
-        amount: req.body.amount,
-        products: req.body.products,
-      },
-    ],
     options: { display: { locale: 'zh_TW' } },
   }
 
-  //console.log(order)
-
-  // 要儲存到資料庫的order資料
+  // 要儲存到資料庫的資料
   const dbOrder = {
     id: orderId,
-    user_id: userId,
+    user_id: req.body.userid,
     amount: req.body.amount,
     status: 'pending', // 'pending' | 'paid' | 'cancel' | 'fail' | 'error'
     order_info: JSON.stringify(order), // 要傳送給line pay的訂單資訊
   }
 
+  const dbItems = req.body.products.map(product => {
+    const start = new Date(product.startdate)
+    const end = new Date(product.enddate)
+  
+    let weekendDays = 0
+    let weekdayDays = 0
+  
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const dayOfWeek = d.getDay()
+      if (dayOfWeek === 6 || dayOfWeek === 0) {
+        weekendDays++
+      } else {
+        weekdayDays++
+      }
+    }
+  
+    const weekendPrice = weekendDays * product.holiday_price
+    const weekdayPrice = weekdayDays * product.normal_price
+    const subtotal = weekendPrice + weekdayPrice
+  
+    return {
+      purchase_order_id: orderId,
+      store_id: product.store_id,
+      room_id: product.room_id,
+      startdate: product.startdate,
+      enddate: product.enddate,
+      price: subtotal, // 使用計算出的 subtotal
+      totalday: product.totalday,
+    }
+  })
+
+  console.log('dbItems:', dbItems); // 檢查是否正確
+
   // 儲存到資料庫
-  await Purchase_Order.create(dbOrder)
+  await Purchase_Order.create(dbOrder);
+  console.log('Purchase_Item:', Purchase_Item);
+
+  const insertedItems = await Purchase_Item.bulkCreate(dbItems, { returning: true });
+  console.log('insertedItems:', insertedItems);
 
   // 回傳給前端的資料
-  res.json({ status: 'success', data: { order } })
-})
+  res.json({ status: 'success', data: { order } });
+});
 
 // 重新導向到line-pay，進行交易(純導向不回應前端)
 // 資料格式參考 https://enylin.github.io/line-pay-merchant/api-reference/request.html#example
