@@ -1,0 +1,94 @@
+.homeLogoBig {
+  cursor: pointer;
+  margin: 0 auto;
+}
+.kv {
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: url(/images/homepage/kv.jpg) lightgray 50% / cover no-repeat;
+  background-blend-mode: multiply;
+}
+
+.happy {
+  color: var(--white);
+  text-align: center;
+  font-family: 'Luckiest Guy';
+  font-size: 64px;
+  font-weight: 400;
+}
+.indexHeading p {
+  font-family: 'Luckiest Guy';
+  color: var(--white);
+  text-align: center;
+}
+.glassCardSection {
+  padding: 0px 100px;
+  // margin-top: 30px;
+}
+.glassCard {
+  position: absolute;
+  left: 100px;
+  top: 350px;
+  width: 400px;
+  box-shadow: 0px 30px 30px 0px rgba(0, 0, 0, 0.55),
+    0px 0px 30px 0px rgba(255, 255, 255, 0.55) inset;
+  backdrop-filter: blur(25px);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 35px 60px;
+}
+.searchForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+.formTitle {
+  color: var(--white);
+}
+.kvDecorateTop {
+  width: 100%;
+  position: absolute;
+  left: -6px;
+  bottom: -45px;
+}
+@media (max-width: 576px) {
+  .glassCardSection {
+    display: flex;
+    justify-content: center;
+    margin: 0px;
+    width: 100%;
+    padding: 0px;
+  }
+  .indexHeading {
+    display: none;
+  }
+  .homeLogoBig {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-block: 5px;
+  }
+  .glassCard {
+    /* margin: auto ; */
+    padding: 30px 25px;
+    left: 20px;
+    top: 230px;
+    gap: 20px;
+    width: 340px;
+    /* z-index: -1; */
+    /* margin-inline: 10px; */
+  }
+
+  .glassCard h5 {
+    font-size: var(--h6);
+  }
+  .searchForm {
+    z-index: 2;
+    gap: 15px;
+  }
+  .kvDecorateTop {
+    display: none;
+  }
+}

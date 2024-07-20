@@ -292,7 +292,7 @@ export default function Blog() {
                     } `}
                   >
                     <Image
-                      src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+                      src={v.img_name? `http://localhost:3005/img-blog/${v.img_name}` :`http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`}
                       className="img-fluid"
                       alt="..."
                       width={400}
@@ -323,7 +323,7 @@ export default function Blog() {
                           </div>
                         </div>
                         <p className="card-text text-muted mb-md-5">
-                          <small className="text-muted">{v.author}</small>
+                          <small className="text-muted">{v.name}</small>
                         </p>
                         <div
                           className={`card-content mb-md-3 ${styles.textTruncate4}`}

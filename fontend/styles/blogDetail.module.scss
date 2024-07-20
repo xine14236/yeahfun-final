@@ -1,0 +1,50 @@
+.span1{
+  padding-inline: 20px;
+background: #FFF;
+cursor: pointer;;
+border-radius: 20px;
+padding-block: 5px;
+margin-block: 5px;
+}
+.span2{
+  padding-inline: 20px;
+background: var(--primary-1);
+color: #fff;
+cursor: pointer;;
+border-radius: 20px;
+padding-block: 5px;
+margin-block: 5px;
+
+}
+.span3{
+  padding-inline: 20px;
+background: var( --secondary-2);
+cursor: pointer;;
+border-radius: 20px;
+padding-block: 5px;
+margin-block: 5px;
+
+}
+
+.likeContainer{
+  background-color: var(--secondary-3);
+  border-radius: 10px;
+  
+
+}
+
+.cc{
+  padding-left: 0;
+  padding-right: 0;
+  
+
+}
+
+.meAuto{
+  margin-left:45% ;
+  @media (max-width: 768px) {
+    margin-left:22% ;
+  }
+  
+  
+}

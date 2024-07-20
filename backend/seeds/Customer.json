@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "email": "lee@test.com",
+    "password": "11111",
+    "name": "李京樺", 
+    "phone": "0906102808",
+    "gender": "女",
+    "birthday": "1996-07-13", 
+    "address": "桃園市桃園區劉南路377號18樓",
+    "introduction": "My name is hua. I love camping.",
+    "id_card":"E285416832"
+  },
+  {
+    "id": 2,
+    "email": "young@test.com",
+    "password": "22222",
+    "name": "李為煬", 
+    "phone": "0906102313",
+    "gender": "男",
+    "birthday": "1980-01-01", 
+    "address": "臺南市永康區南臺街3號",
+    "introduction": "My name is young.  I love camping.",
+    "id_card":"E185416832"
+  },
+  {
+    "id": 3,
+    "email": "shin@test.com",
+    "password": "33333",
+    "name": "陳豊鑫", 
+    "phone": "0906102333",
+    "gender": "男",
+    "birthday": "1980-03-03", 
+    "address": "臺南市永康區南臺街9號5樓",
+    "introduction": "My name is shin.  I love camping.",
+    "id_card":"E185416832"
+  },
+  {
+    "id": 4,
+    "email": "yumi@test.com",
+    "password": "44444",
+    "name": "陳昱穎", 
+    "phone": "0906102444",
+    "gender": "女",
+    "birthday": "1980-05-27", 
+    "address": "臺南市東區崇善路8號",
+    "introduction": "My name is yumi.  I love camping.",
+    "id_card":"E285416832"
+  },
+  {
+    "id": 5,
+    "email": "jun@test.com",
+    "password": "55555",
+    "name": "鄒家浚", 
+    "phone": "0906102555",
+    "gender": "男",
+    "birthday": "1980-06-28", 
+    "address": "臺南市東區崇德路156號",
+    "introduction": "My name is jun.  I love camping.",
+    "id_card":"E185416832"
+  },{
+    "id": 6,
+    "email": "hui@test.com",
+    "password": "66666",
+    "name": "劉于卉", 
+    "phone": "0906102666",
+    "gender": "女",
+    "birthday": "1980-12-25", 
+    "address": "臺南市永康區中正南路99號",
+    "introduction": "My name is hui.  I love camping.",
+    "id_card":"E285416832"
+  }
+]

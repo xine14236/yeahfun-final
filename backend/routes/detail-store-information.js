@@ -9,7 +9,10 @@ router.get('/:stores_id', async function (req, res) {
   // 轉為數字
   const id = +req.params.stores_id || 0
 
-  const [rows] = await db.query(`SELECT * FROM store WHERE stores_id = ?`, [id])
+  const [rows] = await db.query(
+    `SELECT store.*, fav.id as like_id FROM store LEFT JOIN (SELECT favorite.id, favorite.pid, favorite.uid FROM favorite WHERE uid = 1) fav ON store.stores_id = fav.pid WHERE stores_id = ?`,
+    [id]
+  )
   const store = rows[0]
 
   //取得 tag_name
@@ -30,13 +33,28 @@ router.get('/:stores_id', async function (req, res) {
   )
   const tag = tagRows
 
+  // 取得圖片
+  const [imgRows] = await db.query(
+    `SELECT
+      store.stores_id,
+      store.name,
+      stores_img.img_name
+    FROM
+      store
+    JOIN stores_img 
+    ON store.stores_id = stores_img.stores_id
+    WHERE store.stores_id = ?`,
+    [id]
+  )
+  const img = imgRows[0]
+
   // const [rows2] = await db.query(
   //   'SELECT stores_id, COUNT(*) as commentCounts FROM `comment` WHERE stores_id = ? GROUP BY stores_id',
   //   [id]
   // )
   // const commentCount = rows2[0]
 
-  return res.json({ status: 'success', data: { store, tag } })
+  return res.json({ status: 'success', data: { store, tag, img } })
 })
 
 export default router
