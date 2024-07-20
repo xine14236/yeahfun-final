@@ -19,7 +19,7 @@ export default function MyNavbar() {
         <GreenLogo width={90} className={styles.homeLogo} />
 
         <div className={`container-fluid ${styles.myContainer}`}>
-          <Link className={` ${styles.HomepageName}`} href="#/">
+          <Link className={` ${styles.HomepageName}`} href="/">
             <h3>YeahFun</h3>
           </Link>
           <button

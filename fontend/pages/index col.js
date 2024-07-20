@@ -11,6 +11,7 @@ import { motion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
+import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
@@ -25,7 +26,8 @@ export default function Home() {
   const [tag3, setTag3] = useState([])
   const [swiperInstance, setSwiperInstance] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const swiperRef = useRef(null)
+
+  const [swiperInstances, setSwiperInstances] = useState([])
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
 
   const tags = [
@@ -151,8 +153,56 @@ export default function Home() {
     getProducts(), getBlog(), getTag(), getTag2(), getTag3()
   }, [])
 
+  useEffect(() => {
+    setSwiperInstances((prevInstances) =>
+      prevInstances.slice(0, products.length)
+    )
+  }, [products])
+
+  const handleMouseEnter = (index) => {
+    if (swiperInstances[index]) {
+      swiperInstances[index].autoplay.start()
+      setAutoplayStatus('自動切換進行中')
+    }
+  }
+
+  const handleMouseLeave = (index) => {
+    if (swiperInstances[index]) {
+      swiperInstances[index].autoplay.stop()
+      setAutoplayStatus('自動切換暫停了')
+    }
+  }
+
+  const onSwiperInit = (swiper, index) => {
+    setSwiperInstances((prevInstances) => {
+      const newInstances = [...prevInstances]
+      newInstances[index] = swiper
+      return newInstances
+    })
+  }
+
   return (
     <>
+      <ScrollMotionContainer
+        element="div"
+        className="bg-dark text-secondary px-4 py-5 text-center"
+      >
+        <div className="py-5">
+          <ScrollMotionItem
+            element="h1"
+            type="up"
+            className="display-5 fw-bold text-white"
+          >
+            Dark mode hero
+          </ScrollMotionItem>
+          <div className="col-lg-6 mx-auto">
+            <ScrollMotionItem element="p" type="up" className="fs-5 mb-4">
+              Quickly design and customize responsive mobile-first sites.
+            </ScrollMotionItem>
+          </div>
+        </div>
+      </ScrollMotionContainer>
+      
       <div className={`${styles.myCardList} ${styles.section02}`}>
         <Image
           className={styles.section02DecorateTop}
@@ -161,7 +211,6 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        {/* 代辦事項:hover like */}
         <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
@@ -177,73 +226,68 @@ export default function Home() {
         <div className="container">
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
-              {products.map((v, i) => {
-                return (
-                  <div className="col-12 col-sm-4" key={i}>
-                    <div
-                      className="card"
-                      // onMouseEnter={handleMouseEnter}
-                      // onMouseLeave={handleMouseLeave}
-                    >
-                      {/*<Link>
-                         <svg className={styles.iconLike}>
-                      <use href="#like" />
-                    </svg> 
-                      </Link>*/}
-                      <Link href={`/detail-test/${v.stores_id}`}>
-                        <Swiper
-                          ref={swiperRef}
-                          spaceBetween={30}
-                          centeredSlides={true}
-                          loop={true}
-                          autoplay={{
-                            delay: 2500,
-                            disableOnInteraction: false,
-                          }}
-                          modules={[Autoplay]}
-                          className="mySwiper1"
-                        >
-                          {v.img_name.split(',').map((img, index) => (
-                            <SwiperSlide key={index}>
-                              <Image
-                                src={`/detail/${img}`}
-                                className={styles.cardImage}
-                                alt="tents"
-                                width={300}
-                                height={200}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  objectFit: 'contain',
-                                }}
-                              />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </Link>
-                      <div className={styles.cardBody}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
-                          </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
-                          </div>
+              {products.map((v, i) => (
+                <div className="col-12 col-sm-4" key={i}>
+                  <div
+                    className="card"
+                    onMouseEnter={() => handleMouseEnter(i)}
+                    onMouseLeave={() => handleMouseLeave(i)}
+                  >
+                    <Link href={`/detail-test/${v.stores_id}`}>
+                      <Swiper
+                        onSwiper={(swiper) => onSwiperInit(swiper, i)}
+                        spaceBetween={30}
+                        centeredSlides={true}
+                        autoplay={{
+                          delay: 2500,
+                          disableOnInteraction: false,
+                          enabled: false, // 初始化時禁用自動播放
+                        }}
+                        // pagination={true}
+                        modules={[Autoplay]}
+                        className="mySwiper1"
+                      >
+                        {v.img_name.split(',').map((img, index) => (
+                          <SwiperSlide key={index}>
+                            <Image
+                              src={`/detail/${img}`}
+                              className={styles.cardImage}
+                              alt="tents"
+                              width={300}
+                              height={200}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain',
+                              }}
+                            />
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    </Link>
+                    {/* <div id="showhtml">{autoplayStatus}</div> */}
+                    <div className={styles.cardBody}>
+                      <div className={styles.cardTags}>
+                        <div className={styles.cardTagLocation}>
+                          <Location className={styles.iconLocation} />
+                          <p>{v.address}</p>
                         </div>
-                        <div className={styles.cardTitle}>
-                          <h4>
-                            <Link href={`/detail-test/${v.stores_id}`}>
-                              {v.name}
-                            </Link>
-                          </h4>
+                        <div className={styles.cardTagStar}>
+                          <Star className={styles.iconStar} />
+                          <p>{v.comment_star}</p>
                         </div>
+                      </div>
+                      <div className={styles.cardTitle}>
+                        <h4>
+                          <Link href={`/detail-test/${v.stores_id}`}>
+                            {v.name}
+                          </Link>
+                        </h4>
                       </div>
                     </div>
                   </div>
-                )
-              })}
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import PlaceholderText from '@/components/common/placeholder-text'
 import styles from '@/styles/homepage02.module.scss'
 import HomeLayout from '@/components/layout/home-layout'
+import Header from '@/components/home/header'
 import { useState } from 'react'
 import { useEffect, useRef } from 'react'
 
@@ -11,6 +12,7 @@ import { motion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
+import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
@@ -182,7 +184,14 @@ export default function Home() {
 
   return (
     <>
-      <div className={`${styles.myCardList} ${styles.section02}`}>
+      <Header />
+      <ScrollMotionContainer
+        once={true}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
+
         <Image
           className={styles.section02DecorateTop}
           src="/images/homepage/decorate.png"
@@ -190,6 +199,7 @@ export default function Home() {
           width={1920}
           height={80}
         />
+
         <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
@@ -202,6 +212,7 @@ export default function Home() {
             <p>熱門營地</p>
           </div>
         </div>
+
         <div className="container">
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
@@ -270,9 +281,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </ScrollMotionContainer>
+      {/* </div> */}
 
-      <div className={styles.section03}>
+      <ScrollMotionContainer
+        once={true}
+        element="div"
+        className={styles.section03}
+      >
+        {/* <div className={styles.section03}> */}
         <Image
           className={styles.section04DecorateTop}
           src="/images/homepage/decorate.png"
@@ -280,6 +297,15 @@ export default function Home() {
           width={1920}
           height={80}
         />
+        <Image
+          className={styles.section03Bg}
+          src="/images/homepage/home-bg01.jpg"
+          alt="section03Bg"
+          width={1920}
+          height={1080}
+          style={{ width: '100%' }}
+        />
+
         <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
@@ -292,14 +318,7 @@ export default function Home() {
             <p>最新消息</p>
           </div>
         </div>
-        <Image
-          className={styles.section03Bg}
-          src="/images/homepage/home-bg01.jpg"
-          alt="section03Bg"
-          width={1920}
-          height={1080}
-          style={{ width: '100%' }}
-        />
+
         <div className={`row justify-content-center ${styles.rowActivity1}`}>
           <Swiper
             loop={true}
@@ -379,9 +398,14 @@ export default function Home() {
             )
           })}
         </div>
-      </div>
+      </ScrollMotionContainer>
+      {/* </div> */}
 
-      <div className={`${styles.myCardList} ${styles.section04}`}>
+      <ScrollMotionContainer
+        element="div"
+        className={`${styles.myCardList} ${styles.section04}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section04}`}> */}
         {/* 代辦事項: like hover，輪播動畫*/}
         <div className="title">
           <Image
@@ -473,9 +497,11 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={styles.section05}>
+      <ScrollMotionContainer element="div" className={styles.section05}>
+        {/* <div className={styles.section05}> */}
         {/* 代辦事項: 卡片展開 */}
         <Image
           className={styles.section05DecorateTop}
@@ -491,7 +517,9 @@ export default function Home() {
           width={1900}
           height={655}
         />
-        <div className="title">
+
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -502,9 +530,15 @@ export default function Home() {
             <h3 className="titleText">about us</h3>
             <p>關於我們</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <div className="container">
-          <div className={`row ${styles.aboutRow}`}>
+          <ScrollMotionItem
+            element="div"
+            type="up"
+            className={`row ${styles.aboutRow}`}
+          >
+            {/* <div className={`row ${styles.aboutRow}`}> */}
             <div className="col-12 col-sm-4 p-0">
               <div className={`card ${styles.aboutCard}`}>
                 <a href="#/">
@@ -605,9 +639,11 @@ export default function Home() {
                 </motion.div>
               </div>
             </div>
-          </div>
+          </ScrollMotionItem>
+          {/* </div> */}
         </div>
-      </div>
+        {/* </div> */}
+      </ScrollMotionContainer>
       <GoTop />
     </>
   )
