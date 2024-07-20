@@ -1,4 +1,5 @@
 import GoTopIcon from '@/components/icons/go-top-icon'
+import { motion } from 'framer-motion'
 
 export default function GoTop() {
   const scrollToTop = () => {
@@ -10,9 +11,14 @@ export default function GoTop() {
 
   return (
     <>
-      <button onClick={scrollToTop}>
-        <GoTopIcon className="goTop" size={50} />
-      </button>
+      <motion.button
+        onClick={scrollToTop}
+        className="goTop"
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+      >
+        <GoTopIcon size={50} />
+      </motion.button>
     </>
   )
 }

@@ -15,7 +15,7 @@ export default function HomeNavbar() {
         className={`navbar navbar-expand-lg navbar-light py-3 py-sm-3 ${styles.navbar}`}
       >
         <div className={`container-fluid ${styles.myContainer}`}>
-          <Link className={` ${styles.HomepageName}`} href="#/">
+          <Link className={` ${styles.HomepageName}`} href="/">
             <h3>YeahFun</h3>
           </Link>
           <button

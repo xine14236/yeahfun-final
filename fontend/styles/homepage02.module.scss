@@ -27,6 +27,25 @@
   --bs-card-bg: transparent;
   --bs-card-border-color: transparent;
 }
+.productCard {
+  position: relative;
+  transition: all 0.3s ease;
+}
+.productCard:hover .favor {
+  top: -30px; /* 更新 favor 在卡片上的位置 */
+  opacity: 1; /* 淡入效果 */
+}
+.favor {
+  z-index: 2;
+  opacity: 0; /* 初始狀態為隱藏 */
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
 .cardImage {
   border-radius: 10px;
@@ -217,6 +236,7 @@
 .section04 {
   position: relative;
   gap: 15px;
+  padding: 0 0 0 50px;
 }
 .section04DecorateTop {
   width: 100%;
@@ -227,6 +247,7 @@
 .paginationButtons {
   display: flex;
   gap: 20px;
+  margin-bottom: 30px;
 }
 .themeBtn {
   background: transparent;
