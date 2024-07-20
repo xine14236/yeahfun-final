@@ -1,8 +1,11 @@
 import express from 'express'
 const router = express.Router()
+import jsonwebtoken from 'jsonwebtoken'
 
 // 資料庫使用: 直接使用 mysql 來查詢
 import db from '#configs/mysql.js'
+
+router.use((req, res, next) => {})
 
 // GET - 得到單筆資料(注意，有動態參數時要寫在 GET 區段最後面)
 router.get('/:stores_id', async (req, res) => {

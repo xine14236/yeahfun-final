@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart-hook'
+import { initUserData, useAuth } from '@/hooks/use-auth'
 import Image from 'next/image'
 import { DatePicker, Space } from 'antd'
 import styles from '@/styles/detail.module.css'
@@ -18,6 +19,7 @@ export default function DetailTest() {
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
   const [dateRange, setDateRange] = useState([])
   const { addCart } = useCart()
+  const { auth } = useAuth()
   const { RangePicker } = DatePicker
 
   const getCampsitesInformation = async (pid) => {
@@ -61,6 +63,7 @@ export default function DetailTest() {
     }
 
     addCart({
+      user_id: auth.userData.id,
       stores_id: store.stores_id,
       rooms_campsites_id: store.rooms_campsites_id,
       store_name: store.store_name,
