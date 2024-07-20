@@ -221,31 +221,35 @@ export default function Home() {
                         onSwiper={(swiper) => onSwiperInit(swiper, i)}
                         spaceBetween={30}
                         centeredSlides={true}
+                        loop={true}
                         autoplay={{
                           delay: 2500,
                           disableOnInteraction: false,
                           enabled: false, // 初始化時禁用自動播放
                         }}
-                        // pagination={true}
-                        modules={[Autoplay]}
+                        pagination={true}
+                        modules={[Autoplay, Pagination]}
                         className="mySwiper1"
                       >
-                        {v.img_name.split(',').map((img, index) => (
-                          <SwiperSlide key={index}>
-                            <Image
-                              src={`/detail/${img}`}
-                              className={styles.cardImage}
-                              alt="tents"
-                              width={300}
-                              height={200}
-                              style={{
-                                width: '100%',
-                                height: 'auto',
-                                objectFit: 'contain',
-                              }}
-                            />
-                          </SwiperSlide>
-                        ))}
+                        {v.img_name
+                          .split(',')
+                          .slice(0, 6)
+                          .map((img, index) => (
+                            <SwiperSlide key={index}>
+                              <Image
+                                src={`/detail/${img}`}
+                                className={styles.cardImage}
+                                alt="tents"
+                                width={300}
+                                height={200}
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  objectFit: 'contain',
+                                }}
+                              />
+                            </SwiperSlide>
+                          ))}
                       </Swiper>
                     </Link>
                     {/* <div id="showhtml">{autoplayStatus}</div> */}
@@ -419,6 +423,7 @@ export default function Home() {
           loop={true}
           onSlideChange={handleSlideChange}
           navigation={true}
+          allowTouchMove={false}
           modules={[Pagination, Navigation]}
           className="mySwiper3"
         >
@@ -434,18 +439,40 @@ export default function Home() {
                             <Favor size={40} />
                           </div>
                           <Link href={`/detail-test/${v.stores_id}`}>
-                            <Image
-                              src={`/detail/${v.img_name.split(',')[0]}`}
-                              className={styles.cardImage}
-                              alt="tents"
-                              width={300}
-                              height={200}
-                              style={{
-                                width: '100%',
-                                height: 'auto',
-                                objectFit: 'contain',
+                            <Swiper
+                              onSwiper={(swiper) => onSwiperInit(swiper, i)}
+                              spaceBetween={30}
+                              centeredSlides={true}
+                              autoplay={{
+                                delay: 2500,
+                                disableOnInteraction: false,
+                                enabled: false,
                               }}
-                            />
+                              loop={true}
+                              pagination={true}
+                              modules={[Autoplay, Pagination]}
+                              className="mySwiper1"
+                            >
+                              {v.img_name
+                                .split(',')
+                                .slice(0, 6)
+                                .map((img, index) => (
+                                  <SwiperSlide key={index}>
+                                    <Image
+                                      src={`/detail/${img}`}
+                                      className={styles.cardImage}
+                                      alt="tents"
+                                      width={300}
+                                      height={200}
+                                      style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  </SwiperSlide>
+                                ))}
+                            </Swiper>
                           </Link>
                           <div className={styles.cardBody}>
                             <div className={styles.cardTags}>
@@ -477,7 +504,7 @@ export default function Home() {
         </Swiper>
       </div>
 
-      <div className={styles.section05}>
+      <ScrollMotionContainer element="div" className={styles.section05}>
         {/* 代辦事項: 卡片展開 */}
         <Image
           className={styles.section05DecorateTop}
@@ -493,7 +520,7 @@ export default function Home() {
           width={1900}
           height={655}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -504,25 +531,30 @@ export default function Home() {
             <h3 className="titleText">about us</h3>
             <p>關於我們</p>
           </div>
-        </div>
-        <div className="container">
+        </ScrollMotionItem>
+        <ScrollMotionItem element="div" type="up" className="container">
           <div className={`row ${styles.aboutRow}`}>
             <div className="col-12 col-sm-4 p-0">
               <div className={`card ${styles.aboutCard}`}>
-                <a href="#/">
-                  <Image
-                    src="/images/homepage/stone3.png"
-                    className={`card-img-top ${styles.stone}`}
-                    alt="減碳慢活"
-                    width={300}
-                    height={300}
-                  />
-                </a>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                >
+                  <a href="#/">
+                    <Image
+                      src="/images/homepage/stone3.png"
+                      className={`card-img-top ${styles.stone}`}
+                      alt="減碳慢活"
+                      width={300}
+                      height={300}
+                    />
+                  </a>
+                </motion.div>
 
                 <motion.div
                   className={`card-body ${styles.aboutCardBody}`}
                   whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
@@ -543,19 +575,24 @@ export default function Home() {
             </div>
             <div className="col-12 col-sm-4 p-0">
               <div className={`card ${styles.aboutCard}`}>
-                <a href="#/">
-                  <Image
-                    src="/images/homepage/stone1.png"
-                    className={`card-img-top ${styles.stone}`}
-                    alt="響應無痕山林"
-                    width={300}
-                    height={300}
-                  />
-                </a>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                >
+                  <a href="#/">
+                    <Image
+                      src="/images/homepage/stone1.png"
+                      className={`card-img-top ${styles.stone}`}
+                      alt="響應無痕山林"
+                      width={300}
+                      height={300}
+                    />
+                  </a>
+                </motion.div>
                 <motion.div
                   className={`card-body ${styles.aboutCardBody}`}
                   whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
@@ -576,6 +613,10 @@ export default function Home() {
             </div>
             <div className="col-12 col-sm-4 p-0">
               <div className={`card ${styles.aboutCard}`}>
+              <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                >
                 <a href="#/">
                   <Image
                     src="/images/homepage/stone02.png"
@@ -585,10 +626,11 @@ export default function Home() {
                     height={300}
                   />
                 </a>
+                </motion.div>
                 <motion.div
                   className={`card-body ${styles.aboutCardBody}`}
                   whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
                 >
                   {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
                   <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
@@ -608,8 +650,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </ScrollMotionItem>
+      </ScrollMotionContainer>
       <GoTop />
     </>
   )
