@@ -200,11 +200,12 @@ export default function Blog() {
 
   return (
     <>
+
       <div className="container">
-        <div id="blogFilter">
+        <div className={`${styles.blogFilter}`}>
           <div className="row  ">
             <div
-              className={`col-12 col-sm-4 col-lg-5 border d-flex flex-column  ${styles.filterControl1} ${styles.h150}`}
+              className={`col-12 col-sm-4 col-lg-5  d-flex flex-column  ${styles.filterControl1} ${styles.h150}`}
             >
               <div className="row">
                 <div className="col-lg-6 col-12 d-flex align-items-center">
@@ -237,13 +238,13 @@ export default function Blog() {
                   <span
                     className={`form-text text-center ${styles.marginInline}`}
                   >
-                    透過部落格標題搜尋 <FaSearch />
+                    透過部落格標題搜尋<FaSearch />
                   </span>
                 </div>
               </div>
             </div>
             <div
-              className={`col-12 col-sm-6  col-lg-5 border d-flex justify-content-evenly align-items-center ${styles.h150}`}
+              className={`col-12 col-sm-6  col-lg-5  d-flex justify-content-evenly align-items-center ${styles.h150}`}
             >
          
          <Space direction="vertical">
@@ -258,14 +259,26 @@ export default function Blog() {
           
             </div>
             <div
-              className={`col-12 col-sm-2 col-lg  border d-flex  align-items-center justify-content-sm-center ${styles.h150}` }
+              className={`col-12 col-sm-2 col-lg   d-flex  align-items-center justify-content-sm-center ${styles.h150}` }
               onClick={handleSearch}
             >
               <FaSearch  />
             </div>
-            <div className={`col-12 border ${styles.blogcategory}`} onClick={showModal} >點我展開分類搜尋</div>
+            <div className={`col-12  border ${styles.blogcategory}`} onClick={showModal} >點我展開分類搜尋</div>
           </div>
 
+        </div>
+        <div className="title">
+          <Image
+            src="/images/homepage/title-tree.png"
+            alt="tree"
+            width={66}
+            height={33}
+          />
+          <div className="titleContent">
+            <h3 className="titleText">Blog</h3>
+            <p>露營文章</p>
+          </div>
         </div>
         <div className="row" id="card-container"></div>
       </div>
