@@ -1,11 +1,11 @@
 // 這裡貼上從firebase專案設定中，網頁應用程式整合的設定值
 const firebaseConfig = {
-  apiKey: 'AIzaSyBsIeIzXTdZk4RPiwmuHVi2n27zQOPRjwU',
-  authDomain: 'react-test-e84f6.firebaseapp.com',
-  projectId: 'react-test-e84f6',
-  storageBucket: 'react-test-e84f6.appspot.com',
-  messagingSenderId: '1077454373020',
-  appId: '1:1077454373020:web:807add77fcd4858fcc2d59',
+  apiKey: 'AIzaSyBm5vgxNeiWM8ZmTEcJU2-o_ueq6T83JBk',
+  authDomain: 'yeahfun-login.firebaseapp.com',
+  projectId: 'yeahfun-login',
+  storageBucket: 'yeahfun-login.appspot.com',
+  messagingSenderId: '909749873208',
+  appId: '1:909749873208:web:8325569a78ab57c4a414cd',
 }
 
 export { firebaseConfig }

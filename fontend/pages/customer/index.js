@@ -29,6 +29,31 @@ export default function Index() {
   //     birthday: '',
   //     address: '',
   //   })
+  // 按鈕換色
+
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  const links = [
+    { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
+    {
+      href: '/customer/orders',
+      icon: '/icon/shopping-bag.svg',
+      text: '我的行程',
+    },
+    { href: '/customer/collect', icon: '/icon/star.svg', text: '口袋名單' },
+    { href: '/customer/comments', icon: '/icon/comment.svg', text: '我的評價' },
+    { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
+    { href: '/customer/blogs', icon: '/icon/tent.svg', text: 'FUN部落' },
+    {
+      href: '/customer/achievement',
+      icon: '/icon/tree-1.svg',
+      text: 'FUN成就',
+    },
+  ]
+
+  const handleClick = (index) => {
+    setSelectedIndex(index)
+  }
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -117,7 +142,34 @@ export default function Index() {
       <div className={styles.body}>
         <div className={`container ${styles.memberCard}`}>
           <ul className={styles.memberAside}>
-            <li className={styles.memberAsideList}>
+            {links.map((link, index) => (
+              <Link
+                key={index}
+                href={link.href}
+                className={`${styles.memberAsideList} ${
+                  selectedIndex === index ? styles.clicked : ''
+                }`}
+                onClick={() => handleClick(index)}
+              >
+                <Image
+                  className={styles.memberAsideListIcon}
+                  src={link.icon}
+                  alt={link.text}
+                  width={30}
+                  height={30}
+                />
+                <span className={styles.memberAsideListText}>{link.text}</span>
+              </Link>
+            ))}
+          </ul>
+          {/* <ul className={styles.memberAside}>
+            <Link
+              href=""
+              className={`${styles.memberAsideList} ${
+                isClicked ? styles.clicked : ''
+              }`}
+              onClick={handleClick}
+            >
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/user.svg"
@@ -125,11 +177,14 @@ export default function Index() {
                 width={30}
                 height={30}
               />
-              <Link href="" className={styles.memberAsideListText}>
-                個人資訊
-              </Link>
-            </li>
-            <li className={styles.ListTop}>
+              <span className={styles.memberAsideListText}>個人資訊</span>
+            </Link>
+            <Link
+              href=""
+              className={`${styles.memberAsideList} ${
+                isClicked ? styles.clicked : ''
+              }`}
+            >
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/shopping-bag.svg"
@@ -138,11 +193,11 @@ export default function Index() {
                 height={30}
               />
 
-              <Link href="" className={styles.memberAsideListText}>
+              <span href="" className={styles.memberAsideListText}>
                 我的行程
-              </Link>
-            </li>
-            <li className={styles.memberAsideList}>
+              </span>
+            </Link>
+            <Link href="" className={styles.memberAsideList}>
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/star.svg"
@@ -151,11 +206,11 @@ export default function Index() {
                 height={30}
               />
 
-              <Link href="" className={styles.memberAsideListText}>
+              <span href="" className={styles.memberAsideListText}>
                 口袋名單
-              </Link>
-            </li>
-            <li className={styles.memberAsideList}>
+              </span>
+            </Link>
+            <Link href="" className={styles.memberAsideList}>
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/comment.svg"
@@ -163,11 +218,11 @@ export default function Index() {
                 width={30}
                 height={30}
               />
-              <Link href="" className={styles.memberAsideListText}>
+              <span href="" className={styles.memberAsideListText}>
                 我的評價
-              </Link>
-            </li>
-            <li className={styles.memberAsideList}>
+              </span>
+            </Link>
+            <Link href="" className={styles.memberAsideList}>
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/coupon.svg"
@@ -175,11 +230,11 @@ export default function Index() {
                 width={30}
                 height={30}
               />
-              <Link className={styles.memberAsideListText} href="">
+              <span className={styles.memberAsideListText} href="">
                 Fun優惠
-              </Link>
-            </li>
-            <li className={styles.memberAsideList}>
+              </span>
+            </Link>
+            <Link href="" className={styles.memberAsideList}>
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/tent.svg"
@@ -187,11 +242,11 @@ export default function Index() {
                 width={30}
                 height={30}
               />
-              <Link className={styles.memberAsideListText} href="">
+              <span href="" className={styles.memberAsideListText}>
                 FUN部落
-              </Link>
-            </li>
-            <li className={styles.ListButton}>
+              </span>
+            </Link>
+            <Link href="" className={styles.memberAsideList}>
               <Image
                 className={styles.memberAsideListIcon}
                 src="/icon/tree-1.svg"
@@ -199,11 +254,11 @@ export default function Index() {
                 width={30}
                 height={30}
               />
-              <Link className={styles.memberAsideListText} href="">
+              <span className={styles.memberAsideListText} href="">
                 FUN成就
-              </Link>
-            </li>
-          </ul>
+              </span>
+            </Link>
+          </ul> */}
           <form
             name="form1"
             onSubmit={handleSubmit}
