@@ -241,6 +241,8 @@
   }
   .searchBar {
     justify-content: start;
+    position: relative;
+    z-index: -1;
   }
   .searchBarSort {
     flex-direction: column;
@@ -256,5 +258,19 @@
     margin-block: 10px;
     justify-content: end;
     gap: 5px;
+  }
+  .orderBys,
+  .price {
+    width: 100%;
+  }
+  .cardTitle h5 {
+    font-size: 16px;
+  }
+  .cardTitle h4 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
 }

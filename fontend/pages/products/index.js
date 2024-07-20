@@ -14,6 +14,7 @@ import Star from '@/components/icons/star'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
+import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 
 import GoTop from '@/components/home/go-top'
 
@@ -145,7 +146,6 @@ export default function Products() {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(products, null, 4)}</pre>; */}
       <div className={styles.searchBar}>
         <form
           className={styles.productSearchForm}
@@ -277,8 +277,14 @@ export default function Products() {
           </button>
         </form>
       </div>
-      <div className={`${styles.myCardList} ${styles.section02}`}>
-        <div className="title">
+      {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
+      <ScrollMotionContainer
+        once={true}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -289,8 +295,14 @@ export default function Products() {
             <h3 className="titleText">List</h3>
             <p>目錄</p>
           </div>
-        </div>
-        <div className={`container-fluid ${styles.listContainer}`}>
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`container-fluid ${styles.listContainer}`}
+        >
+          {/* <div className={`container-fluid ${styles.listContainer}`}> */}
           {/* <div className={styles.orderByNone}>
             <Select
               defaultValue="排序-價格-低到高排序"
@@ -400,7 +412,7 @@ export default function Products() {
                               {v.name}
                             </Link>
                           </h4>
-                          <h5>${v.lowest_normal_price}/每晚</h5>
+                          <h5>${v.lowest_normal_price}/晚</h5>
                         </div>
                       </div>
                     </div>
@@ -467,8 +479,10 @@ export default function Products() {
               </div> */}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+      </ScrollMotionContainer>
+      {/* </div> */}
       <GoTop />
     </>
   )
