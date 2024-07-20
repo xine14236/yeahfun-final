@@ -7,6 +7,7 @@ import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
 import Favor from '@/components/icons/favor'
 import Share from '@/components/icons/share'
+import FavStoreBtn from '@/components/icons/fav-store-btn'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -74,16 +75,46 @@ export default function DetailTest() {
   }
 
   //收藏功能：擴充商店資料，多一個代表是否已收藏的屬性fav(布林值，預設是false)
-  const initState =
-    Array.isArray(store) && store.length === 0
-      ? store.map((v) => ({ ...v, fav: false }))
-      : []
+  // const initState =
+  //   Array.isArray(store) && store.length === 0
+  //     ? store.map((v) => ({ ...v, fav: false }))
+  //     : []
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [favor, setFavor] = useState(initState)
+  // const [favor, setFavor] = useState(initState)
 
-  if (Array.isArray(store)) {
-    console.log('store is not an array')
+  // 加入或取消最愛
+  const handleFavor = async (store_id) => {
+    const url = 'http://localhost:3005/api/add-fav-store/' + store_id
+
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+
+      if (resData.status === 'success') {
+        const data = structuredClone(store) // 深層複製
+        // console.log(data)
+        if (data.stores_id === store_id) {
+          // 確認 stores_id 是否匹配 store_id
+          if (resData.data.output.action === 'add') {
+            data.like_id = true
+          } else {
+            data.like_id = false
+          }
+
+          setStore(data)
+        } else {
+          console.error('store_id 不匹配')
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
+
+  // if (Array.isArray(store)) {
+  //   console.log('store is not an array')
+  // }
 
   // 將取得tag資料map
   const tags = tag.map((item, index) => {
@@ -108,7 +139,7 @@ export default function DetailTest() {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
     }
-  }, [router.isReady, router.query.pid])
+  }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (e) => {
     setPeopleFilter(e.target.value)
@@ -125,7 +156,12 @@ export default function DetailTest() {
           <h1>{store.name}</h1>
           <div className="storeShare">
             <Share />
-            <Favor />
+            <FavStoreBtn
+              initFull={store.like_id}
+              handler={() => {
+                handleFavor(store.stores_id)
+              }}
+            />
           </div>
         </div>
         {/* <div className="row storeIntroduce"> */}
@@ -315,30 +351,46 @@ export default function DetailTest() {
             .filter((campsite) => campsite.type === 'bed')
             .map((campsite) => (
               <div key={campsite.rooms_campsites_id} className="storeCard">
-                <h5>房型名稱: {campsite.rooms_campsites_name}</h5>
-                <div>
+                <div className="thumbNail">
+                  <span className="span">總房間數: {campsite.amount}</span>
                   <Image
                     src={`/productDetail/${campsite.img}`}
                     alt={campsite.rooms_campsites_name}
                     width={300}
                     height={200}
+                    style={{
+                      borderTopLeftRadius: '5px',
+                      borderTopRightRadius: '5px',
+                    }}
                   />
                 </div>
-                <p>平日價格: ${campsite.normal_price}</p>
-                <p>假日價格: ${campsite.holiday_price}</p>
-                <p>夜衝價格: ${campsite.night_price}</p>
-                <p>房型數量: {campsite.amount}</p>
-                <p>房型最多人數: {campsite.people}</p>
+                <div className="areaInfo">
+                  <div style={{ width: '50%', paddingLeft: '10px' }}>
+                    <h5 style={{ alignContent: 'center' }}>
+                      {campsite.rooms_campsites_name}
+                    </h5>
+                    <p style={{ color: 'transparent' }}>--</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary btnGreen"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      詳細內容
+                    </button>
+                  </div>
+                  <div className="areaPrice">
+                    <p style={{ color: '#888' }}>
+                      平日價: ${campsite.normal_price}
+                    </p>
+                    <p style={{ color: '#888' }}>
+                      假日價: ${campsite.holiday_price}
+                    </p>
+                  </div>
+                </div>
+
                 <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  詳細內容
-                </button>
-                <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btnBookNow"
                   onClick={() => {
                     handleAddToCart(campsite)
                   }}
@@ -402,32 +454,49 @@ export default function DetailTest() {
             .filter((campsite) => campsite.type === 'tent')
             .map((campsite) => (
               <div key={campsite.rooms_campsites_id} className="storeCard">
-                <h5>房型名稱: {campsite.rooms_campsites_name}</h5>
-                <div>
+                <div className="thumbNail">
+                  <span className="span">總帳數: {campsite.amount}</span>
                   <Image
                     src={`/productDetail/${campsite.img}`}
                     alt={campsite.rooms_campsites_name}
                     width={300}
                     height={200}
+                    style={{
+                      borderTopLeftRadius: '5px',
+                      borderTopRightRadius: '5px',
+                    }}
                   />
                 </div>
-
-                <p>平日價格: ${campsite.normal_price}</p>
-                <p>假日價格: ${campsite.holiday_price}</p>
-                <p>夜衝價格: ${campsite.night_price}</p>
-                <p>房型數量: {campsite.amount}</p>
-                <p>房型最多人數: {campsite.people}</p>
+                <div className="areaInfo">
+                  <div style={{ width: '50%', paddingLeft: '10px' }}>
+                    <h5 style={{ alignContent: 'center' }}>
+                      {campsite.rooms_campsites_name}
+                    </h5>
+                    <p style={{ color: 'transparent' }}>--</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary btnGreen"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      詳細內容
+                    </button>
+                  </div>
+                  <div className="areaPrice">
+                    <p style={{ color: '#888' }}>
+                      平日價: ${campsite.normal_price}
+                    </p>
+                    <p style={{ color: '#888' }}>
+                      假日價: ${campsite.holiday_price}
+                    </p>
+                    <p style={{ color: '#888' }}>
+                      夜衝價: ${campsite.night_price}/帳
+                    </p>
+                  </div>
+                </div>
 
                 <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  詳細內容
-                </button>
-                <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btnBookNow"
                   onClick={() => {
                     handleAddToCart(campsite)
                   }}
@@ -552,15 +621,6 @@ export default function DetailTest() {
             border-radius: 50px;
             background: var(--secondary-3, #fdaf17);
           }
-           {
-            /* .inputDateAndNumber {
-            display: flex;
-            padding: 15px 40px;
-            align-items: center;
-            gap: 40px;
-            align-self: stretch;
-          } */
-          }
           .inputNumber {
             display: flex;
             width: 370px;
@@ -573,14 +633,6 @@ export default function DetailTest() {
             align-items: center;
             gap: 20px;
           }
-           {
-            /* .campAreas {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-          } */
-          }
           .cardContainer {
             display: flex;
             width: 100%;
@@ -590,8 +642,64 @@ export default function DetailTest() {
           .storeCard {
             border: 1px solid #ccc;
             border-radius: 5px;
-            padding: 10px;
             margin-bottom: 10px;
+          }
+          .thumbNail {
+            position: relative;
+            width: 100%;
+          }
+          .span {
+            position: absolute;
+            margin-top: 10px;
+            margin-left: 10px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            color: white;
+          }
+          .areaInfo {
+            display: flex;
+            justify-content: space-between;
+            margin-block: 10px;
+          }
+          .areaPrice {
+            display: flex;
+            flex-direction: column;
+            padding-right: 10px;
+          }
+          .btnGreen {
+            border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+            background: #fefcf0;
+            color: var(--primary-1);
+            width: 100%;
+          }
+          .btnGreen:hover {
+            border: 1px solid var(--white);
+            background: var(--primary-1);
+            color: var(--white);
+            /* font-size: var(--p); */
+            border: 1px solid var(--white);
+          }
+          .btnBookNow {
+            display: flex;
+            width: 47%;
+            justify-content: center;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            padding: 10px 30px;
+            background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
+            color: var(--white);
+            font-size: var(--h5);
+            border: var(--white);
+          }
+          .btnBookNow:hover {
+            background: linear-gradient(
+              to bottom,
+              #ffb58e 0%,
+              #fa8752 50%,
+              #ff8c00 51%,
+              #fb955e 100%
+            );
           }
         `}
       </style>
