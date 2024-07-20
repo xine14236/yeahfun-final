@@ -42,7 +42,7 @@ export default function Index() {
     },
     { href: '/customer/collect', icon: '/icon/star.svg', text: '口袋名單' },
     { href: '/customer/comments', icon: '/icon/comment.svg', text: '我的評價' },
-    { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
+    // { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
     { href: '/customer/blogs', icon: '/icon/tent.svg', text: 'FUN部落' },
     {
       href: '/customer/achievement',
