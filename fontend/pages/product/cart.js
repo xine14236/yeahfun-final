@@ -5,9 +5,10 @@ import { useCart } from '@/hooks/cart-hook'
 import { FaLocationDot, FaStar, FaCommentDots, FaMinus } from 'react-icons/fa6'
 import { useRouter } from 'next/router'
 import { differenceInDays, parseISO } from 'date-fns'
+import Link from 'next/link'
 
 export default function Cart() {
-  const { cartItems, removeFromCart } = useCart()
+  const { cartItems, removeFromCart, processCheckout } = useCart()
 
   const handleRemove = (rooms_campsites_id) => {
     removeFromCart(rooms_campsites_id)
@@ -35,6 +36,7 @@ export default function Cart() {
             address: resData.data.store.address,
             comment_star: resData.data.store.comment_star,
             commentCounts: resData.data.commentCount.commentCounts,
+            storeImage: resData.data.store.img_name.split(',')[0],
           },
         }))
       }
@@ -50,6 +52,21 @@ export default function Cart() {
       })
     }
   }, [router.isReady, cartItems])
+
+  // 新增 checkout 函數
+  const checkout = () => {
+    // 你可以在這裡調用鉤子並傳遞所需的參數
+    // 假設你想傳遞 cartItems 和總金額
+    const totalAmount = cartItems.reduce(
+      (acc, store) =>
+        acc +
+        store.normal_price *
+          differenceInDays(store.endDate, store.startDate) *
+          store.rooms_campsites_amount,
+      0
+    )
+    processCheckout(cartItems, totalAmount)
+  }
 
   return (
     <>
@@ -70,7 +87,9 @@ export default function Cart() {
             <div className="cartBox">
               <div className="cartInfoImage">
                 <Image
-                  src="/productDetail/tent05.jpg"
+                  src={`/detail/${
+                    storeInformation[store.stores_id]?.storeImage
+                  }`}
                   alt="Picture of the author"
                   width={450}
                   height={300}
@@ -104,7 +123,7 @@ export default function Cart() {
                 <div className="content">
                   <div className="contentDetailSite">
                     <h3 className="my-1">
-                      {store.rooms_campsites_name} x{' '}
+                      {store.rooms_campsites_name} *{' '}
                       {store.rooms_campsites_amount}
                     </h3>
                     <div className="my-1">
@@ -112,8 +131,8 @@ export default function Cart() {
                         預訂日期: {store.startDate} ~ {store.endDate}
                       </p>
                       <p className="py-2" style={{ margin: 0 }}>
-                        價格: NT${store.normal_price}{' '}
-                        {differenceInDays(store.endDate, store.startDate)} 晚{' '}
+                        價格: NT${store.normal_price} *{' '}
+                        {differenceInDays(store.endDate, store.startDate)} 晚 *{' '}
                         {store.rooms_campsites_amount} 間
                       </p>
                     </div>
@@ -130,7 +149,12 @@ export default function Cart() {
                 <div className="detailPrice">
                   {/* <input type="checkbox" className="" />
                 coupon */}
-                  <h3 className="mx-2">NT$ {store.normal_price}</h3>
+                  <h3 className="mx-2">
+                    NT${' '}
+                    {store.normal_price *
+                      differenceInDays(store.endDate, store.startDate) *
+                      store.rooms_campsites_amount}
+                  </h3>
                 </div>
               </div>
             </div>
@@ -138,13 +162,33 @@ export default function Cart() {
         ))
       )}
 
+      {cartItems.length > 0 && (
+        <div className="totalMount m-2">
+          <h3>
+            Total : NT${' '}
+            {cartItems.reduce(
+              (acc, store) =>
+                acc +
+                store.normal_price *
+                  differenceInDays(store.endDate, store.startDate) *
+                  store.rooms_campsites_amount,
+              0
+            )}
+          </h3>
+        </div>
+      )}
+
       <div className="checkoutButton">
         <button
           className="btn btn-primary btn-lg mt-5 checkout"
           disabled={cartItems.length === 0}
+          onClick={checkout}
         >
           結帳
         </button>
+        <Link href="#/" className="mt-5">
+          前往結帳頁面
+        </Link>
       </div>
       <style jsx>
         {`
@@ -222,6 +266,10 @@ export default function Cart() {
           }
           .checkout {
             padding: 10px 80px;
+          }
+          .totalMount {
+            display: flex;
+            justify-content: flex-end;
           }
         `}
       </style>

@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { useAuth } from '@/hooks/use-auth'
+import { initUserData, useAuth } from '@/hooks/use-auth'
+
+import { googleLogin, parseJwt, getUserById } from '@/services/user'
 import styles from '@/components/welcome/login.module.scss'
 import Image from 'next/image'
 import { MdOutlineRemoveRedEye } from 'react-icons/md'
 import Link from 'next/link'
+import useFirebase from '@/hooks/use-firebase'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Login() {
   // auth物件狀態的樣貌:
@@ -14,7 +18,7 @@ export default function Login() {
   //     email: '',
   //   }
   // }
-
+  const { loginGoogle, logoutFirebase } = useFirebase()
   const { auth, setAuth, handleCheck, handleLogin, handleLogout } = useAuth()
   // 使用者帳號密碼輸入框
   const [customer, setCustomer] = useState({
@@ -67,6 +71,54 @@ export default function Login() {
 
     // 檢查都沒問題才會到這裡執行
     handleLogin(customer)
+  }
+
+  // 處理google登入後，要向伺服器進行登入動作
+  const callbackGoogleLoginPopup = async (providerData) => {
+    console.log(providerData)
+
+    // 如果目前react(next)已經登入中，不需要再作登入動作
+    if (auth.isAuth) return
+
+    // 向伺服器進行登入動作
+    const res = await googleLogin(providerData)
+
+    // console.log(res.data)
+
+    if (res.data.status === 'success') {
+      // 從JWT存取令牌中解析出會員資料
+      // 注意JWT存取令牌中只有id, username, google_uid, line_uid在登入時可以得到
+      const jwtUser = parseJwt(res.data.data.accessToken)
+      // console.log(jwtUser)
+
+      const res1 = await getUserById(jwtUser.id)
+      //console.log(res1.data)
+
+      if (res1.data.status === 'success') {
+        // 只需要initUserData中的定義屬性值，詳見use-auth勾子
+        const dbUser = res1.data.data.user
+        const userData = { ...initUserData }
+
+        for (const key in userData) {
+          if (Object.hasOwn(dbUser, key)) {
+            userData[key] = dbUser[key] || ''
+          }
+        }
+
+        // 設定到全域狀態中
+        setAuth({
+          isAuth: true,
+          userData,
+        })
+
+        toast.success('已成功登入')
+      } else {
+        toast.error('登入後無法得到會員資料')
+        // 這裡可以讓會員登出，因為這也算登入失敗，有可能會造成資料不統一
+      }
+    } else {
+      toast.error(`登入失敗`)
+    }
   }
 
   return (
@@ -165,6 +217,7 @@ export default function Login() {
                     alt="Google Icon"
                     width={60}
                     height={60}
+                    onClick={() => loginGoogle(callbackGoogleLoginPopup)}
                   />
                 </span>
               </div>
@@ -182,6 +235,8 @@ export default function Login() {
             </div>
           </div>
         </div>
+        {/* 土司訊息視窗用 */}
+        <Toaster />
       </div>
     </>
   )
