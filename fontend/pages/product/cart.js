@@ -186,7 +186,7 @@ export default function Cart() {
         >
           結帳
         </button>
-        <Link href="#/" className="mt-5">
+        <Link href="/product/ecpay" className="mt-5">
           前往結帳頁面
         </Link>
       </div>

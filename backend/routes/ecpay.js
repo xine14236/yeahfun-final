@@ -2,8 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 import * as crypto from 'crypto'
-// 存取`.env`設定檔案使用
-import 'dotenv/config.js'
+
 // 資料庫使用
 import sequelize from '#configs/db.js'
 const { Purchase_Order } = sequelize.models
@@ -44,7 +43,7 @@ router.get('/payment', authenticate, async (req, res, next) => {
   //二、輸入參數
   const TotalAmount = orderRecord.amount
   const TradeDesc = '商店線上付款'
-  const ItemName = '訂單編號' + orderRecord.id + '商品一批'
+  const ItemName = '訂單編號：' + orderRecord.id
 
   const ChoosePayment = 'ALL'
 
@@ -53,21 +52,23 @@ router.get('/payment', authenticate, async (req, res, next) => {
   const algorithm = 'sha256'
   const digest = 'hex'
   const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
-  // 交易編號
-  const MerchantTradeNo =
-    new Date().toISOString().split('T')[0].replaceAll('-', '') +
-    crypto.randomBytes(32).toString('base64').substring(0, 12)
 
+  // 交易編號，只包含數字和英文字母
+  function generateMerchantTradeNo(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
+  const MerchantTradeNo = generateMerchantTradeNo(20);
+
+  
   // 交易日期時間
-  const MerchantTradeDate = new Date().toLocaleDateString('zh-TW', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  })
+  const date = new Date();
+  const MerchantTradeDate = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
 
   //三、計算 CheckMacValue 之前
   let ParamsBeforeCMV = {
@@ -140,40 +141,46 @@ router.get('/payment', authenticate, async (req, res, next) => {
     .join('')
 
   //六、製作送出畫面
-  const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>全方位金流-測試</title>
-</head>
-<body>
-    <form method="post" action="${APIURL}">
-${inputs}
-<input type ="submit" value = "送出參數">
-    </form>
-</body>
-</html>
-`
-  //res.json({ htmlContent })
-  res.send(htmlContent)
+//   const htmlContent = `
+// <!DOCTYPE html>
+// <html>
+// <head>
+//     <title>全方位金流-測試</title>
+// </head>
+// <body>
+//     <form method="post" action="${APIURL}">
+// ${inputs}
+// <input type ="submit" value = "送出參數">
+//     </form>
+// </body>
+// </html>
+// `
+//   //res.json({ htmlContent })
+//   res.send(htmlContent)
 
-  // const htmlContent = `
-  // <!DOCTYPE html>
-  // <html>
-  // <head>
-  //     <title>全方位金流測試</title>
-  // </head>
-  // <body>
-  //     <form method="post" action="${APIURL}">
-  // ${inputs}
-  // <input type ="submit" value = "送出參數">
-  //     </form>
-  // <script>
-  //   document.forms[0].submit();
-  // </script>
-  // </body>
-  // </html>
-  // `
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <form method="post" action="${APIURL}">
+    ${inputs}
+    <input type="submit" value="送出參數" style="display:none">
+        </form>
+    <script>
+      document.forms[0].submit();
+    </script>
+    </body>
+    </html>
+    `
+
+    res.send(htmlContent)
+
+  // 叫react送form的作法
+  // res.json({ htmlContent })
+  
 })
 
 router.post('/result', async (req, res, next) => {
