@@ -269,3 +269,31 @@
   font-weight: 600;
   line-height: normal;
 }
+
+// order
+.infoFrame table {
+  /* h4 */
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border-collapse: separate;
+  border-radius: 10px; 
+  overflow: hidden;
+}
+.infoFrame th {
+  vertical-align: middle;
+  text-align: center;
+  color: var(--grey-800, #575757);
+  background-color: var(--grey-400, #c4c4c4);
+}
+.infoFrame td {
+  vertical-align: middle;
+  text-align: center;
+  color: var(--grey-800, #575757);
+  border-bottom: var(--grey-400, #c4c4c4) 1px solid;
+}
+.orderTr{
+  border-radius: 10px;
+}

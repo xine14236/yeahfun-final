@@ -168,15 +168,34 @@ export default function Index() {
             className={styles.memberFrame}
           >
             <div className={styles.infoFrame}>
-
+              <table className="table">
+                <thead className={styles.orderTr}>
+                  <tr>
+                    <th scope="col">營地照片</th>
+                    <th scope="col">營地名稱</th>
+                    <th scope="col">日期</th>
+                    <th scope="col">價格</th>
+                    <th scope="col">訂單狀態</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <Image
+                        src="/detail/01.jpg"
+                        alt="camp1"
+                        width={160}
+                        height={120}
+                      />
+                    </td>
+                    <td>哈哈哈路營地</td>
+                    <td>2024/08/10~2024/08/12</td>
+                    <td>NT5000</td>
+                    <td>已付款</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <button
-              type="submit"
-              className={styles.btnSquare}
-              onSubmit={handleSubmit}
-            >
-              修改
-            </button>
           </form>
         </div>
       </div>
