@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 import Link from 'next/link'
 import Image from 'next/image'
+import Favor from '@/components/icons/favor'
 
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
@@ -68,12 +69,11 @@ export default function Section04({
                   <div className={`row ${styles.myRow}`}>
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
-                        <div className="card">
-                          <Link href="#/">
-                            {/* <svg className={styles.iconLike}>
-                            <use href="#like" />
-                          </svg> */}
-                          </Link>
+                        <div className={`card ${styles.productCard}`}>
+                          <div className={styles.favor}>
+                            <Favor size={40} />
+                          </div>
+
                           <Link href={`/detail-test/${v.stores_id}`}>
                             <Image
                               src={`/detail/${v.img_name.split(',')[0]}`}

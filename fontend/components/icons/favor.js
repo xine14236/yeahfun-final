@@ -19,11 +19,11 @@ export default function Favor({ size, color, className }) {
         role="button"
         tabIndex={0}
       >
-        <MdStars size={30} />
+        <MdStars size={size} className={className} />
       </div>
       <style jsx>{`
         .favor {
-          color: #feaf18;
+          color: #feaf18; 
         }
         .favor-active {
           background-color: #feaf18;
