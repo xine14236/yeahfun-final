@@ -11,7 +11,7 @@ router.get('/', async function (req, res) {
     SELECT title,content,img_name,home_blog.id 
     FROM home_blog
     LEFT JOIN blog_img ON home_blog.id = blog_img.blog_id
-    LIMIT 8;
+    LIMIT 6;
         `
   )
   const blogs = rows
