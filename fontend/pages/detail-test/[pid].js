@@ -182,8 +182,10 @@ export default function DetailTest() {
               alt="Camping scene with tents"
               width={500} // 圖片的實際寬度
               height={100} // 圖片的實際高度
-              layout="responsive" // 新增這行
+              priority
               style={{
+                width: '100%',
+                height: 'auto',
                 borderRadius: '5px',
               }}
             />
@@ -196,51 +198,10 @@ export default function DetailTest() {
                 alt="Camping scene"
                 width={500}
                 height={300}
-                layout="responsive"
-                style={{ borderRadius: '5px' }}
+                style={{ width: '100%', height: 'auto', borderRadius: '5px' }}
               />
             </div>
           ))}
-
-          {/* <div style={{ display: 'flex' }}>
-            <Image
-              className="gridImage"
-              src="../../detail/campGallery3.jpg"
-              alt="Camping scene"
-              width={500} // 圖片的實際寬度
-              height={300} // 圖片的實際高度
-              layout="responsive" // 新增這行
-              style={{
-                borderRadius: '5px',
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex' }}>
-            <Image
-              className="gridImage"
-              src="../../detail/campGallery2.jpg"
-              alt="Camping scene"
-              width={500} // 圖片的實際寬度
-              height={300} // 圖片的實際高度
-              layout="responsive" // 新增這行
-              style={{
-                borderRadius: '5px',
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex' }}>
-            <Image
-              className="gridImage"
-              src="../../detail/campGallery5.jpg"
-              alt="Camping scene"
-              width={500} // 圖片的實際寬度
-              height={300} // 圖片的實際高度
-              layout="responsive" // 新增這行
-              style={{
-                borderRadius: '5px',
-              }}
-            />
-          </div> */}
         </div>
       </div>
       <div className="row storeNormalInfo">
