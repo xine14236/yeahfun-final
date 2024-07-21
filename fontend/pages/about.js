@@ -20,7 +20,7 @@ export default function About() {
           </div>
         </div>
       </header>
-      {/* Main Content*/}
+      {/* Main Content*/} 
       <section className="about section">
         <ScrollMotionContainer
           amount={0.2}

@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Favor from '@/components/icons/favor'
+import { useLoader } from '@/hooks/use-loader'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
@@ -29,6 +30,7 @@ export default function Home() {
 
   const [swiperInstances, setSwiperInstances] = useState([])
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
+  const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const tags = [
     {
@@ -150,7 +152,14 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getProducts(), getBlog(), getTag(), getTag2(), getTag3()
+    showLoader()
+    getProducts(),
+      getBlog(),
+      getTag(),
+      getTag2(),
+      getTag3()
+        .then(delay(3000)) // 延時3秒後再停止載入器，只有手動控制有用，自動關閉會無用
+        .then(hideLoader)
   }, [])
 
   useEffect(() => {

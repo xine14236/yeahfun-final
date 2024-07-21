@@ -2,6 +2,7 @@
 import Lottie from 'lottie-react'
 import catAnimation from '@/assets/loader-cat.json'
 import nikeAnimation from '@/assets/loader-nike.json'
+import CircleAnimation from '@/assets/loading-circle.json'
 
 // 展示用載入元件
 export function DefaultLoader({ show = false }) {
@@ -17,6 +18,17 @@ export function LoaderText({ text = 'loading', show = false }) {
       <div className={`loading-text ${show ? '' : 'loading-text--hide'}`}>
         {text}...
       </div>
+    </div>
+  )
+}
+
+export function CircleLoader({ show = false }) {
+  return (
+    <div className={`circle-loader-bg ${show ? '' : 'circle-loader--hide'}`}>
+      <Lottie
+        className={`circle-loader ${show ? '' : 'circle-loader--hide'}`}
+        animationData={CircleAnimation}
+      />
     </div>
   )
 }
