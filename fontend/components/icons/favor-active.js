@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { MdStars } from 'react-icons/md'
 
-export default function Favor({
+export default function FavorActive({
   size,
   color,
   className,
@@ -23,7 +23,7 @@ export default function Favor({
     <>
       <div
         // className={`favor ${fav ? 'favor-active' : ''}`}
-        className="favor"
+        className="favor-active"
         // onMouseEnter={() => setIsFavor(true)}
         // onMouseLeave={() => setIsFavor(false)}
         onClick={handler}
@@ -34,8 +34,10 @@ export default function Favor({
         <MdStars size={30} />
       </div>
       <style jsx>{`
-        .favor {
-          color: #feaf18;
+        .favor-active {
+          background-color: #feaf18;
+          color: #fefcf0;
+          border-radius: 50%;
         }
       `}</style>
     </>
