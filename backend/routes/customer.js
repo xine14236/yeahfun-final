@@ -37,6 +37,50 @@ router.get('/:id/order', async function (req, res) {
   }
 })
 
+// GET - 得到口袋名單資料
+router.get('/:id/collect', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      `SELECT
+        favorite.id,
+        favorite.pid,
+        favorite.uid,
+        store.name AS store_name,
+        store.address,
+        comment.comment_star,
+        stores_img.img_name as store_img_name
+        FROM
+        favorite
+        JOIN store ON favorite.pid = store.stores_id
+        JOIN comment ON favorite.pid = comment.stores_id
+        JOIN stores_img ON favorite.pid = stores_img.stores_id
+        WHERE favorite.uid = ?`,
+      [id]
+    )
+
+    const collect = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { collect },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
+
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字
   const id = Number(req.params.id)
