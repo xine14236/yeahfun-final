@@ -21,14 +21,8 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  const [order, setOrder] = useState([
-    // campId: '',
-    // campName: '',
-    // startDate: '',
-    // endDate: '',
-    // price: '',
-    // status: '',
-  ])
+  const [order, setOrder] = useState([])
+  const [img, setImg] = useState([])
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -86,6 +80,11 @@ export default function Index() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
+      const resDataImg = resData.data.order.map((v) => {
+        return v.store_img_name.split(',')
+      })
+      setImg(resDataImg)
+      // const imgArray = store_img_name ? img.img_name.split(',') : []
 
       if (resData.status === 'success' && Array.isArray(resData.data.order)) {
         // const order = resData.data.order
@@ -179,11 +178,7 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          <form
-            name="form1"
-            onSubmit={handleSubmit}
-            className={styles.memberFrame}
-          >
+          <div className={styles.memberFrame}>
             <div className={styles.infoFrame}>
               <table className="table">
                 <thead className={styles.orderTr}>
@@ -200,14 +195,16 @@ export default function Index() {
                     <tr key={v.id}>
                       <td>
                         <Image
-                          src="/detail/01.jpg"
+                          src={`/detail/${img[i][0]}`}
                           alt="camp1"
                           width={160}
                           height={120}
                         />
                       </td>
-                      <td>{v.store_id}</td>
-                      <td>{v.checkin_date}</td>
+                      <td>{v.store_name}</td>
+                      <td>
+                        {v.checkin_date}~{v.checkout_date}
+                      </td>
                       <td> {v.total_price}</td>
                       <td>{v.payment_status}</td>
                     </tr>
@@ -215,7 +212,7 @@ export default function Index() {
                 </tbody>
               </table>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
