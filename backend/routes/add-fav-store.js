@@ -18,22 +18,6 @@ router.get('/:stores_id', async (req, res) => {
     code: 0,
   }
 
-  // const [rows] = await db.query(
-  //   `SELECT
-  //     favorite.id,
-  //     favorite.uid,
-  //     customer.name as customer_name,
-  //     favorite.pid,
-  //     store.name as store_name
-  //   FROM
-  //     favorite
-  //   JOIN customer ON favorite.uid = customer.id
-  //   JOIN store ON favorite.pid = store.stores_id
-  //   WHERE stores_id = ?`,
-  //   [id]
-  // )
-  // const favStore = rows[0]
-
   // 檢查是否已經加入我的最愛
   const [rows2] = await db.query(
     `SELECT * FROM favorite WHERE uid = 1 AND pid = ?`,
