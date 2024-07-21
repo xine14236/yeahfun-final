@@ -1,8 +1,11 @@
 import express from 'express'
 const router = express.Router()
+import jsonwebtoken from 'jsonwebtoken'
 
 // 資料庫使用: 直接使用 mysql 來查詢
 import db from '#configs/mysql.js'
+
+router.use((req, res, next) => {})
 
 // GET - 得到單筆資料(注意，有動態參數時要寫在 GET 區段最後面)
 router.get('/:stores_id', async (req, res) => {
@@ -14,22 +17,6 @@ router.get('/:stores_id', async (req, res) => {
     error: '',
     code: 0,
   }
-
-  // const [rows] = await db.query(
-  //   `SELECT
-  //     favorite.id,
-  //     favorite.uid,
-  //     customer.name as customer_name,
-  //     favorite.pid,
-  //     store.name as store_name
-  //   FROM
-  //     favorite
-  //   JOIN customer ON favorite.uid = customer.id
-  //   JOIN store ON favorite.pid = store.stores_id
-  //   WHERE stores_id = ?`,
-  //   [id]
-  // )
-  // const favStore = rows[0]
 
   // 檢查是否已經加入我的最愛
   const [rows2] = await db.query(

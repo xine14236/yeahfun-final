@@ -155,6 +155,10 @@ export function AuthProvider({ children }) {
       console.error(e)
     }
   }
+
+  // 取得包含 token 的檔頭
+  const getAuthHeader = () => {}
+
   useEffect(() => {
     if (router.isReady && !auth.isAuth) {
       handleCheck()
