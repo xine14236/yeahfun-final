@@ -63,7 +63,8 @@ export default function Favor({
   return (
     <>
       <div
-        className={`favor ${fav ? 'favor-active' : ''}`}
+        // className={`favor ${fav ? 'favor-active' : ''}`}
+        className="favor"
         // onMouseEnter={() => setIsFavor(true)}
         // onMouseLeave={() => setIsFavor(false)}
         onClick={handler}
@@ -76,11 +77,6 @@ export default function Favor({
       <style jsx>{`
         .favor {
           color: #feaf18; 
-        }
-        .favor-active {
-          background-color: #feaf18;
-          color: #fefcf0;
-          border-radius: 50%;
         }
       `}</style>
     </>

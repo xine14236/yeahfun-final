@@ -19,7 +19,7 @@ export default function DetailTest() {
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
   const [dateRange, setDateRange] = useState([])
   const { addCart } = useCart()
-  const { auth } = useAuth()
+  const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
 
   const getCampsitesInformation = async (pid) => {
@@ -42,7 +42,11 @@ export default function DetailTest() {
     const url = 'http://localhost:3005/api/detail-store-information/' + pid
 
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
       const resData = await res.json()
       console.log(resData)
 
@@ -77,20 +81,16 @@ export default function DetailTest() {
     })
   }
 
-  //收藏功能：擴充商店資料，多一個代表是否已收藏的屬性fav(布林值，預設是false)
-  // const initState =
-  //   Array.isArray(store) && store.length === 0
-  //     ? store.map((v) => ({ ...v, fav: false }))
-  //     : []
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  // const [favor, setFavor] = useState(initState)
-
   // 加入或取消最愛
   const handleFavor = async (store_id) => {
     const url = 'http://localhost:3005/api/add-fav-store/' + store_id
 
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
       const resData = await res.json()
       console.log(resData)
 
@@ -470,7 +470,7 @@ export default function DetailTest() {
                 {/* Modal */}
                 <div
                   className="modal fade  modal-xl "
-                  id="exampleModal"
+                  id={`exampleModal${campsite.rooms_campsites_id}`}
                   tabIndex={-1}
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
