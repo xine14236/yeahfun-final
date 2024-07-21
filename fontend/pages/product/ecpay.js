@@ -98,7 +98,7 @@ export default function ECPayIndex() {
     }))
 
     const res = await axiosInstance.post('/line-pay/create-order', {
-      userid: 20,
+      userid: auth.userData.id,
       products: products,
       amount: sum,
     })
