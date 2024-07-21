@@ -71,7 +71,7 @@
 } */
 
 .blogFilter{
-  background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
+  background: linear-gradient(0deg, #fdb524 0%, #fa8752 100%);
   margin-block:0 ;
   border-radius: 20px;
   padding-left: 5px;
@@ -109,6 +109,16 @@
     height: 150px;
   }
 
+}
+.goCreate{
+  position: sticky;
+  top: 100px;
+  left: 50px;
+  color: var(--secondary-3);
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 2;
+  /* margin-left: auto; */
 }
 .marginInline{
   @media (max-width: 576px){

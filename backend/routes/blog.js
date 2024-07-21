@@ -3,6 +3,7 @@ import moment from 'moment-timezone'
 import db from './../utils/connect-mysql.js'
 import upload from './../utils/upload-img-blog.js'
 import upload2 from './../utils/upload-img-blogComment.js'
+import authenticate from '#middlewares/authenticate.js'
 
 const router = express.Router()
 
@@ -247,8 +248,17 @@ router.get('/like/:b_id', async (req, res) => {
 })
 
 // 新增 還沒有連接會員
-router.post('/add', async (req, res) => {
+router.get('/create', authenticate , async (req, res) => {
+  if (!req.user.id ) {
+    return res.json({ success:false, message: '存取會員資料失敗' })
+  }
   
+  const sql = ` INSERT INTO blog ( title, author ) VALUES ( NULL , ?); `
+ 
+ 
+  const [result] = await db.query(sql,[req.user.id])
+  // insertId
+  res.json({success:true,data:result})
 })
 
 

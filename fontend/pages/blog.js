@@ -9,13 +9,20 @@ import { DatePicker, Space,Modal } from 'antd'
 import blogCategory from '@/data/blog/BlogCategory.json'
 import BS5Pagination from '@/components/common/bs5-pagination';
 
+import GoTop from '@/components/home/go-top'
+import CreateBlog from '@/components/blog/createBlog';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 const { RangePicker } = DatePicker
 const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryModal'), {
   ssr: false,
 });
 
 
+
 export default function Blog() {
+
+ 
   const initialCate = blogCategory.map((v, i) => {
     return { ...v, checked: false }
   })
@@ -190,6 +197,8 @@ export default function Blog() {
     setHoveredBlogId(null);
   };
 
+
+
   useEffect(() => {
     //  建立搜尋參數物件
   
@@ -262,7 +271,13 @@ export default function Blog() {
               className={`col-12 col-sm-2 col-lg   d-flex  align-items-center justify-content-sm-center ${styles.h150}` }
               onClick={handleSearch}
             >
-              <FaSearch  />
+                  <button
+            type="submit"
+            className={`btnGreenPc transition mx-auto `}
+            // onClick={handleSearch}
+          >
+            搜尋<FaSearch  className='ms-3'/>
+          </button>
             </div>
             <div className={`col-12  border ${styles.blogcategory}`} onClick={showModal} >點我展開分類搜尋</div>
           </div>
@@ -282,7 +297,9 @@ export default function Blog() {
         </div>
         <div className="row" id="card-container"></div>
       </div>
-      <div className="container">
+      <div className={`container position-relative `}>
+       
+      <CreateBlog />
       
         {blogs.map((v, i) => {
           return (
@@ -368,6 +385,8 @@ export default function Blog() {
         />
         </div>
       </div>
+      
+      <GoTop />
       <BlogCategoryModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} initialCate={initialCate} category={category} setCategory={setCategory} toggleCheckbox={toggleCheckbox} handleCategoryCheckedAll={handleCategoryCheckedAll} handleSearch={handleSearch} />
       
     </>
