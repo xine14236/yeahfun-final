@@ -4,8 +4,8 @@ import ReactQuill from 'react-quill'
 // import 'react-quill/dist/quill.bubble.css'
 import 'react-quill/dist/quill.snow.css'
 
-export default function MyComponent() {
-  const [value, setValue] = useState('')
+export default function MyComponent({value='', setValue=()=>{},blogId=2}) {
+  
   const reactQuillRef = useRef(null);
 
   const uploadToCloudinary = async (file)=> {
@@ -13,7 +13,7 @@ export default function MyComponent() {
     formData.append("photos", file);
    
     const res = await fetch(
-      `http://localhost:3005/api/blog/uploads/23`,
+      `http://localhost:3005/api/blog/uploads/${blogId}`,
       { method: "POST", body: formData }
     );
     const data = await res.json();
