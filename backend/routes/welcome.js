@@ -142,8 +142,8 @@ router.post('/login', async (req, res) => {
     expiresIn: '3d',
   })
 
-  // 使用httpOnly cookie來讓瀏覽器端儲存access token
-  res.cookie('accessToken', accessToken, { httpOnly: true })
+  // 使用httpOnly cookie來讓瀏覽器端儲存access token(先改成 false)
+  res.cookie('accessToken', accessToken, { httpOnly: false })
 
   // 傳送access token回應(例如react可以儲存在state中使用)
   res.json({

@@ -1,15 +1,21 @@
 import express from 'express'
 const router = express.Router()
 
+// 中介軟體，存取隱私會員資料用
+import authenticate from '#middlewares/authenticate.js'
+
 // 資料庫使用: 直接使用 mysql 來查詢
 import db from '#configs/mysql.js'
 
 // GET - 得到單筆資料(注意，有動態參數時要寫在 GET 區段最後面)
-router.get('/:stores_id', async function (req, res) {
+router.get('/:stores_id', authenticate, async function (req, res) {
   // 轉為數字
   const id = +req.params.stores_id || 0
 
-  const [rows] = await db.query(`SELECT * FROM store WHERE stores_id = ?`, [id])
+  const [rows] = await db.query(
+    `SELECT store.*, fav.id as like_id FROM store LEFT JOIN (SELECT favorite.id, favorite.pid, favorite.uid FROM favorite WHERE uid = ?) fav ON store.stores_id = fav.pid WHERE stores_id = ?`,
+    [req.user.id, id]
+  )
   const store = rows[0]
 
   //取得 tag_name

@@ -1,5 +1,5 @@
 import Footer from './footer'
-import Header from './header'
+import Header from '../../home/header'
 import Head from 'next/head'
 
 export default function HomeLayout({ title = 'HomeList', children }) {
@@ -9,7 +9,7 @@ export default function HomeLayout({ title = 'HomeList', children }) {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width" />
       </Head>
-      <Header />
+
       <main>{children}</main>
       <Footer />
     </>

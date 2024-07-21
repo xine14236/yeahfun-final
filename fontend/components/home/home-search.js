@@ -1,9 +1,10 @@
-import styles from '@/components/layout/home-layout/header.module.scss'
+import styles from '@/components/home/header.module.scss'
 import { Select, DatePicker, Input } from 'antd'
 const { RangePicker } = DatePicker
 import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+
 
 export default function HomeSearch() {
   const router = useRouter()
