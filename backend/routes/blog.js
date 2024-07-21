@@ -5,12 +5,14 @@ import upload from './../utils/upload-img-blog.js'
 import upload2 from './../utils/upload-img-blogComment.js'
 import authenticate from '#middlewares/authenticate.js'
 
+
 const router = express.Router()
 
 const getBlogData = async (req) => {
   const conditions = []
   const dateFormat1 = 'YYYY-MM-DD HH:mm:ss'
   const dateFormat2 = 'YYYY年MM月DD日 '
+  // const memberId = req.user.id || 0
 
   // let test1 =moment('Thu Jul 25 2024 00:00:00 ').format(dateFormat1)
   // console.log({test1})
@@ -116,10 +118,14 @@ const getBlogData = async (req) => {
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id
    Left join blog_img bi on b.id=bi.blog_id
    left join customer c on b.author=c.id
+
      ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`
     const [rows] = await db.query(sql)
-
+    // , li.id fav_id
+    // LEFT JOIN (
+    //   SELECT * FROM favorite_blog WHERE customer_id=${memberId}
+    // ) li ON b.id =li.blog_id
     rows.forEach((r) => {
       r.date = ''
       if(r.img_name){

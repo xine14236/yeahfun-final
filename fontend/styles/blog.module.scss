@@ -47,8 +47,18 @@
 .color2 {
   color: #929311;
 }
+.color2:hover{
+  color: var(--secondary-3);
+}
 .color1 {
   color: #389b87;
+}
+.color1:hover {
+  color: var(--secondary-3);
+}
+
+.color3:hover{
+  color: var(--secondary-3);
 }
 .order1 {
   order: 1;
