@@ -26,7 +26,7 @@ const linePayClient = createLinePayClient({
 // 在資料庫建立order資料(需要會員登入才能使用)
 router.post('/create-order', authenticate, async (req, res) => {
   // 會員id由authenticate中介軟體提供
-  const userId = req.body.userid
+  //const userId = req.body.userid
 
   // 產生 orderId 與 packageId
   const orderId = uuidv4()
@@ -75,7 +75,7 @@ router.post('/create-order', authenticate, async (req, res) => {
       startdate: product.startdate,
       enddate: product.enddate,
       price: subtotal, // 使用計算出的 subtotal
-      totalday: product.totalday,
+
     }
   })
 

@@ -160,14 +160,14 @@ router.get('/payment', authenticate, async (req, res, next) => {
 
     const htmlContent = `
     <!DOCTYPE html>
-    <html>
+    <html  style="display:none">
     <head>
         <title></title>
     </head>
     <body>
         <form method="post" action="${APIURL}">
     ${inputs}
-    <input type="submit" value="送出參數" style="display:none">
+    <input type="submit" value="送出參數">
         </form>
     <script>
       document.forms[0].submit();
