@@ -19,7 +19,7 @@ export default function DetailTest() {
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
   const [dateRange, setDateRange] = useState([])
   const { addCart } = useCart()
-  const { auth } = useAuth()
+  const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
 
   const getCampsitesInformation = async (pid) => {
@@ -90,7 +90,11 @@ export default function DetailTest() {
     const url = 'http://localhost:3005/api/add-fav-store/' + store_id
 
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
       const resData = await res.json()
       console.log(resData)
 
