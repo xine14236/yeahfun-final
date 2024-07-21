@@ -7,6 +7,36 @@ import sequelize from '#configs/db.js'
 const { Customer } = sequelize.models
 import db from '#configs/mysql.js'
 
+// GET - 得到訂單資料
+router.get('/:id/order', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM orders WHERE customer_id = ?',
+      [id]
+    )
+    const order = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { order },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
+
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字
   const id = Number(req.params.id)

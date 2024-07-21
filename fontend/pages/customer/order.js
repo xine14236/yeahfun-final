@@ -21,15 +21,14 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  //   const [errors, setErrors] = useState({
-  //     email: '',
-  //     name: '',
-  //     phone: '',
-  //     gender: '',
-  //     birthday: '',
-  //     address: '',
-  //   })
-  // 按鈕換色
+  const [order, setOrder] = useState([
+    // campId: '',
+    // campName: '',
+    // startDate: '',
+    // endDate: '',
+    // price: '',
+    // status: '',
+  ])
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -81,10 +80,25 @@ export default function Index() {
       console.error(e)
     }
   }
-  const handleFieldChange = (e) => {
-    console.log(e.target.name, e.target.value, e.target.type)
-    setCustomer({ ...customer, [e.target.name]: e.target.value })
-    // [e.target.name]: e.target.value這樣可以動態的設定物件的屬性名稱
+  const getOrder = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/order`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+
+      if (resData.status === 'success' && Array.isArray(resData.data.order)) {
+        // const order = resData.data.order
+        setOrder(resData.data.order)
+        // 設定會員資料(除了密碼)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1500)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -129,9 +143,12 @@ export default function Index() {
 
     if (userId) {
       getCustomer()
+      getOrder()
     } else {
       console.log('need check')
+
       handleCheck()
+
       // console.og('e',auth.userData.id);
       setUserId(auth.userData.id)
     }
@@ -179,20 +196,22 @@ export default function Index() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <Image
-                        src="/detail/01.jpg"
-                        alt="camp1"
-                        width={160}
-                        height={120}
-                      />
-                    </td>
-                    <td>哈哈哈路營地</td>
-                    <td>2024/08/10~2024/08/12</td>
-                    <td>NT5000</td>
-                    <td>已付款</td>
-                  </tr>
+                  {order.map((v, i) => (
+                    <tr key={v.id}>
+                      <td>
+                        <Image
+                          src="/detail/01.jpg"
+                          alt="camp1"
+                          width={160}
+                          height={120}
+                        />
+                      </td>
+                      <td>{v.store_id}</td>
+                      <td>{v.checkin_date}</td>
+                      <td> {v.total_price}</td>
+                      <td>{v.payment_status}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
