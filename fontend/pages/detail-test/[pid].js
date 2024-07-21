@@ -182,6 +182,7 @@ export default function DetailTest() {
               alt="Camping scene with tents"
               width={500} // 圖片的實際寬度
               height={100} // 圖片的實際高度
+              priority
               style={{
                 borderRadius: '5px',
                 width: '100%',
