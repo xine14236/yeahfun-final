@@ -85,19 +85,20 @@ export default function ECPayIndex() {
     sumTotal()
   }, [cartItems])
 
+  //const userid = auth?.useData?.id
+
   const createOrderAndPay = async () => {
     const products = cartItems.map((v) => ({
-      store_id: 1,
-      room_id: 100,
+      store_id: v.stores_id,
+      room_id: v.rooms_campsites_id,
       startdate: v.startDate,
       enddate: v.endDate,
       normal_price: v.normal_price,
-      holiday_price: v.holiday_price,
-      totalday: v.totalDays,
+      holiday_price: v.holiday_price
     }))
 
     const res = await axiosInstance.post('/line-pay/create-order', {
-      userid: 99,
+      userid: 20,
       products: products,
       amount: sum,
     })
@@ -215,7 +216,7 @@ export default function ECPayIndex() {
                           地點：
                         </span>
                         <span className={`fs-6 ${styles.textColor}`}>
-                          556南投縣信義鄉信筆巷170-5號
+                        {v.store_name}
                         </span>
                       </div>
                     </div>
@@ -227,13 +228,13 @@ export default function ECPayIndex() {
                           房號：
                         </span>
                         <span className={`fs-6 ${styles.textColor}`}>
-                          {v.name}
+                          {v.rooms_campsites_name}
                         </span>
                       </div>
                     </div>
                     <img
                       className="w-50"
-                      src={`/productDetail/${v.img}`}
+                      src={`/productDetail/${v.storeImage}`}
                       alt="camping image"
                     />
                   </div>
