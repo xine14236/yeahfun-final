@@ -4,6 +4,9 @@ import ListNavbar from '@/components/layout/home-layout/home-navbar'
 import styles from '@/styles/about.module.scss'
 import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 import GoTop from '@/components/home/go-top'
+import Camp from '@/components/icons/camp'
+import Children from '@/components/icons/children'
+import Tree from '@/components/icons/tree'
 
 export default function About() {
   return (
@@ -34,7 +37,9 @@ export default function About() {
             >
               <div className="block">
                 <div className="section-title">
-                  <h2>減碳慢活</h2>
+                  <h2>
+                    <Tree size={30} color={'#389b87 '} /> &nbsp;減碳慢活
+                  </h2>
                 </div>
                 <p>
                   我們致力於推廣減碳慢活的理念，鼓勵大家以低碳的方式享受露營生活。我們提倡：
@@ -62,6 +67,7 @@ export default function About() {
             <ScrollMotionItem element="div" type="left" className="col-sm-5">
               <div className="block">
                 <Image
+                  className={styles.aboutImg}
                   src="/images/about/earth.jpg"
                   alt="earth"
                   width={550}
@@ -79,6 +85,7 @@ export default function About() {
             >
               <div className="block">
                 <Image
+                  className={styles.aboutImg}
                   src="/images/about/forest.jpg"
                   alt="forest"
                   width={550}
@@ -89,8 +96,11 @@ export default function About() {
             </ScrollMotionItem>
             <ScrollMotionItem element="div" type="left" className="col-sm-7">
               <div className="block">
-                <div className="section-title">
-                  <h2>響應無痕山林</h2>
+                <div className={`section-title ${styles.sectionTitle}`}>
+                  <h2>
+                    <Camp color={'#389b87 '} size={30} />
+                    &nbsp;響應無痕山林
+                  </h2>
                 </div>
                 <p>
                   我們積極響應無痕山林的理念，提倡所有露營者在享受大自然的同時，也要尊重和保護環境。無痕山林的七大原則是我們的重要指導方針：
@@ -131,7 +141,10 @@ export default function About() {
             >
               <div className="block">
                 <div className="section-title">
-                  <h2>親子探索教育</h2>
+                  <h2>
+                    <Children size={30} color={'#389b87 '} />
+                    &nbsp;親子探索教育
+                  </h2>
                 </div>
                 <p>
                   在我們的露營地，我們深信大自然是最好的教室。我們設計了一系列親子探索教育活動，旨在讓孩子們在遊戲和探險中學習，培養他們對大自然的熱愛和保護意識。我們的活動包括：
@@ -156,6 +169,7 @@ export default function About() {
             <ScrollMotionItem element="div" type="left" className="col-sm-5">
               <div className="block">
                 <Image
+                  className={styles.aboutImg}
                   src="/images/about/family2.jpg"
                   alt="family"
                   width={550}

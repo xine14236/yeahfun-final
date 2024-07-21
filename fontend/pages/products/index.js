@@ -3,7 +3,7 @@ import { P_LIST } from '@/configs/api-path'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from '@/styles/list.module.scss'
-import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
+import { Select, Input, Slider, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
 import dayjs from 'dayjs'
 
@@ -16,7 +16,6 @@ import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 import GoTop from '@/components/home/go-top'
 
 import Image from 'next/image'
-import { set } from 'lodash'
 
 export default function Products() {
   const router = useRouter()
