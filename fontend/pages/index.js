@@ -425,9 +425,8 @@ export default function Home() {
           loop={true}
           onSlideChange={handleSlideChange}
           navigation={true}
-          allowTouchMove={false}
           modules={[Pagination, Navigation]}
-          className="mySwiper3"
+          className="mySwiper"
         >
           {tags.map((tagSet, idx) => (
             <SwiperSlide key={idx}>
@@ -436,45 +435,25 @@ export default function Home() {
                   <div className={`row ${styles.myRow}`}>
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
-                        <div className={`card ${styles.productCard}`}>
-                          <div className={styles.favor}>
-                            <Favor size={40} />
-                          </div>
+                        <div className="card">
+                          <Link href="#/">
+                            {/* <svg className={styles.iconLike}>
+                            <use href="#like" />
+                          </svg> */}
+                          </Link>
                           <Link href={`/detail-test/${v.stores_id}`}>
-                            <Swiper
-                              onSwiper={(swiper) => onSwiperInit(swiper, i)}
-                              spaceBetween={30}
-                              centeredSlides={true}
-                              autoplay={{
-                                delay: 2500,
-                                disableOnInteraction: false,
-                                enabled: false,
+                            <Image
+                              src={`/detail/${v.img_name.split(',')[0]}`}
+                              className={styles.cardImage}
+                              alt="tents"
+                              width={300}
+                              height={200}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain',
                               }}
-                              loop={true}
-                              pagination={true}
-                              modules={[Autoplay, Pagination]}
-                              className="mySwiper1"
-                            >
-                              {v.img_name
-                                .split(',')
-                                .slice(0, 6)
-                                .map((img, index) => (
-                                  <SwiperSlide key={index}>
-                                    <Image
-                                      src={`/detail/${img}`}
-                                      className={styles.cardImage}
-                                      alt="tents"
-                                      width={300}
-                                      height={200}
-                                      style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                        objectFit: 'contain',
-                                      }}
-                                    />
-                                  </SwiperSlide>
-                                ))}
-                            </Swiper>
+                            />
                           </Link>
                           <div className={styles.cardBody}>
                             <div className={styles.cardTags}>
