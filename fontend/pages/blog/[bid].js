@@ -94,7 +94,7 @@ export default function blogDetail() {
   </span>
   <span className={`${styles.span1} fs-3 `}>
 
-   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.likes_count}
+   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.favorite_count}
   </span>
  
   <span className={`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>

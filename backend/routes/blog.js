@@ -168,7 +168,7 @@ router.get('/',authenticate, async (req, res) => {
 })
 
 // 收藏 還沒有連接會員
-router.get('/fav/:b_id', async (req, res) => {
+router.get('/fav/:b_id',authenticate, async (req, res) => {
   const output = {
     success: false,
     action: '',
@@ -192,13 +192,13 @@ router.get('/fav/:b_id', async (req, res) => {
   // 3.該項有沒有加入過
   const sql2 = `SELECT id FROM favorite_blog WHERE customer_id=? AND blog_id=?`
   // ********************先用req給
-  const [rows2] = await db.query(sql2, [req.query.customer, req.params.b_id])
+  const [rows2] = await db.query(sql2, [req.user.id, req.params.b_id])
   let result
   if (rows2.length < 1) {
     // 沒有加入過
     output.action = 'add'
     const sql3 = `INSERT INTO favorite_blog (customer_id, blog_id) VALUES (?, ?)`
-    ;[result] = await db.query(sql3, [req.query.customer, req.params.b_id])
+    ;[result] = await db.query(sql3, [req.user.id, req.params.b_id])
   } else {
     // 已經加入了
     output.action = 'remove'
@@ -211,7 +211,7 @@ router.get('/fav/:b_id', async (req, res) => {
 })
 
 // 喜歡
-router.get('/like/:b_id', async (req, res) => {
+router.get('/like/:b_id',authenticate , async (req, res) => {
   const output = {
     success: false,
     action: '',
@@ -235,13 +235,13 @@ router.get('/like/:b_id', async (req, res) => {
   // 3.該項有沒有加入過
   const sql2 = `SELECT id FROM likes_blog WHERE customer_id=? AND blog_id=?`
   // ********************先用req給
-  const [rows2] = await db.query(sql2, [req.query.customer, req.params.b_id])
+  const [rows2] = await db.query(sql2, [req.user.id, req.params.b_id])
   let result
   if (rows2.length < 1) {
     // 沒有加入過
     output.action = 'add'
     const sql3 = `INSERT INTO likes_blog (customer_id, blog_id) VALUES (?, ?)`
-    ;[result] = await db.query(sql3, [req.query.customer, req.params.b_id])
+    ;[result] = await db.query(sql3, [req.user.id, req.params.b_id])
   } else {
     // 已經加入了
     output.action = 'remove'
@@ -405,8 +405,10 @@ router.get('/:bid', async (req, res) => {
   const row1 = rows1[0]
 
   const sql2 = `SELECT   b.id, b.title, b.create_at, 
+  bi.img_name,
     COALESCE(lb.likes_count, 0) AS likes_count
    FROM blog b 
+   Left join blog_img bi on b.id=bi.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  
    Where b.title is not null
   GROUP BY b.id ORDER BY likes_count DESC ,b.id DESC
@@ -415,7 +417,9 @@ LIMIT 5 `
 const dateFormat3 = 'YYYYMMDD'
   const [row2]=await db.query(sql2)
   row2.forEach((r) => {
-   
+    if(r.img_name){
+      r.img_name=r.img_name.split(',')[0]
+    }
     // "JS 的Date 類型 轉換成日期格式的字串"
     if (r.create_at) {
       r.create_at = moment(r.create_at).format(dateFormat3)
