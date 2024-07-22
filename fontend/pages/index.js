@@ -193,8 +193,14 @@ export default function Home() {
   return (
     <>
       <Header />
+      <ScrollMotionContainer
+        once={true}
+        amount={0.1}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
 
-      <div className={`${styles.myCardList} ${styles.section02}`}>
         <Image
           className={styles.section02DecorateTop}
           src="/images/homepage/decorate.png"
@@ -202,7 +208,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -213,8 +220,10 @@ export default function Home() {
             <h3 className="titleText">HOT</h3>
             <p>熱門營地</p>
           </div>
-        </div>
-        <div className="container">
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem element="div" type="up" className="container">
+          {/* <div className="container"> */}
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
               {products.map((v, i) => (
@@ -295,10 +304,18 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={styles.section03}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.4}
+        element="div"
+        className={styles.section03}
+      >
+        {/* <div className={styles.section03}> */}
         <Image
           className={styles.section04DecorateTop}
           src="/images/homepage/decorate.png"
@@ -306,7 +323,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -317,7 +335,8 @@ export default function Home() {
             <h3 className="titleText">Activity</h3>
             <p>最新消息</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <Image
           className={styles.section03Bg}
           src="/images/homepage/home-bg01.jpg"
@@ -326,7 +345,12 @@ export default function Home() {
           height={1080}
           style={{ width: '100%' }}
         />
-        <div className={`row justify-content-center ${styles.rowActivity1}`}>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`row justify-content-center ${styles.rowActivity1}`}
+        >
+          {/* <div className={`row justify-content-center ${styles.rowActivity1}`}> */}
           <Swiper
             loop={true}
             watchSlidesProgress={true}
@@ -372,7 +396,8 @@ export default function Home() {
               )
             })}
           </Swiper>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <div className={`row justify-content-center ${styles.rowActivity2}`}>
           {blog.map((v, i) => {
             return (
@@ -405,11 +430,19 @@ export default function Home() {
             )
           })}
         </div>
-      </div>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={`${styles.myCardList} ${styles.section04}`}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.6}
+        element="div"
+        className={`${styles.myCardList} ${styles.section04}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section04}`}> */}
         {/* 代辦事項: like hover，輪播動畫*/}
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -420,7 +453,8 @@ export default function Home() {
             <h3 className="titleText">theme</h3>
             <p>主題營地</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
 
         <div className={styles.paginationButtons}>
           {tags.map((tagSet, index) => (
@@ -435,6 +469,7 @@ export default function Home() {
             </button>
           ))}
         </div>
+
         <Swiper
           onSwiper={setSwiperInstance}
           slidesPerView={1}
@@ -499,7 +534,9 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+
+        {/* </div> */}
+      </ScrollMotionContainer>
 
       <Section05 />
 
