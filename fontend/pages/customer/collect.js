@@ -179,16 +179,16 @@ export default function Index() {
             ))}
           </ul>
           <div className={styles.memberFrame}>
-            <div className={styles.infoFrame}>
+            <div className={styles.collectInfoFrame}>
               {collect.map((v, i) => (
-                <div key={v.id} className={styles.collectCard}>
+                <span key={v.id} className={styles.collectCard}>
                   <div>
                     <Image
                       className={styles.chiiListImage}
                       src={`/detail/${img[i][0]}`}
                       alt="camp1"
-                      width={376}
-                      height={264}
+                      width={300}
+                      height={200}
                     />
                   </div>
                   <div className={styles.chiiCardBody}>
@@ -236,7 +236,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </span>
               ))}
             </div>
           </div>

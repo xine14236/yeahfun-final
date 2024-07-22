@@ -113,6 +113,19 @@
   align-self: stretch;
   border-radius: 10px;
   background: #fff;
+  flex-wrap: wrap;
+}
+.collectInfoFrame {
+  display: flex;
+  flex-direction: row; /* 水平排列 */
+  flex-wrap: wrap; /* 允許換行 */
+  justify-content: center; /* 靠左對齊 */
+  min-height: 600px;
+  padding: 10px;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #fff;
 }
 .memberList {
   display: flex;
@@ -166,23 +179,26 @@
   background: var(--secondary-3, #fdaf17);
   color: var(--white, #fff);
 }
-.collectCard {
+.collectCard { 
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
+  // flex: 1 1 calc(30% - 20px); /* 調整為每行 3 個卡片，減去間距 */
+  box-sizing: border-box; /* 確保內邊距和邊框包含在寬度內 */
+  margin: 10px; /* 設置卡片之間的間距 */
 }
 
 .chiiListImage {
-  width: 376px;
-  height: 264px;
+  width: 300px;
+  height: 200px;
   border-radius: 10px;
   background: #d9d9d9;
 }
 
 .chiiCardBody {
   display: flex;
-  width: 372px;
+  width: 300px;
   height: 120px;
   padding: 24px;
   flex-direction: column;
@@ -279,7 +295,7 @@
   font-weight: 600;
   line-height: normal;
   border-collapse: separate;
-  border-radius: 10px; 
+  border-radius: 10px;
   overflow: hidden;
 }
 .infoFrame th {
@@ -294,6 +310,6 @@
   color: var(--grey-800, #575757);
   border-bottom: var(--grey-400, #c4c4c4) 1px solid;
 }
-.orderTr{
+.orderTr {
   border-radius: 10px;
 }
