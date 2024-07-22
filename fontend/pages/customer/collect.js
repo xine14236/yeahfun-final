@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
 import Loader from '@/components/loader'
 import Link from 'next/link'
@@ -25,7 +26,7 @@ export default function Index() {
   })
 
   // 按鈕換色
-
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -45,6 +46,11 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
@@ -77,42 +83,6 @@ export default function Index() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    // 阻擋表單預設送出行為
-    e.preventDefault()
-
-    try {
-      const updatedCustomer = {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        address: customer.address,
-      }
-
-      if (customer.password) {
-        updatedCustomer.password = customer.password
-      }
-
-      const url = `http://localhost:3005/api/customer/${userId}/profile`
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCustomer),
-      })
-
-      const resData = await res.json()
-      console.log(resData)
-
-      alert('修改成功')
-    } catch (e) {
-      console.error(e)
-    }
-  }
   const getCollect = async () => {
     const url = `http://localhost:3005/api/customer/${userId}/collect`
     try {
@@ -179,16 +149,16 @@ export default function Index() {
             ))}
           </ul>
           <div className={styles.memberFrame}>
-            <div className={styles.infoFrame}>
+            <div className={styles.collectInfoFrame}>
               {collect.map((v, i) => (
-                <div key={v.id} className={styles.collectCard}>
+                <span key={v.id} className={styles.collectCard}>
                   <div>
                     <Image
                       className={styles.chiiListImage}
                       src={`/detail/${img[i][0]}`}
                       alt="camp1"
-                      width={376}
-                      height={264}
+                      width={300}
+                      height={200}
                     />
                   </div>
                   <div className={styles.chiiCardBody}>
@@ -236,7 +206,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </span>
               ))}
             </div>
           </div>
