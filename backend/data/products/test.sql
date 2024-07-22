@@ -58,3 +58,17 @@ WHERE (name LIKE '%e%')
     AND price <= 10000
 ORDER BY price ASC;
 -- LIMIT 10 OFFSET 0;
+
+SELECT 
+    orders.*, 
+    store.name AS store_name, 
+    stores_img.img_name AS store_img_name 
+  FROM 
+    orders 
+  JOIN 
+    store ON orders.store_id = store.stores_id
+  LEFT JOIN 
+    (SELECT stores_id, MIN(img_name) AS img_name FROM stores_img GROUP BY stores_id) AS stores_img 
+    ON orders.store_id = stores_img.stores_id 
+  WHERE 
+    orders.customer_id = 1

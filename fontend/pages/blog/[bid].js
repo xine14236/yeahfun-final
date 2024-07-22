@@ -66,6 +66,25 @@ export default function blogDetail() {
     getBlog(router.query.bid)
   }
 
+  const handleClickHeart = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/like/${id}?customer=1`,{
+      credentials: 'include', 
+    method: 'GET', // or POST/PUT depending on your use case
+    headers: {
+      'Content-Type': 'application/json',
+    },
+ 
+  })
+    const resData = await res.json()
+    console.log(resData.action)
+    if (resData.action === 'add') {
+      toast.success('已喜歡此文章！');
+    } else if (resData.action === 'remove') {
+      toast.error('已取消喜歡此文章！');
+    }
+    getBlog(router.query.bid)
+  }
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
@@ -111,7 +130,7 @@ export default function blogDetail() {
 
 <div className={`col-12 border likeContainer d-flex ${styles.likeContainer}`}>
 
-  <span className={`${styles.span1} fs-3 me-md-5 ms-md-5 ms-3 me-3 `}>
+  <span className={`${styles.span1} fs-3 me-md-5 ms-md-5 ms-3 me-3 `} onClick={()=>{handleClickHeart(blog.id)}}>
 
    <Image src={heart} height={20} width={20} className='me-2'/>{blog.likes_count}
   </span>
