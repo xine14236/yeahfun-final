@@ -163,6 +163,7 @@ export default function DetailTest() {
             <Share />
             <FavStoreBtn2
               initFull={store.like_id}
+              width={30}
               handler={() => {
                 handleFavor(store.stores_id)
               }}
