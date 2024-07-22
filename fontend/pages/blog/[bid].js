@@ -3,6 +3,7 @@ import styles from '@/styles/blogDetail.module.scss'
 import Carousel from '@/components/blog/carousel'
 import { useRouter } from 'next/router'
 import { FaPencil } from "react-icons/fa6";
+import toast, { Toaster } from 'react-hot-toast'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -45,6 +46,26 @@ export default function blogDetail() {
     }
   }
 
+  
+  const handleClickStar = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`,{
+      credentials: 'include', 
+    method: 'GET', // or POST/PUT depending on your use case
+    headers: {
+      'Content-Type': 'application/json',
+    },
+ 
+  })
+    const resData = await res.json()
+    console.log(resData.action)
+    if (resData.action === 'add') {
+      toast.success('已收藏此文章！');
+    } else if (resData.action === 'remove') {
+      toast.error('已取消收藏此文章！');
+    }
+    getBlog(router.query.bid)
+  }
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
@@ -60,7 +81,9 @@ export default function blogDetail() {
       <div className="row ">
         <Carousel />
       </div>
+
       <div className="row " >
+      <Toaster  reverseOrder={false} />
         <div className={`col-12 col-md-9 border ${styles.cc} `}>
         <div className="col-12">
       <h2>{blog.title}</h2>
@@ -92,9 +115,9 @@ export default function blogDetail() {
 
    <Image src={heart} height={20} width={20} className='me-2'/>{blog.likes_count}
   </span>
-  <span className={`${styles.span1} fs-3 `}>
+  <span className={`${styles.span1} fs-3 `}  onClick={()=>{handleClickStar(blog.id)}}>
 
-   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.likes_count}
+   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.favorite_count}
   </span>
  
   <span className={`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>

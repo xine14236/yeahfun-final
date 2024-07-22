@@ -390,7 +390,9 @@ export default function Blog() {
                           <h5 className={`card-text ${styles.color3}`}>
                             {stripHtmlTags(v.content)
                               .replace(/\\r\\n/g, '')
-                              .replace(/\s+/g, '')}
+                              .replace(/\s+/g, '')
+                              .replace(/\&nbsp;/g, '')}
+                              
                           </h5>
                            </Link>
                          
