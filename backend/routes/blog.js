@@ -288,9 +288,14 @@ router.post('/save',authenticate, async (req, res) => {
     const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
     await db.query(deleteSql, [req.body.blogId]);
 
+    const tags = req.body.tags || [];
+    if (!tags.includes(7)) {
+      tags.push(7);
+    }
+
     // 插入新的标签
     const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
-    const tagValues = req.body.tags.map(tag => [req.body.blogId, tag]);
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
     const [insertResult] = await db.query(insertSql, [tagValues]);
 
     output.result2 = insertResult;
@@ -381,6 +386,61 @@ if (req.files) {
   res.json(output)
 
 
+})
+
+router.get('/edit/:bid', authenticate , async (req, res) => {
+ 
+  const sql = ` SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids
+   FROM blog b Left join  blog_category bc ON b.id=bc.blog_id   where b.id=${req.params.bid} GROUP BY b.id
+    `
+ 
+ 
+  const [rows] = await db.query(sql)
+  const row=rows[0]
+  // insertId
+  res.json({success:true,data:{
+    blog:row
+  }})
+})
+
+router.post('/update' , async (req, res) => {
+ 
+  const output={
+    success:false,
+    info:'',
+    
+  }
+ 
+  const sql = `UPDATE blog set title=? , content=? where id=?`
+  const [result]= await db.query(sql,[req.body.title, req.body.content, req.body.blogId])
+  output.result1=result
+  output.info='修改成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
+    await db.query(deleteSql, [req.body.blogId]);
+
+    const tags = req.body.tags || [];
+   
+if(tags.length > 0){
+    // 插入新的标签
+    const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
+    const [insertResult] = await db.query(insertSql, [tagValues]);
+
+    output.result2 = insertResult;
+}
+
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
 })
 
 router.get('/:bid', async (req, res) => {
