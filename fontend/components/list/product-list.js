@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
 import styles from '@/styles/list.module.scss'
-import Favor from '@/components/icons/favor'
+import FavStoreBtn3 from '../icons/fav-store-btn3'
 import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
@@ -12,6 +12,7 @@ const ProductList = ({ products }) => {
   const [swiperInstances, setSwiperInstances] = useState([])
 
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
+  const [fav, setFav] = useState(true)
 
   useEffect(() => {
     setSwiperInstances((prevInstances) =>
@@ -52,7 +53,14 @@ const ProductList = ({ products }) => {
               onMouseLeave={() => handleMouseLeave(i)}
             >
               <div className={styles.favor}>
-                <Favor size={40} />
+                <FavStoreBtn3
+                  width={45}
+                  onClick={() => {
+                    setFav(!fav)
+                    console.log(fav)
+                  }}
+                  fav={fav}
+                />
               </div>
               <Link href={`/detail-test/${v.stores_id}`}>
                 <Swiper
@@ -60,7 +68,7 @@ const ProductList = ({ products }) => {
                   spaceBetween={30}
                   centeredSlides={true}
                   autoplay={{
-                    delay: 2500,
+                    delay: 2000,
                     disableOnInteraction: false,
                     enabled: false, // 初始化時禁用自動播放
                   }}

@@ -3,7 +3,7 @@ import { P_LIST } from '@/configs/api-path'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useLoader } from '@/hooks/use-loader'
-
+import NextBreadCrumb from '@/components/common/next-breadcrumb'
 import styles from '@/styles/list.module.scss'
 import { Select, Input, Slider, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
@@ -259,14 +259,8 @@ export default function Products() {
           </button>
         </form>
       </div>
-      {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
-      <ScrollMotionContainer
-        once={true}
-        element="div"
-        className={`${styles.myCardList} ${styles.section02}`}
-      >
-        <ScrollMotionItem element="div" type="up" className="title">
-          {/* <div className="title"> */}
+      <div className={`${styles.myCardList} ${styles.section02}`}>
+        <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -275,15 +269,12 @@ export default function Products() {
           />
           <div className="titleContent">
             <h3 className="titleText">List</h3>
-            <p>目錄</p>
+            {/* <p>目錄</p> */}
+            <NextBreadCrumb isHomeIcon isChevron bgClass="" />
           </div>
-          {/* </div> */}
-        </ScrollMotionItem>
-        <ScrollMotionItem
-          element="div"
-          type="up"
-          className={`container-fluid ${styles.listContainer}`}
-        >
+        </div>
+
+        <div className={`container-fluid ${styles.listContainer}`}>
           <div className="row">
             {loading ? <Loading /> : <ProductList products={products} />}
             <div
@@ -301,10 +292,8 @@ export default function Products() {
               )}
             </div>
           </div>
-          {/* </div> */}
-        </ScrollMotionItem>
-      </ScrollMotionContainer>
-      {/* </div> */}
+        </div>
+      </div>
       <GoTop />
     </>
   )
