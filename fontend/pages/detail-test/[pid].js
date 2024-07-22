@@ -10,6 +10,7 @@ import Share from '@/components/icons/share'
 import FavStoreBtn from '@/components/icons/fav-store-btn'
 import Swiper from 'swiper'
 import Carousel from '@/components/product/detail/carousel'
+import GoTop from '@/components/home/go-top'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -526,6 +527,7 @@ export default function DetailTest() {
           <Carousel />
         </div>
       </div>
+      <GoTop/>
       <style jsx>
         {`
           .storeTitle {

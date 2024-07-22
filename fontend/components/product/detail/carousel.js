@@ -21,11 +21,9 @@ export default function Carousel() {
         slidesPerView={3}
         navigation={true}
         centeredSlides={true}
+        loop={true}
         pagination={{
           type: 'fraction',
-        }}
-        history={{
-          key: 'slide',
         }}
         modules={[Navigation, Pagination, History]}
         className="mySwiper"
