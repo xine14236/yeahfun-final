@@ -43,7 +43,7 @@ export default function MyApp({ Component, pageProps }) {
     <CartProviderNew>
       <ConfigProvider theme={theme}>
         <AuthProvider>
-          <LoaderProvider close={5} CustomLoader={CircleLoader}>
+          <LoaderProvider close={4} CustomLoader={CircleLoader}>
             <CartProvider>
               {getLayout(<Component {...pageProps} />)}
             </CartProvider>
