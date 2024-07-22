@@ -65,7 +65,7 @@ export default function Carousel() {
 
         <SwiperSlide>
           <Image
-            src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+            src="http://localhost:3005/img-blog/20240718142201397818.webp"
             className="img-fluid"
             alt="..."
             width={400}

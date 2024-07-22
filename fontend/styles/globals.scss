@@ -374,26 +374,38 @@ a {
 }
 
 .ql-editor h1 {
-  font-size: 48px;
-  font-weight: 700;
+  font-size: 48px !important;
+  font-weight: 700 !important;
 }
 .ql-editor h2 {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 32px !important;
+  font-weight: 700 !important;
 }
 .ql-editor h3 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 28px !important;
+  font-weight: 700 !important;
 }
 .ql-editor h4 {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 24px !important;
+  font-weight: 600 !important;
 }
 .ql-editor h5 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 20px !important;
+  font-weight: 600 !important;
 }
 .ql-editor h6 {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+.ql-editor a {
+  color: var(--secondary-3) !important;
+  font-weight: bold !important; 
+  
+}
+.ql-editor img {
+  max-width: 500px;
+            max-height: 350px;
+            display: block;   /* 使图片独占一行 */
+            margin: 1rem 0;
 }
