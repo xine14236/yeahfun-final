@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
       }
 
       alert('成功登出')
-      router.push('/')
+      router.push('/welcome/login')
     } catch (e) {
       console.error(e)
     }

@@ -20,9 +20,9 @@ export default function HomeMemberBar() {
             <Link href="/customer" className={styles.navA}>
               <h5>會員中心</h5>
             </Link>
-            <div className={styles.navA}>
+            <Link href="#/" onClick={handleLogout} className={styles.navA}>
               <h5>登出</h5>
-            </div>
+            </Link>
           </>
         ) : (
           <Link href="/welcome/login" className={`btnOrangePc transition`}>
