@@ -21,7 +21,7 @@
   max-width: 400px;
   flex-direction: column;
   align-items: flex-start;
-  
+
   background-color: var(--white, #fff);
 }
 .memberAsideList {
@@ -45,7 +45,7 @@
   gap: 10px;
   align-self: stretch;
   background: var(--primary-1, #389b87); /* 點擊後的顏色，可以根據需要修改 */
-  color: var(--white, #fff);;
+  color: var(--white, #fff);
 }
 .ListTop {
   display: flex;
@@ -72,10 +72,10 @@
   // background: var(--primary-1, #389B87);
 }
 .memberAsideList.clicked .memberAsideListIcon {
-  filter: brightness(0) invert(1); 
+  filter: brightness(0) invert(1);
 }
 .memberAsideList.clicked .memberAsideListText {
-  color:var(--white, #fff); /* 點擊後的文字顏色 */
+  color: var(--white, #fff); /* 點擊後的文字顏色 */
 }
 .memberAsideListIcon {
   display: flex;
@@ -163,6 +163,137 @@
 
 .btnSquare:hover {
   border: 1px solid var(--white, #fff);
-  background: var(--secondary-3, #fdaf17); 
-  color: var(--white, #fff);;
+  background: var(--secondary-3, #fdaf17);
+  color: var(--white, #fff);
+}
+.collectCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.chiiListImage {
+  width: 376px;
+  height: 264px;
+  border-radius: 10px;
+  background: #d9d9d9;
+}
+
+.chiiCardBody {
+  display: flex;
+  width: 372px;
+  height: 120px;
+  padding: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+.chiiCardTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.chiiLocationDetail {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  align-self: stretch;
+}
+.chiiLocationDetailCity {
+  display: flex;
+  padding: 5px 13px;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--primary-1, #389b87);
+}
+.chiiLocationDetailCityIcon {
+  width: 9px;
+  height: 14px;
+  color: var(--white, #fff);
+}
+.chiiLocationDetailCityText {
+  overflow: hidden;
+  color: var(--white, #fff);
+  text-overflow: ellipsis;
+
+  /* p */
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.chiiStar {
+  display: flex;
+  padding: 5px 13px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--primary-1, #389b87);
+}
+.chiiStarIcon {
+  width: 16px;
+  height: 14px;
+  color: #fdaf17;
+}
+.chiiStarPoint {
+  color: var(--white, #fff);
+  /* p */
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.chiiLocationName {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+
+  /* h4 */
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+// order
+.infoFrame table {
+  /* h4 */
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border-collapse: separate;
+  border-radius: 10px; 
+  overflow: hidden;
+}
+.infoFrame th {
+  vertical-align: middle;
+  text-align: center;
+  color: var(--grey-800, #575757);
+  background-color: var(--grey-400, #c4c4c4);
+}
+.infoFrame td {
+  vertical-align: middle;
+  text-align: center;
+  color: var(--grey-800, #575757);
+  border-bottom: var(--grey-400, #c4c4c4) 1px solid;
+}
+.orderTr{
+  border-radius: 10px;
 }

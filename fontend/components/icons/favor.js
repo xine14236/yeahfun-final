@@ -1,5 +1,46 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { MdStars } from 'react-icons/md'
+
+// export default function Favor({
+//   initFull = false,
+//   handler = () => {},
+//   color = '#feaf18',
+//   className = '',
+// }) {
+//   const [full, setFull] = useState(initFull)
+
+//   const handleToggle = () => {
+//     setFull(!full)
+//     handler()
+//   }
+
+//   useEffect(() => {
+//     setFull(initFull)
+//   }, [initFull])
+
+//   return (
+//     <>
+//       <span
+//         style={{ color: color, cursor: 'pointer' }}
+//         className={full ? 'favor-active' : 'favor'}
+//         onClick={handleToggle}
+//         onKeyDown={handleToggle}
+//         role="button"
+//         tabIndex="0"
+//       >
+//         <MdStars size={30} />
+//       </span>
+//       <style jsx>{`
+//         .favor {
+//           color: #feaf18;
+//         }
+//         .favor-active {
+//           color: black;
+//         }
+//       `}</style>
+//     </>
+//   )
+// }
 
 export default function Favor({
   size,
@@ -22,7 +63,8 @@ export default function Favor({
   return (
     <>
       <div
-        className={`favor ${fav ? 'favor-active' : ''}`}
+        // className={`favor ${fav ? 'favor-active' : ''}`}
+        className="favor"
         // onMouseEnter={() => setIsFavor(true)}
         // onMouseLeave={() => setIsFavor(false)}
         onClick={handler}
@@ -35,11 +77,6 @@ export default function Favor({
       <style jsx>{`
         .favor {
           color: #feaf18;
-        }
-        .favor-active {
-          background-color: #feaf18;
-          color: #fefcf0;
-          border-radius: 50%;
         }
       `}</style>
     </>

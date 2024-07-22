@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize'
+import PurchaseItem from '../models/Purchase_Item.js'; // 確保導入路徑正確
 
 // 讀取.env檔用
 import 'dotenv/config.js'
@@ -23,23 +24,8 @@ const sequelize = new Sequelize(
     },
   }
 )
-// for postgresql test
-// const sequelize = new Sequelize(
-//   process.env.PG_DB_DATABASE,
-//   process.env.PG_DB_USERNAME,
-//   process.env.PG_DB_PASSWORD,
-//   {
-//     host: process.env.PG_DB_HOST,
-//     port: process.env.PG_DB_PORT,
-//     dialect: 'postgres',
-//     logging: false,
-//     define: {
-//       freezeTableName: true,
-//       charset: 'utf8',
-//       collate: 'utf8_general_ci',
-//     },
-//   }
-// )
+
+
 
 // 啟動時測試連線
 sequelize
@@ -53,6 +39,8 @@ sequelize
     )
     console.error(error)
   })
+
+  const Purchase_Item = PurchaseItem(sequelize); // 初始化模型
 
 // 載入models中的各檔案
 await applyModels(sequelize)
@@ -71,5 +59,7 @@ console.log(
     .bgGreen
 )
 
+
 // 輸出模組
 export default sequelize
+export { Purchase_Item }; // 導出模型以便其他地方使用

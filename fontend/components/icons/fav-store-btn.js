@@ -16,7 +16,9 @@ export default function FavStoreBtn({
     <span
       style={{ color: color, cursor: 'pointer' }}
       onClick={handler}
-      onKeyDown={handler}
+      onKeyDown={(e) => {
+        e.preventDefault()
+      }}
       role="button"
       tabIndex="0"
     >

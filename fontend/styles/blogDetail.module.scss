@@ -48,3 +48,22 @@ margin-block: 5px;
   
   
 }
+
+.contentWrapper > * {
+  margin-bottom: 1rem;
+}
+
+.contentWrapper strong {
+  font-weight: bold;
+}
+
+.contentWrapper em {
+  font-style: italic;
+}
+
+.contentWrapper img {
+  max-width: 500px;
+            max-height: 350px;
+            display: block;   /* 使图片独占一行 */
+            margin: 1rem 0;
+}
