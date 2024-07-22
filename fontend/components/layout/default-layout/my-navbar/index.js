@@ -19,7 +19,7 @@ export default function MyNavbar() {
         <GreenLogo width={90} className={styles.homeLogo} />
 
         <div className={`container-fluid ${styles.myContainer}`}>
-          <Link className={` ${styles.HomepageName}`} href="#/">
+          <Link className={` ${styles.HomepageName}`} href="/">
             <h3>YeahFun</h3>
           </Link>
           <button
@@ -51,7 +51,10 @@ export default function MyNavbar() {
                 </Link>
               </li>
               <li className={`nav-item ${styles.navItem}`}>
-                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                <Link
+                  className={`nav-link p-0 ${styles.navMenuA}`}
+                  href="/about"
+                >
                   <h3>About us</h3>
                 </Link>
               </li>

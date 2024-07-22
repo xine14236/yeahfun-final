@@ -2,13 +2,16 @@
   position: fixed;
   top: 0;
   z-index: 2;
+
   width: 100%;
+  // background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
   background-color: var(--secondary-4);
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease; /* 平滑过渡效果 */
 }
 .myContainer {
   padding: 0px 100px;
+  height: 70px;
 }
 
 .HomepageName {

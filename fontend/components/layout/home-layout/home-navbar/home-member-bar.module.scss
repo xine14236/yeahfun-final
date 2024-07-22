@@ -15,9 +15,11 @@
 .navA {
   color: var(--white);
   position: relative;
+  cursor: pointer;
 }
 .navA:hover {
   color: var(--secondary-3);
+  cursor: pointer;
 }
 
 .navA::after {

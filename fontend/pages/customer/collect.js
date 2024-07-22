@@ -12,6 +12,8 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [collect, setCollect] = useState([])
+  const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
     email: '',
@@ -21,14 +23,7 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  //   const [errors, setErrors] = useState({
-  //     email: '',
-  //     name: '',
-  //     phone: '',
-  //     gender: '',
-  //     birthday: '',
-  //     address: '',
-  //   })
+
   // 按鈕換色
 
   const [selectedIndex, setSelectedIndex] = useState(null)
@@ -36,7 +31,7 @@ export default function Index() {
   const links = [
     { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
     {
-      href: '/customer/orders',
+      href: '/customer/order',
       icon: '/icon/shopping-bag.svg',
       text: '我的行程',
     },
@@ -81,11 +76,6 @@ export default function Index() {
       console.error(e)
     }
   }
-  const handleFieldChange = (e) => {
-    console.log(e.target.name, e.target.value, e.target.type)
-    setCustomer({ ...customer, [e.target.name]: e.target.value })
-    // [e.target.name]: e.target.value這樣可以動態的設定物件的屬性名稱
-  }
 
   const handleSubmit = async (e) => {
     // 阻擋表單預設送出行為
@@ -123,12 +113,38 @@ export default function Index() {
       console.error(e)
     }
   }
+  const getCollect = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/collect`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      const resDataImg = resData.data.collect.map((v) => {
+        return v.store_img_name.split(',')
+      })
+      setImg(resDataImg)
+      // const imgArray = store_img_name ? img.img_name.split(',') : []
+
+      if (resData.status === 'success' && Array.isArray(resData.data.collect)) {
+        // const order = resData.data.order
+        setCollect(resData.data.collect)
+        // 設定會員資料(除了密碼)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1500)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
   useEffect(() => {
     // console.log('userId:', userId);
     console.log('auth:', auth)
 
     if (userId) {
       getCustomer()
+      getCollect()
     } else {
       console.log('need check')
       handleCheck()
@@ -162,237 +178,68 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
-          <form
-            name="form1"
-            onSubmit={handleSubmit}
-            className={styles.memberFrame}
-          >
+          <div className={styles.memberFrame}>
             <div className={styles.infoFrame}>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="name">
-                  姓名
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={customer.name}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="email">
-                  信箱
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="email"
-                  name="email"
-                  value={customer.email}
-                  disabled
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="phone">
-                  電話
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={customer.phone}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="gender">
-                  性別
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="gender"
-                  name="gender"
-                  value={customer.gender}
-                  onChange={handleFieldChange}
-                />
-                {/* <select name="gender" id="gender">
-                  <option value="male">男性</option>
-                  <option value="female">女性</option>
-                  <option value="other">其他</option>
-                </select> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="birthday">
-                  生日
-                </label>
-                <input
-                  type="date"
-                  className={styles.memberListInput}
-                  id="birthday"
-                  name="birthday"
-                  value={customer.birthday}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="address">
-                  地址
-                </label>
-                <input
-                  type="text"
-                  className={styles.memberListInput}
-                  id="address"
-                  name="address"
-                  value={customer.address}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              {/* <div className="mb-3">
-                <label htmlFor="introduction" className="form-label">
-                  自我介紹
-                </label>
-                <textarea
-                  name="introduction"
-                  id="introduction"
-                  className="form-control"
-                  rows="4"
-                  cols="50"
-                ></textarea>
-              </div> */}
-              {/* <div className="memberList">
-                <label htmlFor="id_card" className="form-label">
-                  身分證字號
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="id_card"
-                  name="id_card"
-                  value=""
-                />
-                <div className="form-text"></div>
-              </div> */}
-              {/* <input
-                type="hidden"
-                className="form-control"
-                id="id"
-                name="id"
-                value=""
-              /> */}
+              {collect.map((v, i) => (
+                <div key={v.id} className={styles.collectCard}>
+                  <div>
+                    <Image
+                      className={styles.chiiListImage}
+                      src={`/detail/${img[i][0]}`}
+                      alt="camp1"
+                      width={376}
+                      height={264}
+                    />
+                  </div>
+                  <div className={styles.chiiCardBody}>
+                    <div className={styles.chiiCardTitle}>
+                      <div className={styles.chiiLocationDetail}>
+                        <div className={styles.chiiLocationDetailCity}>
+                          <svg
+                            className={styles.chiiLocationDetailCityIcon}
+                            stroke="currentColor"
+                            fill="currentColor"
+                            stroke-width="0"
+                            viewBox="0 0 384 512"
+                            height="1em"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
+                          </svg>
+
+                          <div className={styles.chiiLocationDetailCityText}>
+                            {v.address}
+                          </div>
+                        </div>
+                        <div className={styles.chiiStar}>
+                          <svg
+                            className={styles.chiiStarIcon}
+                            stroke="currentColor"
+                            fill="currentColor"
+                            stroke-width="0"
+                            viewBox="0 0 576 512"
+                            height="1em"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path>
+                          </svg>
+
+                          <div className={styles.chiiStarPoint}>
+                            {v.comment_star}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.chiiLocationName}>
+                        {v.store_name}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <button
-              type="submit"
-              className={styles.btnSquare}
-              onSubmit={handleSubmit}
-            >
-              修改
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </>

@@ -1,38 +1,43 @@
 import ListLayout from '@/components/layout/list-layout'
+import { P_LIST } from '@/configs/api-path'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useLoader } from '@/hooks/use-loader'
+
 import styles from '@/styles/list.module.scss'
-import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
+import { Select, Input, Slider, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
-import ReactPaginate from 'react-paginate'
-import LeftArrow from '@/components/icons/left-arrow'
-import RightArrow from '@/components/icons/right-arrow'
-import Link from 'next/link'
-import Location from '@/components/icons/location'
-import Star from '@/components/icons/star'
 import dayjs from 'dayjs'
+
+import Pagination from '@/components/list/pagination'
+import ProductList from '@/components/list/product-list'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
+import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 
+import GoTop from '@/components/home/go-top'
+import Loading from '@/components/list/loading'
 import Image from 'next/image'
 
 export default function Products() {
   const router = useRouter()
   const query = router.query
-  const [products, setProducts] = useState([])
-  const [total, setTotal] = useState(0) // 總筆數
-  const [pageCount, setPageCount] = useState(0) // 總頁數
-  const [page, setPage] = useState(1) // 起始頁
-  const [perpage, setPerpage] = useState(12) // 每頁12筆
+  const [products, setProducts] = useState({
+    success: false,
+    total: 0,
+    pageCount: 0,
+    page: 0,
+    perPage: 0,
+    stores: [],
+  })
   const [sort, setSort] = useState('id')
   const [order, setOrder] = useState('asc')
-
-  // 查詢條件用(這裡用的初始值都與伺服器的預設值一致)
-  const [dateRange, setDateRange] = useState([])
-  const [nameLike, setNameLike] = useState(router.query.nameLike || '')
+  const [nameLike, setNameLike] = useState(query.name_like || '')
   const [location, setLocation] = useState('')
   const [tag, setTag] = useState([])
+  const [dateRange, setDateRange] = useState([])
   const [priceRange, setPriceRange] = useState([0, 5000])
+  const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const tagOptions = [
     '草地',
@@ -46,128 +51,99 @@ export default function Products() {
     '山景雲海',
     '海景',
   ]
-  const locationOptions = ['全台灣', '南投縣', '屏東縣', '花蓮縣']
+  const locationOptions = [
+    '全台灣',
+    '苗栗縣',
+    '南投縣',
+    '嘉義縣',
+    '屏東縣',
+    '花蓮縣',
+  ]
 
-  // 獲取產品數據
-  const getProducts = async (params = {}) => {
-    const baseUrl = 'http://localhost:3005/api/stores'
-    const searchParams = new URLSearchParams(params)
-    const qs = searchParams.toString()
-    const url = `${baseUrl}?${qs}`
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-    try {
-      const res = await fetch(url)
-      const resData = await res.json()
+    const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
+    const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
 
-      if (resData.status === 'success') {
-        setPageCount(resData.data.pageCount)
-        setTotal(resData.data.total)
-        if (Array.isArray(resData.data.stores)) {
-          setProducts(resData.data.stores)
-        }
-      }
-    } catch (e) {
-      console.error('Fetch error:', e)
+    let locationQuery = location
+    if (location === '全台灣') {
+      locationQuery = ''
     }
-  }
 
-  // 將陣列分成小塊的函數
-  const chunkArray = (array, size) => {
-    const chunkedArr = []
-    for (let i = 0; i < array.length; i += size) {
-      chunkedArr.push(array.slice(i, i + size))
+    const queryParams = {
+      name_like: nameLike,
+      location: locationQuery,
+      tag: tag.join(','),
+      startDate,
+      endDate,
+      sort,
+      order,
+      lowest_normal_price_gte: priceRange[0],
+      lowest_normal_price_lte: priceRange[1],
     }
-    return chunkedArr
+    const queryString = new URLSearchParams(queryParams).toString()
+    // router.push(`?${queryString}`)
+    router.push(`?${queryString}`).then(() => {
+      // Scroll to 300px from the top
+      window.scrollTo({ top: 300, behavior: 'smooth' })
+    })
   }
-  // 將 products 分成每組三個的小塊
-  const productChunks = chunkArray(products, 3)
-
+  const handleChangeSelect1 = (e) => {
+    setLocation(e)
+  }
   const disabledDate = (current) => {
     return current && current < dayjs().endOf('day')
   }
-
+  const handleDateChange = (e) => {
+    setDateRange(e)
+  }
+  const handleTagChange = (e) => {
+    setTag(e)
+  }
   const handleChange = (value) => {
     const [sortValue, orderValue] = value.split(',')
     setSort(sortValue)
     setOrder(orderValue)
   }
 
-  const handlePageClick = (event) => {
-    setPage(event.selected + 1)
-    window.scrollTo({ top: 300, behavior: 'smooth' })
+  const handlePageClick = (selectedPage) => {
+    const page = selectedPage.selected + 1 // react-paginate selected page is zero-indexed
+    const queryParams = { ...router.query, page }
+    const queryString = new URLSearchParams(queryParams).toString()
+    router.push(`?${queryString}`)
   }
 
-  const handleTagChecked = (e) => {
-    // 宣告方便使用的tv名稱，取得觸發事件物件的目標值
-    const tv = e.target.value
-    // 判斷是否有在陣列中
-    if (tag.includes(tv)) {
-      // 如果有===>移出陣列
-      const nextTag = tag.filter((v) => v !== tv)
-      setTag(nextTag)
-    } else {
-      // 否則===>加入陣列
-      const nextTag = [...tag, tv]
-      setTag(nextTag)
-    }
-  }
-  const handleDateChange = (e) => {
-    setDateRange(e)
-  }
-
-  const handleChangeSelect = (value) => {
-    if (value === '全台灣') {
-      setLocation([])
-    } else {
-      setLocation(value)
-    }
-  }
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    const startDate = dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : ''
-    const endDate = dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''
-
-    // router.push(`?startDate=${startDate}&endDate=${endDate}`)
-  }
-
-  // 按下搜尋按鈕
-  const handleSearch = () => {
-    // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁
-    setPage(1)
-    const params = {
-      page: 1, // 每次搜尋條件後，因為頁數和筆數可能不同，所以要導向第1頁，向伺服器要第1頁的資料
-      perpage,
-      sort: sort,
-      order: order,
-      startDate: dateRange[0]?.format('YYYY-MM-DD'),
-      endDate: dateRange[1]?.format('YYYY-MM-DD'),
-      name_like: nameLike,
-      location: location,
-      tag: tag.join(','),
-      lowest_normal_price_gte: priceRange[0],
-      lowest_normal_price_lte: priceRange[1],
-    }
-
-    getProducts(params)
-  }
-
-  // 初始和頁數或每頁數變化時獲取數據
   useEffect(() => {
     if (!router.isReady) return
-    // const { location, tag, startDate, endDate, nameLike } = router.query
+    showLoader()
+    if (router.query.location) {
+      setLocation(router.query.location)
+    }
+    if (router.query.keyword) {
+      setNameLike(router.query.keyword)
+    }
     if (router.query.tag) {
-      setTag(router.query.tag.split(','))
+      setTag(router.query.tag.split(',')) // 確保從 query 字串分割並設置為陣列
     }
     if (router.query.startDate && router.query.endDate) {
-      setDateRange([
-        dayjs(router.query.startDate, 'YYYY-MM-DD'),
-        dayjs(router.query.endDate, 'YYYY-MM-DD'),
-      ])
+      {
+        setDateRange([
+          dayjs(router.query.startDate),
+          dayjs(router.query.endDate),
+        ])
+      }
     }
-    const params = { page, perpage, sort, order }
-    getProducts(params)
-  }, [page, perpage, sort, order, router])
+
+    fetch(`${P_LIST}?${new URLSearchParams(router.query)}`)
+      .then((r) => r.json())
+      .then((resData) => {
+        setProducts(resData)
+      })
+      .then(delay(3000)) // 延時3秒後再停止載入器，只有手動控制有用，自動關閉會無用
+      .then(hideLoader)
+      .catch((error) => console.error('Error fetching data:', error))
+  }, [router])
 
   return (
     <>
@@ -175,92 +151,73 @@ export default function Products() {
         <form
           className={styles.productSearchForm}
           action=""
-          onSubmit={handleSearch}
+          onSubmit={handleSubmit}
           id="productSearchForm"
         >
+          <div className={styles.goWhereTeam}>
+            <label className={styles.formTitle} htmlFor="goWhere">
+              <h5>你想去哪裡?</h5>
+            </label>
+            <Select
+              defaultValue={query.location || '全台灣'}
+              style={{ width: '100%' }}
+              onChange={handleChangeSelect1}
+              options={locationOptions.map((value, i) => ({
+                key: i,
+                value: value,
+                label: value,
+              }))}
+            />
+          </div>
           <div className={styles.calendarTeam}>
             <label htmlFor="date" className={styles.formTitle}>
               <h5>入住日期區間</h5>
             </label>
             <RangePicker
-              value={dateRange}
+              defaultValue={
+                query.startDate && query.endDate
+                  ? [dayjs(query.startDate), dayjs(query.endDate)]
+                  : [dayjs(), dayjs().add(1, 'day')]
+              }
               disabledDate={disabledDate}
               onChange={handleDateChange}
             />
           </div>
-          <div className={styles.searchBarSort}>
-            <div className={styles.keyword}>
-              <label htmlFor="search" className={styles.formTitle}>
-                <h5>關鍵字搜尋</h5>
-              </label>
-              <Input
-                value={nameLike}
-                onChange={(e) => {
-                  setNameLike(e.target.value)
-                }}
-              />
-            </div>
-            <div className={styles.price}>
-              <label htmlFor="range">
-                <h5>價格區間</h5>
-              </label>
-              <Slider
-                range
-                value={priceRange}
-                defaultValue={[0, 3000]}
-                min={0}
-                max={5000}
-                step={100}
-                onChange={(value) => {
-                  setPriceRange(value)
-                }}
-              />
-            </div>
-            <div className={styles.types}>
-              <h5>類型</h5>
-              <div className="row">
-                {tagOptions.map((v, i) => {
-                  return (
-                    <div className="col-6" key={i}>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          id={v}
-                          type="checkbox"
-                          value={v}
-                          checked={tag.includes(v)}
-                          onChange={handleTagChecked}
-                        />
-                        <label className="form-check-label" htmlFor={v}>
-                          {v}
-                        </label>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-          <button
-            className={`btnGreenPc styles.transition`}
-            onClick={handleSearch}
-          >
-            開始探索
-          </button>
-        </form>
-      </div>
-      <div className={`${styles.myCardList} ${styles.section02}`}>
-        <div className="title">
-          <img src="/images/homepage/title-tree.png" alt="" />
-          <div className="titleContent">
-            <h3 className="titleText">List</h3>
-            <p>目錄</p>
-          </div>
-        </div>
-        <div className={`container-fluid ${styles.listContainer}`}>
-          <div className={styles.orderByNone}>
+          <div className={styles.types}>
+            <h5>類型</h5>
             <Select
-              defaultValue="排序-價格-低到高排序"
+              className={styles.typesSelect}
+              defaultValue={query.tag || []}
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="請選擇類型"
+              value={tag}
+              maxTagCount="responsive"
+              onChange={handleTagChange}
+              options={tagOptions.map((value) => ({
+                value: value,
+                label: value,
+              }))}
+            />
+          </div>
+          <div className={styles.keyword}>
+            <h5>搜尋</h5>
+            <Input
+              placeholder="輸入關鍵字"
+              // defaultValue={query.name_like || ''}
+              value={nameLike}
+              onChange={(e) => {
+                setNameLike(e.target.value)
+              }}
+            />
+          </div>
+          <div className={styles.orderBys}>
+            <label htmlFor="orderBy" className={styles.formTitle}>
+              <h5>排序方式</h5>
+            </label>
+            <Select
+              defaultValue="價格-低到高排序"
               style={{
                 width: '100%',
               }}
@@ -268,181 +225,87 @@ export default function Products() {
               options={[
                 {
                   value: 'lowest_normal_price,asc',
-                  label: '排序-價格-低到高排序',
+                  label: '價格-低到高排序',
                 },
                 {
                   value: 'lowest_normal_price,desc',
-                  label: '排序-價格-高到低排序',
+                  label: '價格-高到低排序',
                 },
               ]}
             />
           </div>
+          <div className={styles.price}>
+            <label htmlFor="range">
+              <h5>價格區間</h5>
+            </label>
+            <Slider
+              range
+              value={priceRange}
+              defaultValue={[0, 3000]}
+              min={0}
+              max={5000}
+              step={100}
+              onChange={(value) => {
+                setPriceRange(value)
+              }}
+            />
+          </div>
+          <button
+            type="submit"
+            className={`btnGreenPc transition`}
+            // onClick={handleSearch}
+          >
+            開始探索
+          </button>
+        </form>
+      </div>
+      {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
+      <ScrollMotionContainer
+        once={true}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
+          <Image
+            src="/images/homepage/title-tree.png"
+            alt="blog"
+            width={66}
+            height={33}
+          />
+          <div className="titleContent">
+            <h3 className="titleText">List</h3>
+            <p>目錄</p>
+          </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`container-fluid ${styles.listContainer}`}
+        >
           <div className="row">
-            <div className="col-sm-2 col-12">
-              <form
-                className={styles.sort}
-                onSubmit={(e) => {
-                  e.preventDefault()
-                }}
-              >
-                <div className={styles.orderBys}>
-                  <label htmlFor="orderBy" className={styles.formTitle}>
-                    <p>排序方式</p>
-                  </label>
-                  <Select
-                    defaultValue="價格-低到高排序"
-                    style={{
-                      width: '100%',
-                    }}
-                    onChange={handleChange}
-                    options={[
-                      {
-                        value: 'lowest_normal_price,asc',
-                        label: '價格-低到高排序',
-                      },
-                      {
-                        value: 'lowest_normal_price,desc',
-                        label: '價格-高到低排序',
-                      },
-                    ]}
-                  />
-                </div>
-                <div className={styles.goWhereTeam}>
-                  <label className={styles.formTitle} htmlFor="goWhere">
-                    <p>你想去哪裡?</p>
-                  </label>
-                  <Select
-                    defaultValue={router.query.location || '全台灣'}
-                    style={{ width: '100%' }}
-                    onChange={handleChangeSelect}
-                    options={locationOptions.map((value, i) => ({
-                      key: i,
-                      value: value,
-                      label: value,
-                    }))}
-                  />
-                </div>
-                <div className="keyword">
-                  <label htmlFor="search" className={styles.formTitle}>
-                    <p>關鍵字搜尋</p>
-                  </label>
-                  <Input
-                    // defaultValue="123"
-                    value={nameLike}
-                    onChange={(e) => {
-                      setNameLike(e.target.value)
-                    }}
-                  />
-                </div>
-                <div className={styles.price}>
-                  <label htmlFor="range">價格區間</label>
-                  <Slider
-                    range
-                    value={priceRange}
-                    defaultValue={[0, 3000]}
-                    min={0}
-                    max={5000}
-                    step={100}
-                    onChange={(value) => {
-                      setPriceRange(value)
-                    }}
-                  />
-                </div>
-                <div className={styles.types}>
-                  <p>類型</p>
-
-                  {tagOptions.map((v, i) => {
-                    return (
-                      <div className="form-check" key={i}>
-                        <input
-                          className="form-check-input"
-                          id={v}
-                          type="checkbox"
-                          value={v}
-                          checked={tag.includes(v)}
-                          onChange={handleTagChecked}
-                        />
-                        <label className="form-check-label" htmlFor={v}>
-                          {v}
-                        </label>
-                      </div>
-                    )
-                  })}
-
-                  <div>
-                    <button className="btnGreenPc" onClick={handleSearch}>
-                      搜尋
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="col-sm-10 col-12">
-              {productChunks.map((chunk, chunkIndex) => (
-                <div className="row" key={chunkIndex}>
-                  {chunk.map((v) => (
-                    <div className="col-12 col-sm-4" key={v.id}>
-                      <div className={`card ${styles.productCard}`}>
-                        <Link href="#">
-                          <img
-                            src="/images/homepage/tent13.jpg"
-                            className={styles.cardImage}
-                            alt="tents"
-                          />
-                        </Link>
-                        <div className={`card-body ${styles.cardBody}`}>
-                          <div className={styles.cardTags}>
-                            <div className={styles.cardTagLocation}>
-                              <Location className={styles.iconLocation} />
-                              <p>{v.address}</p>
-                            </div>
-                            <div className={styles.cardTagStar}>
-                              <Star className={styles.iconStar} />
-                              <p>{v.comment_star}</p>
-                            </div>
-                          </div>
-                          <div className={`card-title ${styles.cardTitle}`}>
-                            <h4>
-                              <Link href="#">{v.name}</Link>
-                            </h4>
-                            <h6>${v.lowest_normal_price}</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+            {loading ? <Loading /> : <ProductList products={products} />}
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel=<RightArrow size={13} className={styles.rightArrow} />
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={pageCount}
-                previousLabel=<LeftArrow size={13} />
-                renderOnZeroPageCount={null}
-                containerClassName={'pagination'}
-                pageClassName={'pageItem item'}
-                pageLinkClassName={'pageLink link'}
-                previousClassName={'previousItem item'}
-                previousLinkClassName={'previousLink link'}
-                nextClassName={'nextItem item'}
-                nextLinkClassName={'nextLink link'}
-                breakClassName={'breakItem item'}
-                breakLinkClassName={'breakLink link'}
-                activeClassName={'active'}
-                disabledClassName={'disabledItem'}
-                disabledLinkClassName={'disabledLink link'}
-              />
+              {loading ? (
+                ''
+              ) : (
+                <Pagination
+                  pageCount={products.pageCount}
+                  onPageChange={handlePageClick}
+                  page={products.page}
+                />
+              )}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+      </ScrollMotionContainer>
+      {/* </div> */}
+      <GoTop />
     </>
   )
 }

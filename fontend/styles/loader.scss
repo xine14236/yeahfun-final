@@ -112,6 +112,35 @@
   display: none;
 }
 
+.circle-loader-bg {
+  content: '';
+  width: 100%;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* margin-bottom: 40px; */
+  /* margin-top: 56px; */
+  background-color: rgba(204, 205, 205, 0.9);
+  z-index: 9999;
+}
+
+.circle-loader {
+  // display: block;
+  position: absolute;
+  top: calc(50% - 5em);
+  left: calc(50% - 8.5em);
+  width: auto;
+  height: 10em;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.circle-loader--hide {
+  display: none;
+}
+
 // 半透明背景調整用
 .nike-loader-bg {
   content: '';
@@ -141,6 +170,12 @@
 // 手機用大小和位置
 @media screen and (max-device-width: 480px) {
   .nike-loader {
+    top: calc(50% - 2.5em);
+    left: calc(50% - 4em);
+    width: auto;
+    height: 5em;
+  }
+  .circle-loader {
     top: calc(50% - 2.5em);
     left: calc(50% - 4em);
     width: auto;
