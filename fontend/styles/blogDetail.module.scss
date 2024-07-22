@@ -67,3 +67,9 @@ margin-block: 5px;
             display: block;   /* 使图片独占一行 */
             margin: 1rem 0;
 }
+
+.contentWrapper a {
+  color: var(--secondary-3);
+  font-weight: bold; 
+  
+}

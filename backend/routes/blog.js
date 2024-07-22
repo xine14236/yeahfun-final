@@ -288,9 +288,14 @@ router.post('/save',authenticate, async (req, res) => {
     const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
     await db.query(deleteSql, [req.body.blogId]);
 
+    const tags = req.body.tags || [];
+    if (!tags.includes(7)) {
+      tags.push(7);
+    }
+
     // 插入新的标签
     const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
-    const tagValues = req.body.tags.map(tag => [req.body.blogId, tag]);
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
     const [insertResult] = await db.query(insertSql, [tagValues]);
 
     output.result2 = insertResult;
