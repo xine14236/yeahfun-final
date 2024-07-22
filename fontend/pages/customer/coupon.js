@@ -22,7 +22,6 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-
   // 按鈕換色
   const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
@@ -36,7 +35,7 @@ export default function Index() {
     },
     { href: '/customer/collect', icon: '/icon/star.svg', text: '口袋名單' },
     { href: '/customer/comments', icon: '/icon/comment.svg', text: '我的評價' },
-    // { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
+    { href: '/customer/coupon', icon: '/icon/coupon.svg', text: 'Fun優惠' },
     { href: '/customer/blogs', icon: '/icon/tent.svg', text: 'FUN部落' },
     {
       href: '/customer/achievement',
@@ -53,6 +52,7 @@ export default function Index() {
   const handleClick = (index) => {
     setSelectedIndex(index)
   }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -79,11 +79,6 @@ export default function Index() {
     } catch (e) {
       console.error(e)
     }
-  }
-  const handleFieldChange = (e) => {
-    console.log(e.target.name, e.target.value, e.target.type)
-    setCustomer({ ...customer, [e.target.name]: e.target.value })
-    // [e.target.name]: e.target.value這樣可以動態的設定物件的屬性名稱
   }
 
   const handleSubmit = async (e) => {
@@ -122,7 +117,19 @@ export default function Index() {
       console.error(e)
     }
   }
-  // npm
+  useEffect(() => {
+    // console.log('userId:', userId);
+    console.log('auth:', auth)
+
+    if (userId) {
+      getCustomer()
+    } else {
+      console.log('need check')
+      handleCheck()
+      // console.og('e',auth.userData.id);
+      setUserId(auth.userData.id)
+    }
+  }, [auth])
 
   const display = (
     <>
