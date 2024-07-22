@@ -77,42 +77,6 @@ export default function Index() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    // 阻擋表單預設送出行為
-    e.preventDefault()
-
-    try {
-      const updatedCustomer = {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        address: customer.address,
-      }
-
-      if (customer.password) {
-        updatedCustomer.password = customer.password
-      }
-
-      const url = `http://localhost:3005/api/customer/${userId}/profile`
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCustomer),
-      })
-
-      const resData = await res.json()
-      console.log(resData)
-
-      alert('修改成功')
-    } catch (e) {
-      console.error(e)
-    }
-  }
   const getCollect = async () => {
     const url = `http://localhost:3005/api/customer/${userId}/collect`
     try {

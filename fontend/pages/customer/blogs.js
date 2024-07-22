@@ -12,7 +12,7 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  // const [blog, setBlog] = useState([])
+  const [blog, setBlog] = useState([])
   // const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
@@ -23,15 +23,6 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  //   const [errors, setErrors] = useState({
-  //     email: '',
-  //     name: '',
-  //     phone: '',
-  //     gender: '',
-  //     birthday: '',
-  //     address: '',
-  //   })
-  // 按鈕換色
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -55,6 +46,30 @@ export default function Index() {
 
   const handleClick = (index) => {
     setSelectedIndex(index)
+  }
+  const getBlog = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      // const resDataImg = resData.data.blog.map((v) => {
+      //   return v.img_name.split(',')
+      // })
+      // setImg(resDataImg)
+
+      if (resData.status === 'success' && Array.isArray(resData.data.blog)) {
+        // const order = resData.data.order
+        setBlog(resData.data.blog)
+        // 設定會員資料(除了密碼)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1500)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
@@ -84,48 +99,13 @@ export default function Index() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    // 阻擋表單預設送出行為
-    e.preventDefault()
-
-    try {
-      const updatedCustomer = {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        address: customer.address,
-      }
-
-      if (customer.password) {
-        updatedCustomer.password = customer.password
-      }
-
-      const url = `http://localhost:3005/api/customer/${userId}/profile`
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCustomer),
-      })
-
-      const resData = await res.json()
-      console.log(resData)
-
-      alert('修改成功')
-    } catch (e) {
-      console.error(e)
-    }
-  }
   useEffect(() => {
     // console.log('userId:', userId);
     console.log('auth:', auth)
 
     if (userId) {
       getCustomer()
+      getBlog()
     } else {
       console.log('need check')
       handleCheck()
@@ -159,112 +139,38 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
           <div className={styles.memberFrame}>
-            <div className={styles.infoFrame}></div>
-            <button
-              type="submit"
-              className={styles.btnSquare}
-              onSubmit={handleSubmit}
-            >
-              修改
-            </button>
+            <div className={styles.infoFrame}>
+              <table className="table">
+                <thead className={styles.orderTr}>
+                  <tr>
+                    <th scope="col">部落照片</th>
+                    <th scope="col">部落名稱</th>
+                    {/* <th scope="col">部落內容</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {blog.map((v, i) => (
+                    <tr key={v.id}>
+                      <td>
+                        <Image
+                          src={
+                            v.img_name
+                              ? `http://localhost:3005/img-blog/${v.img_name}`
+                              : `http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`
+                          }
+                          alt="img"
+                          width={160}
+                          height={120}
+                        />
+                      </td>
+                      <td>{v.title}</td>
+                      {/* <td className={styles.content}>{v.content}</td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
