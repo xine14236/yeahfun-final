@@ -267,6 +267,40 @@ router.get('/create', authenticate , async (req, res) => {
   res.json({success:true,data:result})
 })
 
+router.post('/save',authenticate, async (req, res) => {
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const memberId = req.user.id || null
+  const sql = `UPDATE blog set title=?, author=? , content=? where id=?`
+  const [result]= await db.query(sql,[req.body.title, memberId, req.body.content, req.body.blogId])
+  output.result1=result
+  output.info='新增成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
+    await db.query(deleteSql, [req.body.blogId]);
+
+    // 插入新的标签
+    const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
+    const tagValues = req.body.tags.map(tag => [req.body.blogId, tag]);
+    const [insertResult] = await db.query(insertSql, [tagValues]);
+
+    output.result2 = insertResult;
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
+})
+
 
 router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
   const bid2 = req.params.bid 

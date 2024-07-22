@@ -44,14 +44,43 @@ export default function Test() {
       };
   
       console.log(payload)
-      await fetch('/api/blog/save', {
+    try{
+      await fetch('http://localhost:3005/api/blog/save', {
         method: 'POST',
         credentials: 'include', 
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+            MySwal.fire({
+              title: '成功!',
+              text: 'BLOG文章已創建',
+              icon: 'success',
+            }).then(() => {
+              // Navigate to another page with insertId in the route
+              router.push(`/blog`);
+            });
+          } else {
+            MySwal.fire({
+              title: '錯誤!',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+    })
+    }catch(error){
+      console.error('Error saving blog:', error);
+      MySwal.fire({
+        title: '錯誤!',
+        text: '保存時出現錯誤!',
+        icon: 'error',
+        confirmButtonText: '確認',
       });
+    }
     };
 
 
