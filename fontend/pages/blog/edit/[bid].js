@@ -62,7 +62,7 @@ export default function EditBlog() {
               icon: 'success',
             }).then(() => {
               // Navigate to another page
-              router.push(`/blog`);
+              router.push(`/blog/${blogId}`);
             });
           } else {
             MySwal.fire({

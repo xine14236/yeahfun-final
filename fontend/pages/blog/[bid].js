@@ -148,10 +148,15 @@ export default function blogDetail() {
    <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.favorite_count}
   </span>
  
-  <span className={auth.userData.id==blog.author? `${styles.span3X} ${styles.meAuto} fs-3 me-md-5   me-3`:`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>
+ <span className={auth.userData.id==blog.author? `${styles.span3X} ${styles.meAuto} fs-3 me-md-5   me-3`:`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>
+ <Link href={`/blog/edit/${blog.id}`}>
+
   <FaPencil  />
+ </Link>
 
 </span>
+
+
   <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 `}>
   <FaTrashCan  />
 
