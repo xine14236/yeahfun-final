@@ -19,7 +19,7 @@ export default function MyNavbar() {
         <GreenLogo width={90} className={styles.homeLogo} />
 
         <div className={`container-fluid ${styles.myContainer}`}>
-          <Link className={` ${styles.HomepageName}`} href="#/">
+          <Link className={` ${styles.HomepageName}`} href="/">
             <h3>YeahFun</h3>
           </Link>
           <button
@@ -43,20 +43,23 @@ export default function MyNavbar() {
               className={`navbar-nav me-auto mb-0 py-3 py-sm-0 gap-2 gap-sm-5 ${styles.navMenu}`}
             >
               <li className={`nav-item ${styles.navItem}`}>
-                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
-                  <h3>Action</h3>
-                </Link>
-              </li>
-              <li className={`nav-item ${styles.navItem}`}>
-                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
-                  <h3>List</h3>
-                </Link>
-              </li>
-              <li className={`nav-item ${styles.navItem}`}>
-                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                <Link
+                  className={`nav-link p-0 ${styles.navMenuA}`}
+                  href={`/blog`}
+                >
                   <h3>Blog</h3>
                 </Link>
               </li>
+              <li className={`nav-item ${styles.navItem}`}>
+                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                  <h3>About us</h3>
+                </Link>
+              </li>
+              {/* <li className={`nav-item ${styles.navItem}`}>
+                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                  <h3>Blog</h3>
+                </Link>
+              </li> */}
             </ul>
             <MemberBar />
           </div>

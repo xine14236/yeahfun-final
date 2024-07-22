@@ -3,6 +3,8 @@ import moment from 'moment-timezone'
 import db from './../utils/connect-mysql.js'
 import upload from './../utils/upload-img-blog.js'
 import upload2 from './../utils/upload-img-blogComment.js'
+import authenticate from '#middlewares/authenticate.js'
+
 
 const router = express.Router()
 
@@ -10,6 +12,7 @@ const getBlogData = async (req) => {
   const conditions = []
   const dateFormat1 = 'YYYY-MM-DD HH:mm:ss'
   const dateFormat2 = 'YYYY年MM月DD日 '
+  const memberId = req.user.id || 0
 
   // let test1 =moment('Thu Jul 25 2024 00:00:00 ').format(dateFormat1)
   // console.log({test1})
@@ -108,17 +111,21 @@ const getBlogData = async (req) => {
     //   };
     //
     const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
-    COALESCE(lb.likes_count, 0) AS likes_count, bi.img_name
+    COALESCE(lb.likes_count, 0) AS likes_count, bi.img_name , li.id fav_id
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id 
    Left join  blog_category_name bcn on bc.blog_category_id= bcn.id 
    Left join  (SELECT blog_id, COUNT(*) AS favorite_count FROM favorite_blog GROUP BY blog_id) fb ON b.id = fb.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id
    Left join blog_img bi on b.id=bi.blog_id
    left join customer c on b.author=c.id
+LEFT JOIN (
+      SELECT * FROM favorite_blog WHERE customer_id=${memberId}
+    ) li ON b.id =li.blog_id
      ${where} 
   GROUP BY b.id ${orderby} LIMIT ${limit} OFFSET ${offset};`
     const [rows] = await db.query(sql)
-
+    
+    
     rows.forEach((r) => {
       r.date = ''
       if(r.img_name){
@@ -155,7 +162,7 @@ const getBlogData = async (req) => {
   }
 }
 
-router.get('/', async (req, res) => {
+router.get('/',authenticate, async (req, res) => {
   const result = await getBlogData(req)
   res.json(result)
 })
@@ -247,8 +254,17 @@ router.get('/like/:b_id', async (req, res) => {
 })
 
 // 新增 還沒有連接會員
-router.post('/add', async (req, res) => {
+router.get('/create', authenticate , async (req, res) => {
+  if (!req.user.id ) {
+    return res.json({ success:false, message: '存取會員資料失敗' })
+  }
   
+  const sql = ` INSERT INTO blog ( title, author ) VALUES ( NULL , ?); `
+ 
+ 
+  const [result] = await db.query(sql,[req.user.id])
+  // insertId
+  res.json({success:true,data:result})
 })
 
 

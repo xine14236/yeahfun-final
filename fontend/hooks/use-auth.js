@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
 // import { checkAuth, getFavs } from '@/services/user'
 
 // 1. 建立與導出它
@@ -155,6 +156,19 @@ export function AuthProvider({ children }) {
       console.error(e)
     }
   }
+
+  // 取得包含 token 的檔頭
+  const getAuthHeader = () => {
+    const token = Cookies.get('accessToken') // 從 cookie 中取得 accessToken
+    // console.log('Token:', token)
+    if (token) {
+      return {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+    return {}
+  }
+
   useEffect(() => {
     if (router.isReady && !auth.isAuth) {
       handleCheck()
@@ -173,6 +187,7 @@ export function AuthProvider({ children }) {
         handleLogin,
         handleLogout,
         parseJwt,
+        getAuthHeader,
       }}
     >
       {children}

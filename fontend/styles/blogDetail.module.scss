@@ -48,3 +48,15 @@ margin-block: 5px;
   
   
 }
+
+.contentWrapper > * {
+  margin-bottom: 1rem;
+}
+
+.contentWrapper strong {
+  font-weight: bold;
+}
+
+.contentWrapper em {
+  font-style: italic;
+}

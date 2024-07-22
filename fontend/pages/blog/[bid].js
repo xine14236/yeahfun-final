@@ -81,9 +81,9 @@ export default function blogDetail() {
   </p>
 </div>
 <div className="col-12 mt-4 ">
-<div className="px-md-5">
+<div className={`px-md-5 ${styles.contentWrapper} `} dangerouslySetInnerHTML={{ __html: blog.content }}>
 
-{blog.content}
+
 </div>
 
 <div className={`col-12 border likeContainer d-flex ${styles.likeContainer}`}>

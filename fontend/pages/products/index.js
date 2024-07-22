@@ -5,15 +5,15 @@ import { useRouter } from 'next/router'
 import styles from '@/styles/list.module.scss'
 import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
-import ReactPaginate from 'react-paginate'
-import LeftArrow from '@/components/icons/left-arrow'
-import RightArrow from '@/components/icons/right-arrow'
-import Link from 'next/link'
-import Location from '@/components/icons/location'
-import Star from '@/components/icons/star'
 import dayjs from 'dayjs'
+
+import Pagination from '@/components/list/pagination'
+import ProductList from '@/components/list/product-list'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
+import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
+
+import GoTop from '@/components/home/go-top'
 
 import Image from 'next/image'
 import { set } from 'lodash'
@@ -36,6 +36,8 @@ export default function Products() {
   const [tag, setTag] = useState([])
   const [dateRange, setDateRange] = useState([])
   const [priceRange, setPriceRange] = useState([0, 5000])
+
+  
 
   const tagOptions = [
     '草地',
@@ -143,7 +145,6 @@ export default function Products() {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(products, null, 4)}</pre>; */}
       <div className={styles.searchBar}>
         <form
           className={styles.productSearchForm}
@@ -209,25 +210,6 @@ export default function Products() {
               }}
             />
           </div>
-          {/* 
-          <div className={styles.searchBarSort}>
-            <div className={styles.price}>
-              <label htmlFor="range">
-                <h5>價格區間</h5>
-              </label>
-              <Slider
-                range
-                value={priceRange}
-                defaultValue={[0, 3000]}
-                min={0}
-                max={5000}
-                step={100}
-                onChange={(value) => {
-                  setPriceRange(value)
-                }}
-              />
-            </div>
-          </div> */}
           <div className={styles.orderBys}>
             <label htmlFor="orderBy" className={styles.formTitle}>
               <h5>排序方式</h5>
@@ -275,8 +257,14 @@ export default function Products() {
           </button>
         </form>
       </div>
-      <div className={`${styles.myCardList} ${styles.section02}`}>
-        <div className="title">
+      {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
+      <ScrollMotionContainer
+        once={true}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -287,186 +275,31 @@ export default function Products() {
             <h3 className="titleText">List</h3>
             <p>目錄</p>
           </div>
-        </div>
-        <div className={`container-fluid ${styles.listContainer}`}>
-          {/* <div className={styles.orderByNone}>
-            <Select
-              defaultValue="排序-價格-低到高排序"
-              style={{
-                width: '100%',
-              }}
-              onChange={handleChange}
-              options={[
-                {
-                  value: 'lowest_normal_price,asc',
-                  label: '排序-價格-低到高排序',
-                },
-                {
-                  value: 'lowest_normal_price,desc',
-                  label: '排序-價格-高到低排序',
-                },
-              ]}
-            />
-          </div> */}
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`container-fluid ${styles.listContainer}`}
+        >
           <div className="row">
-            {/* <div className="col-sm-2 col-12">
-              <form
-                className={styles.sort}
-                onSubmit={(e) => {
-                  e.preventDefault()
-                }}
-              >
-                <div className={styles.orderBys}>
-                  <label htmlFor="orderBy" className={styles.formTitle}>
-                    <p>排序方式</p>
-                  </label>
-                  <Select
-                    defaultValue="價格-低到高排序"
-                    style={{
-                      width: '100%',
-                    }}
-                    onChange={handleChange}
-                    options={[
-                      {
-                        value: 'lowest_normal_price,asc',
-                        label: '價格-低到高排序',
-                      },
-                      {
-                        value: 'lowest_normal_price,desc',
-                        label: '價格-高到低排序',
-                      },
-                    ]}
-                  />
-                </div>
-                <div className={styles.price}>
-                  <label htmlFor="range">價格區間</label>
-                  <Slider
-                    range
-                    value={priceRange}
-                    defaultValue={[0, 3000]}
-                    min={0}
-                    max={5000}
-                    step={100}
-                    onChange={(value) => {
-                      setPriceRange(value)
-                    }}
-                  />
-                </div> 
-                <div>
-                  <button
-                    className="btnGreenPc"
-                    // onClick={handleSearch}
-                  >
-                    搜尋
-                  </button>
-                </div>
-              </form>
-            </div> */}
-            <div className="col-sm-12 col-12">
-              {/* {productChunks.map((chunk, chunkIndex) => ( */}
-              <div className="row">
-                {products.stores.map((v) => (
-                  <div className="col-12 col-sm-4" key={v.stores_id}>
-                    <div className={`card ${styles.productCard}`}>
-                      <Link href={`/detail-test/${v.stores_id}`}>
-                        <Image
-                          src={`/detail/${v.img_name.split(',')[0]}`}
-                          className={styles.cardImage}
-                          alt="tents"
-                          width={300}
-                          height={200}
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                          }}
-                        />
-                      </Link>
-                      <div className={`card-body ${styles.cardBody}`}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
-                          </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
-                          </div>
-                        </div>
-                        <div className={`card-title ${styles.cardTitle}`}>
-                          <h4>
-                            <Link href={`/detail-test/${v.stores_id}`}>
-                              {v.name}
-                            </Link>
-                          </h4>
-                          <h5>${v.lowest_normal_price}/每晚</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ProductList products={products} />
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-              <ReactPaginate
-                previousLabel={<LeftArrow />}
-                nextLabel={<RightArrow />}
-                breakLabel={'...'}
-                breakClassName={'breakItem item'}
+              <Pagination
                 pageCount={products.pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
                 onPageChange={handlePageClick}
-                containerClassName={'pagination'}
-                pageClassName={'pageItem item'}
-                pageLinkClassName={'pageLink link'}
-                previousClassName={'previousItem item'}
-                previousLinkClassName={'previousLink link'}
-                nextClassName={'nextItem item'}
-                nextLinkClassName={'nextLink link'}
-                breakLinkClassName={'breakLink link'}
-                activeClassName={'active'}
-                disabledClassName={'disabledItem'}
-                disabledLinkClassName={'disabledLink link'}
+                page={products.page}
               />
-
-              {/* <div className="row">
-                <div className="col">
-                  <nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                      {Array(11)
-                        .fill(1)
-                        .map((v, i) => {
-                          const p = products.page - 5 + i
-                          if (p < 1 || p > products.totalPages) return null
-                          const qs = { ...router.query }
-                          qs.page = p
-                          return (
-                            <li
-                              className={`page-item ${
-                                p === products.page ? 'active' : ''
-                              } `}
-                              key={p}
-                            >
-                              <Link
-                                class="page-link"
-                                href={`?${new URLSearchParams(qs)}`}
-                              >
-                                {p}
-                              </Link>
-                            </li>
-                          )
-                        })}
-                    </ul>
-                  </nav>
-                </div>
-              </div> */}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+      </ScrollMotionContainer>
+      {/* </div> */}
+      <GoTop />
     </>
   )
 }

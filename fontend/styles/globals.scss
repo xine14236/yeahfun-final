@@ -350,3 +350,33 @@ Link {
 a {
   text-decoration: none;
 }
+
+.goTop {
+  position: fixed;
+  bottom: 70px;
+  right: 100px;
+  color: var(--secondary-3);
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 2;
+  border: none;
+}
+@media (max-width: 576px) {
+  .goTop {
+    bottom: 30px;
+    right: 30px;
+  }
+}
+
+.ql-editor {
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.5;
+}
+
+.ql-editor strong {
+  font-weight: bold;
+}
+
+.ql-editor em {
+  font-style: italic;
+}
