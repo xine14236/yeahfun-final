@@ -6,7 +6,6 @@ import HomeLayout from '@/components/layout/home-layout'
 import { useState } from 'react'
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import Favor from '@/components/icons/favor'
 import { useLoader } from '@/hooks/use-loader'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -14,8 +13,7 @@ import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
-import Swal from 'sweetalert2'
-
+import FavStoreBtn3 from '@/components/icons/fav-store-btn3'
 import GoTop from '@/components/home/go-top'
 import Header from '@/components/home/header'
 
@@ -31,6 +29,7 @@ export default function Home() {
   const [swiperInstances, setSwiperInstances] = useState([])
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
   const { showLoader, hideLoader, loading, delay } = useLoader()
+  const [fav, setFav] = useState(true)
 
   const tags = [
     {
@@ -225,7 +224,14 @@ export default function Home() {
                     onMouseLeave={() => handleMouseLeave(i)}
                   >
                     <div className={styles.favor}>
-                      <Favor size={40} />
+                      <FavStoreBtn3
+                        width={45}
+                        onClick={() => {
+                          setFav(!fav)
+                          console.log(fav)
+                        }}
+                        fav={fav}
+                      />
                     </div>
                     <Link href={`/detail-test/${v.stores_id}`}>
                       <Swiper
@@ -234,7 +240,7 @@ export default function Home() {
                         centeredSlides={true}
                         loop={true}
                         autoplay={{
-                          delay: 2500,
+                          delay: 2000,
                           disableOnInteraction: false,
                           enabled: false, // 初始化時禁用自動播放
                         }}
