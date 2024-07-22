@@ -236,7 +236,7 @@
 .section04 {
   position: relative;
   gap: 15px;
-  padding: 0 0 0 50px;
+  // padding: 0 0 0 50px;
 }
 .section04DecorateTop {
   width: 100%;
@@ -296,6 +296,7 @@
 
 .aboutCard {
   /* width: 100%; */
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -309,6 +310,7 @@
 }
 
 .aboutCardBody {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
   display: flex;
   /* width: 360px; */
   padding: 30px;

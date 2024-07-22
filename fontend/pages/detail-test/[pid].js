@@ -6,9 +6,11 @@ import Image from 'next/image'
 import { DatePicker, Space } from 'antd'
 import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
-import Favor from '@/components/icons/favor'
 import Share from '@/components/icons/share'
-import FavStoreBtn from '@/components/icons/fav-store-btn'
+import FavStoreBtn2 from '@/components/icons/fav-store-btn2'
+import Swiper from 'swiper'
+import Carousel from '@/components/product/detail/carousel'
+import GoTop from '@/components/home/go-top'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -159,7 +161,7 @@ export default function DetailTest() {
           <h1>{store.name}</h1>
           <div className="storeShare">
             <Share />
-            <FavStoreBtn
+            <FavStoreBtn2
               initFull={store.like_id}
               handler={() => {
                 handleFavor(store.stores_id)
@@ -517,6 +519,13 @@ export default function DetailTest() {
             ))}
         </div>
       </div>
+      <div className="row">
+        <h3 className="campSubtitle">周邊景點</h3>
+        <div className="container">
+          <Carousel />
+        </div>
+      </div>
+      <GoTop/>
       <style jsx>
         {`
           .storeTitle {

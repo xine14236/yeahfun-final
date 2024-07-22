@@ -1,8 +1,10 @@
 .navbar {
   position: relative;
+  z-index: 3;
 }
 .myContainer {
   padding: 0px 100px;
+  height: 70px;
 }
 .HomepageName {
   color: var(--secondary-3);
