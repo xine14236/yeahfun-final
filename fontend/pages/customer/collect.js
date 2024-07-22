@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
 import Loader from '@/components/loader'
 import Link from 'next/link'
@@ -25,7 +26,7 @@ export default function Index() {
   })
 
   // 按鈕換色
-
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -45,6 +46,11 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
