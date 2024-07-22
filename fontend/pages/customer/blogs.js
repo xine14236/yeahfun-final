@@ -12,8 +12,8 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [blog, setBlog] = useState([])
-  const [img, setImg] = useState([])
+  // const [blog, setBlog] = useState([])
+  // const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
     email: '',
