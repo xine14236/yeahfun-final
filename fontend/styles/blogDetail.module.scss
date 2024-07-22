@@ -19,7 +19,18 @@ margin-block: 5px;
 .span3{
   padding-inline: 20px;
 background: var( --secondary-2);
+cursor: pointer;
+display:none;
+border-radius: 20px;
+padding-block: 5px;
+margin-block: 5px;
+
+}
+.span3X{
+  padding-inline: 20px;
+background: var( --secondary-2);
 cursor: pointer;;
+display:block;
 border-radius: 20px;
 padding-block: 5px;
 margin-block: 5px;
