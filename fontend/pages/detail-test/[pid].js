@@ -11,6 +11,7 @@ import FavStoreBtn2 from '@/components/icons/fav-store-btn2'
 import Swiper from 'swiper'
 import Carousel from '@/components/product/detail/carousel'
 import GoTop from '@/components/home/go-top'
+import Swal from 'sweetalert2'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -64,7 +65,12 @@ export default function DetailTest() {
 
   const handleAddToCart = (store) => {
     if (dateRange.length === 0) {
-      alert('請輸入日期')
+      // alert('請輸入日期')
+      Swal.fire({
+        title: '請填寫入住和退房日！',
+        text: 'Please enter your check-in and check-out dates.',
+        icon: 'question',
+      })
       return
     }
 
@@ -80,6 +86,15 @@ export default function DetailTest() {
       startDate: dateRange[0].format('YYYY-MM-DD'),
       endDate: dateRange[1].format('YYYY-MM-DD'),
       storeImage: store.img,
+    })
+
+    // alert('已加入購物車')
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Yeah! 已加入購物車',
+      showConfirmButton: false,
+      timer: 1500,
     })
   }
 
@@ -525,7 +540,7 @@ export default function DetailTest() {
           <Carousel />
         </div>
       </div>
-      <GoTop/>
+      <GoTop />
       <style jsx>
         {`
           .storeTitle {
@@ -592,7 +607,7 @@ export default function DetailTest() {
             padding: 20px 40px;
             justify-content: space-evenly;
             border-radius: 50px;
-            background: var(--secondary-3, #fdaf17);
+            background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
           }
           .inputNumber {
             display: flex;
