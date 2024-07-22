@@ -4,6 +4,7 @@ import Carousel from '@/components/blog/carousel'
 import { useRouter } from 'next/router'
 import { FaPencil } from "react-icons/fa6";
 import toast, { Toaster } from 'react-hot-toast'
+import Link from 'next/link'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -44,6 +45,11 @@ export default function blogDetail() {
     } catch (ex) {
       console.log(ex)
     }
+  }
+
+  const handleLinkClick = (id) => {
+    router.push(`/blog/${id}`)
+      .then(() => router.reload())
   }
 
   
@@ -113,13 +119,13 @@ export default function blogDetail() {
 
   <FaRegClock className='me-3'/>
   </span>
-  <span className='lh-sm me-5'>
+  <span  className={` lh-sm me-5 ${styles.color1}`}>
   {blog.create_at}
  
   
   </span>
-  <span>BY</span>
-  {blog.name} 
+  <span className={`${styles.color1}`}>BY  {blog.name} </span>
+
   </p>
 </div>
 <div className="col-12 mt-4 ">
@@ -163,12 +169,12 @@ export default function blogDetail() {
             <h2 className="mt-5 mb-4">相關文章推薦</h2>
         </div>
             {favBlog.map((item) => (
-              <div className="card mb-3" key={item.id}>
+              <div className={`card mb-3 ${styles.card1}`} key={item.id} onClick={() => handleLinkClick(item.id)}>
                 <div className="row g-0">
                   <div className="col-md-4">
-
+                 
                   <Image
-                      src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+                      src={item.img_name? `http://localhost:3005/img-blog/${item.img_name}` :`http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`}
                       className="img-fluid"
                       alt="..."
                       width={400}
@@ -180,6 +186,8 @@ export default function blogDetail() {
                         objectFit: 'cover',
                       }}
                     />
+             
+              
                     {/* If you have an image URL, replace the placeholder */}
                     {/* <img
                       src="https://via.placeholder.com/150"

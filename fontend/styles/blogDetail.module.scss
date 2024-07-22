@@ -40,6 +40,18 @@ margin-block: 5px;
 
 }
 
+.color1{
+  color: var( --gray-600);
+}
+
+.card1{
+  cursor: pointer;
+
+}
+.card1:hover{
+  color: var(--secondary-3);
+}
+
 .meAuto{
   margin-left:45% ;
   @media (max-width: 768px) {
@@ -71,5 +83,5 @@ margin-block: 5px;
 .contentWrapper a {
   color: var(--secondary-3);
   font-weight: bold; 
-  
+
 }
