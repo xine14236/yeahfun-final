@@ -251,8 +251,8 @@ export default function Home() {
                                 src={`/detail/${img}`}
                                 className={styles.cardImage}
                                 alt="tents"
-                                width={300}
-                                height={200}
+                                width={640}
+                                height={427}
                                 style={{
                                   width: '100%',
                                   height: 'auto',
