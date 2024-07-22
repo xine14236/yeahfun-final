@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
 import Loader from '@/components/loader'
 import Link from 'next/link'
@@ -29,8 +30,9 @@ export default function Index() {
   //     birthday: '',
   //     address: '',
   //   })
-  // 按鈕換色
 
+  // 按鈕換色
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -50,10 +52,16 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
   }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -162,103 +170,6 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
           <form
             name="form1"
             onSubmit={handleSubmit}
