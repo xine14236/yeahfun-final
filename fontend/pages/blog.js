@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import dynamic from 'next/dynamic';
 import styles from '@/styles/blog.module.scss'
 import heart from '@/assets/heart.svg'
 import chiiLikes from '@/assets/chiiLike.svg'
+import chiiLikes2 from '@/assets/chiiLike2.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import { DatePicker, Space,Modal } from 'antd'
@@ -11,8 +13,10 @@ import BS5Pagination from '@/components/common/bs5-pagination';
 
 import GoTop from '@/components/home/go-top'
 import CreateBlog from '@/components/blog/createBlog';
+import toast, { Toaster } from 'react-hot-toast'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useAuth } from '@/hooks/use-auth';
 const { RangePicker } = DatePicker
 const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryModal'), {
   ssr: false,
@@ -20,7 +24,9 @@ const BlogCategoryModal = dynamic(() => import('@/components/blog/blogCategoryMo
 
 
 
+
 export default function Blog() {
+  const { auth } = useAuth()
 
  
   const initialCate = blogCategory.map((v, i) => {
@@ -38,6 +44,7 @@ export default function Blog() {
   const [sort, setSort] = useState('id')
   const [order, setOrder] = useState('desc')
   const [nameLike, setNameLike] = useState('')
+ 
 
 
   const [selectedRange, setSelectedRange] = useState([null, null])
@@ -52,7 +59,7 @@ export default function Blog() {
   const [hoveredBlogId, setHoveredBlogId] = useState(null);
 
   const [showModal1, setShowModal1] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
+ 
 
   let params = {
     page,
@@ -83,7 +90,14 @@ export default function Blog() {
 
     // 使用tyy-catch語句，真的要執行，不同的電腦上，讓和伺服器連線的程式能作錯誤處理
     try {
-      const res = await fetch(url)
+      const res = await fetch(url,{
+        credentials: 'include', 
+      method: 'GET', // or POST/PUT depending on your use case
+      headers: {
+        'Content-Type': 'application/json',
+      },
+   
+    })
       const resData = await res.json()
       console.log(resData)
 
@@ -178,14 +192,22 @@ export default function Blog() {
   };
 
   const handleClickStar = async (id)=>{
-    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`)
+    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`,{
+      credentials: 'include', 
+    method: 'GET', // or POST/PUT depending on your use case
+    headers: {
+      'Content-Type': 'application/json',
+    },
+ 
+  })
     const resData = await res.json()
     console.log(resData.action)
     if (resData.action === 'add') {
-      setShowModal1(true);
+      toast.success('已收藏此文章！');
     } else if (resData.action === 'remove') {
-      setShowModal2(true);
+      toast.error('已取消收藏此文章！');
     }
+    getLists(params)
   }
 
 
@@ -205,7 +227,7 @@ export default function Blog() {
     // 向伺服器fetch
     getLists(params)
     console.log(params)
-  }, [page, perpage, sort, order])
+  }, [page, perpage, sort, order, auth])
 
   return (
     <>
@@ -300,14 +322,14 @@ export default function Blog() {
       <div className={`container position-relative `}>
        
       <CreateBlog />
-      
+      <Toaster  reverseOrder={false} />
         {blogs.map((v, i) => {
           return (
             <div className={`row ${styles.blogBodyHead}`} id="card-container" key={v.id} onMouseEnter={() => handleMouseEnter(v.id)}
             onMouseLeave={handleMouseLeave}>
            
             <div onClick={()=>{handleClickStar(v.id)}}>
-      <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />
+     {v.fav_id? <Image src={chiiLikes2} className={` ${styles.starBoxShow}`}  /> : <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />}
       </div>
               {/* 卡片内容会在这里动态生成 */}
               <div
@@ -321,6 +343,7 @@ export default function Blog() {
                       i % 2 === 1 ? `${styles.order1}` : ''
                     } `}
                   >
+                    <Link href={`/blog/${v.id}`}> 
                     <Image
                       src={v.img_name? `http://localhost:3005/img-blog/${v.img_name}` :`http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`}
                       className="img-fluid"
@@ -334,15 +357,20 @@ export default function Blog() {
                         objectFit: 'cover',
                       }}
                     />
+                     </Link>
+                  
                   </div>
                   <div className="col-md-7 d-flex flex-column">
                     <div className={`card-body ${styles.order0}`}>
                       <div className="d-flex flex-column">
-                        <h3
+                      <Link href={`/blog/${v.id}`}>
+                      <h3
                           className={`card-title mt-md-3 ${styles.color1} ${styles.textTruncate2}`}
                         >
                           {v.title}
                         </h3>
+                      </Link>
+                      
                         <div className="d-flex justify-content-between ">
                           <p className="card-text ">
                             <small className="text-muted">{v.date}</small>
@@ -358,16 +386,19 @@ export default function Blog() {
                         <div
                           className={`card-content mb-md-3 ${styles.textTruncate4}`}
                         >
-                          <h5 className="card-text">
+                          <Link href={`/blog/${v.id}`}> 
+                          <h5 className={`card-text ${styles.color3}`}>
                             {stripHtmlTags(v.content)
                               .replace(/\\r\\n/g, '')
                               .replace(/\s+/g, '')}
                           </h5>
+                           </Link>
+                         
                         </div>
                       </div>
-                      <a href="" className="text-decoration-none text-end ">
+                      <Link href={`/blog/${v.id}`} className="text-decoration-none text-end ">
                         <p className={`card-text ${styles.color2}`}>查看更多</p>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

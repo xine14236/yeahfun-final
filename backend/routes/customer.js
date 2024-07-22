@@ -7,6 +7,80 @@ import sequelize from '#configs/db.js'
 const { Customer } = sequelize.models
 import db from '#configs/mysql.js'
 
+// GET - 得到訂單資料
+router.get('/:id/order', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      'SELECT orders.*, store.name AS store_name, stores_img.img_name AS store_img_name FROM orders JOIN store ON orders.store_id = store.stores_id LEFT JOIN (SELECT stores_id, MIN(img_name) AS img_name FROM stores_img GROUP BY stores_id) AS stores_img ON orders.store_id = stores_img.stores_id WHERE orders.customer_id = ?',
+      [id]
+    )
+    const order = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { order },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
+
+// GET - 得到口袋名單資料
+router.get('/:id/collect', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      `SELECT
+        favorite.id,
+        favorite.pid,
+        favorite.uid,
+        store.name AS store_name,
+        store.address,
+        comment.comment_star,
+        stores_img.img_name as store_img_name
+        FROM
+        favorite
+        JOIN store ON favorite.pid = store.stores_id
+        JOIN comment ON favorite.pid = comment.stores_id
+        JOIN stores_img ON favorite.pid = stores_img.stores_id
+        WHERE favorite.uid = ?`,
+      [id]
+    )
+
+    const collect = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { collect },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
+
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字
   const id = Number(req.params.id)

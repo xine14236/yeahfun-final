@@ -12,6 +12,8 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  // const [blog, setBlog] = useState([])
+  // const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
     email: '',
@@ -36,7 +38,7 @@ export default function Index() {
   const links = [
     { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
     {
-      href: '/customer/orders',
+      href: '/customer/order',
       icon: '/icon/shopping-bag.svg',
       text: '我的行程',
     },
@@ -80,11 +82,6 @@ export default function Index() {
     } catch (e) {
       console.error(e)
     }
-  }
-  const handleFieldChange = (e) => {
-    console.log(e.target.name, e.target.value, e.target.type)
-    setCustomer({ ...customer, [e.target.name]: e.target.value })
-    // [e.target.name]: e.target.value這樣可以動態的設定物件的屬性名稱
   }
 
   const handleSubmit = async (e) => {
@@ -259,132 +256,8 @@ export default function Index() {
               </span>
             </Link>
           </ul> */}
-          <form
-            name="form1"
-            onSubmit={handleSubmit}
-            className={styles.memberFrame}
-          >
-            <div className={styles.infoFrame}>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="name">
-                  姓名
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={customer.name}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="email">
-                  信箱
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="email"
-                  name="email"
-                  value={customer.email}
-                  disabled
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="phone">
-                  電話
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={customer.phone}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="gender">
-                  性別
-                </label>
-                <input
-                  className={styles.memberListInput}
-                  type="text"
-                  id="gender"
-                  name="gender"
-                  value={customer.gender}
-                  onChange={handleFieldChange}
-                />
-                {/* <select name="gender" id="gender">
-                  <option value="male">男性</option>
-                  <option value="female">女性</option>
-                  <option value="other">其他</option>
-                </select> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="birthday">
-                  生日
-                </label>
-                <input
-                  type="date"
-                  className={styles.memberListInput}
-                  id="birthday"
-                  name="birthday"
-                  value={customer.birthday}
-                  onChange={handleFieldChange}
-                />
-                {/* <div className="form-text"></div> */}
-              </div>
-              <div className={styles.memberList}>
-                <label className={styles.memberListLabel} htmlFor="address">
-                  地址
-                </label>
-                <input
-                  type="text"
-                  className={styles.memberListInput}
-                  id="address"
-                  name="address"
-                  value={customer.address}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              {/* <div className="mb-3">
-                <label htmlFor="introduction" className="form-label">
-                  自我介紹
-                </label>
-                <textarea
-                  name="introduction"
-                  id="introduction"
-                  className="form-control"
-                  rows="4"
-                  cols="50"
-                ></textarea>
-              </div> */}
-              {/* <div className="memberList">
-                <label htmlFor="id_card" className="form-label">
-                  身分證字號
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="id_card"
-                  name="id_card"
-                  value=""
-                />
-                <div className="form-text"></div>
-              </div> */}
-              {/* <input
-                type="hidden"
-                className="form-control"
-                id="id"
-                name="id"
-                value=""
-              /> */}
-            </div>
+          <div className={styles.memberFrame}>
+            <div className={styles.infoFrame}></div>
             <button
               type="submit"
               className={styles.btnSquare}
@@ -392,7 +265,7 @@ export default function Index() {
             >
               修改
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </>
