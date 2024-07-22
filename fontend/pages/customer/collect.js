@@ -5,6 +5,8 @@ import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
+// import Star from '@/components/icons/star'
+// import FavStoreBtn3 from '../icons/fav-store-btn3'
 // import { set } from 'lodash'
 
 export default function Index() {
