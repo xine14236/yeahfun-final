@@ -6,7 +6,7 @@ import styles from '@/styles/list.module.scss'
 import Favor from '@/components/icons/favor'
 import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay } from 'swiper/modules'
+import { Autoplay, Pagination } from 'swiper/modules'
 
 const ProductList = ({ products }) => {
   const [swiperInstances, setSwiperInstances] = useState([])
@@ -64,26 +64,30 @@ const ProductList = ({ products }) => {
                     disableOnInteraction: false,
                     enabled: false, // 初始化時禁用自動播放
                   }}
-                  // pagination={true}
-                  modules={[Autoplay]}
+                  loop={true}
+                  pagination={true}
+                  modules={[Autoplay, Pagination]}
                   className="mySwiper1"
                 >
-                  {v.img_name.split(',').map((img, index) => (
-                    <SwiperSlide key={index}>
-                      <Image
-                        src={`/detail/${img}`}
-                        className={styles.cardImage}
-                        alt="tents"
-                        width={300}
-                        height={200}
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'contain',
-                        }}
-                      />
-                    </SwiperSlide>
-                  ))}
+                  {v.img_name
+                    .split(',')
+                    .slice(0, 6)
+                    .map((img, index) => (
+                      <SwiperSlide key={index}>
+                        <Image
+                          src={`/detail/${img}`}
+                          className={styles.cardImage}
+                          alt="tents"
+                          width={300}
+                          height={200}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            objectFit: 'contain',
+                          }}
+                        />
+                      </SwiperSlide>
+                    ))}
                 </Swiper>
               </Link>
               <div className={`card-body ${styles.cardBody}`}>

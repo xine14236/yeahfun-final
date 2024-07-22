@@ -2,6 +2,17 @@
   width: 100%;
   height: 100%;
 }
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--gray-800); /* 更改導航按鈕的顏色 */
+  transition: 0.5s;
+  padding-inline: 50px;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: var(--gray-400); /* 更改為鼠標懸停時的顏色 */
+}
+
 .mySwiper1 {
   .swiper-slide {
     display: flex;
@@ -61,16 +72,9 @@
     height: 100%;
     object-fit: cover;
   }
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: var(--gray-800); /* 更改導航按鈕的顏色 */
-    transition: 0.5s;
-    padding-inline: 50px;
-  }
-  .swiper-button-next:hover,
-  .swiper-button-prev:hover {
-    color: var(--gray-400); /* 更改為鼠標懸停時的顏色 */
-  }
+}
+.swiper-pagination-bullet-active {
+  background: var(--secondary-4);
 }
 
 /* 添加 hover 效果 */

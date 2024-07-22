@@ -1,0 +1,64 @@
+.kv {
+  flex-direction: column;
+  width: 100%;
+  height: 50vh;
+  background: url(/images/homepage/kv.jpg) lightgray 50% / cover no-repeat;
+  background-blend-mode: multiply;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+}
+.title {
+  color: white;
+  text-align: center;
+  letter-spacing: 0.1em;
+  margin-top: 70px;
+}
+.title h1 {
+  font-size: 4.5rem;
+}
+.aboutRow {
+  margin-block: 100px;
+  line-height: 1.8;
+}
+.aboutRow ul {
+  padding-left: 15px;
+}
+.contact {
+  position: relative; /* 使伪元素能夠定位於此元素之上 */
+  width: 100%;
+  height: 50vh;
+  overflow: hidden; /* 確保內容不會超出容器 */
+}
+
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* 半透明黑色遮罩 */
+  z-index: 1; /* 确保遮罩層在背景之上 */
+}
+
+.contact {
+  width: 100%;
+  background: url(/images/about/contact2.jpg) lightgray 50% / cover no-repeat;
+  background-position: center bottom;
+  background-blend-mode: multiply;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.contactText {
+  z-index: 1;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.aboutImg {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}

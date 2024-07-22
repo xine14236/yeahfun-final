@@ -76,7 +76,7 @@ export default function Favor({
       </div>
       <style jsx>{`
         .favor {
-          color: #feaf18; 
+          color: #feaf18;
         }
       `}</style>
     </>

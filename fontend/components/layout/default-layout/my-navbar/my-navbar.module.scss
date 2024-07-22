@@ -2,6 +2,7 @@
   position: fixed;
   top: 0;
   z-index: 2;
+
   width: 100%;
   // background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
   background-color: var(--secondary-4);
@@ -10,6 +11,7 @@
 }
 .myContainer {
   padding: 0px 100px;
+  height: 70px;
 }
 
 .HomepageName {
