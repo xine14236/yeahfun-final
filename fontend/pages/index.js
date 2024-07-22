@@ -6,16 +6,17 @@ import HomeLayout from '@/components/layout/home-layout'
 import { useState } from 'react'
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import Favor from '@/components/icons/favor'
+import { useLoader } from '@/hooks/use-loader'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import { ScrollMotionContainer, ScrollMotionItem } from '../ScrollMotion'
 import Location from '@/components/icons/location'
 import Star from '@/components/icons/star'
-
+import FavStoreBtn3 from '@/components/icons/fav-store-btn3'
 import GoTop from '@/components/home/go-top'
 import Header from '@/components/home/header'
+import Section05 from '@/components/home/section05'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -28,6 +29,8 @@ export default function Home() {
 
   const [swiperInstances, setSwiperInstances] = useState([])
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
+  const { showLoader, hideLoader, loading, delay } = useLoader()
+  const [fav, setFav] = useState(true)
 
   const tags = [
     {
@@ -149,7 +152,14 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getProducts(), getBlog(), getTag(), getTag2(), getTag3()
+    showLoader()
+    getProducts(),
+      getBlog(),
+      getTag(),
+      getTag2(),
+      getTag3()
+        .then(delay(3000)) // 延時3秒後再停止載入器，只有手動控制有用，自動關閉會無用
+        .then(hideLoader)
   }, [])
 
   useEffect(() => {
@@ -183,7 +193,14 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className={`${styles.myCardList} ${styles.section02}`}>
+      <ScrollMotionContainer
+        once={true}
+        amount={0.1}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
+
         <Image
           className={styles.section02DecorateTop}
           src="/images/homepage/decorate.png"
@@ -191,7 +208,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -202,8 +220,10 @@ export default function Home() {
             <h3 className="titleText">HOT</h3>
             <p>熱門營地</p>
           </div>
-        </div>
-        <div className="container">
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem element="div" type="up" className="container">
+          {/* <div className="container"> */}
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
               {products.map((v, i) => (
@@ -214,7 +234,14 @@ export default function Home() {
                     onMouseLeave={() => handleMouseLeave(i)}
                   >
                     <div className={styles.favor}>
-                      <Favor size={40} />
+                      <FavStoreBtn3
+                        width={45}
+                        onClick={() => {
+                          setFav(!fav)
+                          console.log(fav)
+                        }}
+                        fav={fav}
+                      />
                     </div>
                     <Link href={`/detail-test/${v.stores_id}`}>
                       <Swiper
@@ -223,7 +250,7 @@ export default function Home() {
                         centeredSlides={true}
                         loop={true}
                         autoplay={{
-                          delay: 2500,
+                          delay: 2000,
                           disableOnInteraction: false,
                           enabled: false, // 初始化時禁用自動播放
                         }}
@@ -240,8 +267,8 @@ export default function Home() {
                                 src={`/detail/${img}`}
                                 className={styles.cardImage}
                                 alt="tents"
-                                width={300}
-                                height={200}
+                                width={640}
+                                height={427}
                                 style={{
                                   width: '100%',
                                   height: 'auto',
@@ -277,10 +304,18 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={styles.section03}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.4}
+        element="div"
+        className={styles.section03}
+      >
+        {/* <div className={styles.section03}> */}
         <Image
           className={styles.section04DecorateTop}
           src="/images/homepage/decorate.png"
@@ -288,7 +323,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -299,7 +335,8 @@ export default function Home() {
             <h3 className="titleText">Activity</h3>
             <p>最新消息</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <Image
           className={styles.section03Bg}
           src="/images/homepage/home-bg01.jpg"
@@ -308,7 +345,12 @@ export default function Home() {
           height={1080}
           style={{ width: '100%' }}
         />
-        <div className={`row justify-content-center ${styles.rowActivity1}`}>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`row justify-content-center ${styles.rowActivity1}`}
+        >
+          {/* <div className={`row justify-content-center ${styles.rowActivity1}`}> */}
           <Swiper
             loop={true}
             watchSlidesProgress={true}
@@ -354,7 +396,8 @@ export default function Home() {
               )
             })}
           </Swiper>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <div className={`row justify-content-center ${styles.rowActivity2}`}>
           {blog.map((v, i) => {
             return (
@@ -387,11 +430,19 @@ export default function Home() {
             )
           })}
         </div>
-      </div>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={`${styles.myCardList} ${styles.section04}`}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.6}
+        element="div"
+        className={`${styles.myCardList} ${styles.section04}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section04}`}> */}
         {/* 代辦事項: like hover，輪播動畫*/}
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -402,7 +453,8 @@ export default function Home() {
             <h3 className="titleText">theme</h3>
             <p>主題營地</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
 
         <div className={styles.paginationButtons}>
           {tags.map((tagSet, index) => (
@@ -417,15 +469,15 @@ export default function Home() {
             </button>
           ))}
         </div>
+
         <Swiper
           onSwiper={setSwiperInstance}
           slidesPerView={1}
           loop={true}
           onSlideChange={handleSlideChange}
           navigation={true}
-          allowTouchMove={false}
           modules={[Pagination, Navigation]}
-          className="mySwiper3"
+          className="mySwiper"
         >
           {tags.map((tagSet, idx) => (
             <SwiperSlide key={idx}>
@@ -434,45 +486,25 @@ export default function Home() {
                   <div className={`row ${styles.myRow}`}>
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
-                        <div className={`card ${styles.productCard}`}>
-                          <div className={styles.favor}>
-                            <Favor size={40} />
-                          </div>
+                        <div className="card">
+                          <Link href="#/">
+                            {/* <svg className={styles.iconLike}>
+                            <use href="#like" />
+                          </svg> */}
+                          </Link>
                           <Link href={`/detail-test/${v.stores_id}`}>
-                            <Swiper
-                              onSwiper={(swiper) => onSwiperInit(swiper, i)}
-                              spaceBetween={30}
-                              centeredSlides={true}
-                              autoplay={{
-                                delay: 2500,
-                                disableOnInteraction: false,
-                                enabled: false,
+                            <Image
+                              src={`/detail/${v.img_name.split(',')[0]}`}
+                              className={styles.cardImage}
+                              alt="tents"
+                              width={300}
+                              height={200}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain',
                               }}
-                              loop={true}
-                              pagination={true}
-                              modules={[Autoplay, Pagination]}
-                              className="mySwiper1"
-                            >
-                              {v.img_name
-                                .split(',')
-                                .slice(0, 6)
-                                .map((img, index) => (
-                                  <SwiperSlide key={index}>
-                                    <Image
-                                      src={`/detail/${img}`}
-                                      className={styles.cardImage}
-                                      alt="tents"
-                                      width={300}
-                                      height={200}
-                                      style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                        objectFit: 'contain',
-                                      }}
-                                    />
-                                  </SwiperSlide>
-                                ))}
-                            </Swiper>
+                            />
                           </Link>
                           <div className={styles.cardBody}>
                             <div className={styles.cardTags}>
@@ -502,156 +534,12 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
 
-      <ScrollMotionContainer element="div" className={styles.section05}>
-        {/* 代辦事項: 卡片展開 */}
-        <Image
-          className={styles.section05DecorateTop}
-          src="/images/homepage/decorate.png"
-          alt="decorate"
-          width={1920}
-          height={80}
-        />
-        <Image
-          className={styles.section05Bg}
-          src="/images/homepage/section05Bg.jpg"
-          alt="section05Bg"
-          width={1900}
-          height={655}
-        />
-        <ScrollMotionItem element="div" type="up" className="title">
-          <Image
-            src="/images/homepage/title-tree.png"
-            alt="blog"
-            width={66}
-            height={33}
-          />
-          <div className="titleContent">
-            <h3 className="titleText">about us</h3>
-            <p>關於我們</p>
-          </div>
-        </ScrollMotionItem>
-        <ScrollMotionItem element="div" type="up" className="container">
-          <div className={`row ${styles.aboutRow}`}>
-            <div className="col-12 col-sm-4 p-0">
-              <div className={`card ${styles.aboutCard}`}>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                  <a href="#/">
-                    <Image
-                      src="/images/homepage/stone3.png"
-                      className={`card-img-top ${styles.stone}`}
-                      alt="減碳慢活"
-                      width={300}
-                      height={300}
-                    />
-                  </a>
-                </motion.div>
-
-                <motion.div
-                  className={`card-body ${styles.aboutCardBody}`}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
-                  <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
-                    <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
-                        減碳慢活
-                      </a>
-                    </h3>
-                  </div>
-                  <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
-                      減碳慢活不僅是一種生活方式的選擇，更是對當前全球環境挑戰的一種積極回應。通過實踐這些原則，每個人都能為減少碳足跡、保護地球做出自己的貢獻，同時享受到更加豐富和有意義的生活。
-                    </a>
-                  </p>
-                  {/* </div> */}
-                </motion.div>
-              </div>
-            </div>
-            <div className="col-12 col-sm-4 p-0">
-              <div className={`card ${styles.aboutCard}`}>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                  <a href="#/">
-                    <Image
-                      src="/images/homepage/stone1.png"
-                      className={`card-img-top ${styles.stone}`}
-                      alt="響應無痕山林"
-                      width={300}
-                      height={300}
-                    />
-                  </a>
-                </motion.div>
-                <motion.div
-                  className={`card-body ${styles.aboutCardBody}`}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
-                  <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
-                    <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
-                        響應無痕山林
-                      </a>
-                    </h3>
-                  </div>
-                  <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
-                      守護自然，從我做起，無痕山林不僅是一種環保行為，更是一種生活態度。每個人都應該從自身做起，響應無痕山林的號召，在享受大自然美景的同時，保護我們共同的家園。讓我們一起行動，守護地球的未來！
-                    </a>
-                  </p>
-                  {/* </div> */}
-                </motion.div>
-              </div>
-            </div>
-            <div className="col-12 col-sm-4 p-0">
-              <div className={`card ${styles.aboutCard}`}>
-              <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                <a href="#/">
-                  <Image
-                    src="/images/homepage/stone02.png"
-                    className={`card-img-top ${styles.stone}`}
-                    alt="親子探索教育"
-                    width={300}
-                    height={300}
-                  />
-                </a>
-                </motion.div>
-                <motion.div
-                  className={`card-body ${styles.aboutCardBody}`}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                >
-                  {/* <div className={`card-body ${styles.aboutCardBody}`}> */}
-                  <div className={`card-title m-0 ${styles.aboutCardTitle}`}>
-                    <h3>
-                      <a href="#/" className={styles.aboutCardTitleA}>
-                        親子探索教育
-                      </a>
-                    </h3>
-                  </div>
-                  <p className={styles.aboutCardText}>
-                    <a href="#/" className={styles.aboutCardTextA}>
-                      親子探索教育是一種寓教於樂的教育方式，通過豐富多樣的活動，讓孩子在親身體驗中學習和成長。不僅促進了親子關係，還培養了孩子的各種素質和能力。讓我們一起參與到親子探索教育中來，與孩子一起探索世界，共同成長。
-                    </a>
-                  </p>
-                  {/* </div> */}
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </ScrollMotionItem>
+        {/* </div> */}
       </ScrollMotionContainer>
+
+      <Section05 />
+
       <GoTop />
     </>
   )

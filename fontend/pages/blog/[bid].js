@@ -3,6 +3,9 @@ import styles from '@/styles/blogDetail.module.scss'
 import Carousel from '@/components/blog/carousel'
 import { useRouter } from 'next/router'
 import { FaPencil } from "react-icons/fa6";
+import toast, { Toaster } from 'react-hot-toast'
+import { useAuth } from '@/hooks/use-auth';
+import Link from 'next/link'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -11,6 +14,7 @@ import Image from 'next/image'
 import heart from '@/assets/heart.svg'
 import chiiLikes from '@/assets/chiiLike.svg'
 export default function blogDetail() {
+  const { auth } = useAuth()
   const [blog, setBlog] = useState({
     id: 0,
     title: '',
@@ -45,6 +49,50 @@ export default function blogDetail() {
     }
   }
 
+  const handleLinkClick = (id) => {
+    router.push(`/blog/${id}`)
+      .then(() => router.reload())
+  }
+
+  
+  const handleClickStar = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`,{
+      credentials: 'include', 
+    method: 'GET', // or POST/PUT depending on your use case
+    headers: {
+      'Content-Type': 'application/json',
+    },
+ 
+  })
+    const resData = await res.json()
+    console.log(resData.action)
+    if (resData.action === 'add') {
+      toast.success('已收藏此文章！');
+    } else if (resData.action === 'remove') {
+      toast.error('已取消收藏此文章！');
+    }
+    getBlog(router.query.bid)
+  }
+
+  const handleClickHeart = async (id)=>{
+    const res = await fetch(`http://localhost:3005/api/blog/like/${id}?customer=1`,{
+      credentials: 'include', 
+    method: 'GET', // or POST/PUT depending on your use case
+    headers: {
+      'Content-Type': 'application/json',
+    },
+ 
+  })
+    const resData = await res.json()
+    console.log(resData.action)
+    if (resData.action === 'add') {
+      toast.success('已喜歡此文章！');
+    } else if (resData.action === 'remove') {
+      toast.error('已取消喜歡此文章！');
+    }
+    getBlog(router.query.bid)
+  }
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
@@ -60,7 +108,9 @@ export default function blogDetail() {
       <div className="row ">
         <Carousel />
       </div>
+
       <div className="row " >
+      <Toaster  reverseOrder={false} />
         <div className={`col-12 col-md-9 border ${styles.cc} `}>
         <div className="col-12">
       <h2>{blog.title}</h2>
@@ -71,13 +121,13 @@ export default function blogDetail() {
 
   <FaRegClock className='me-3'/>
   </span>
-  <span className='lh-sm me-5'>
+  <span  className={` lh-sm me-5 ${styles.color1}`}>
   {blog.create_at}
  
   
   </span>
-  <span>BY</span>
-  {blog.name} 
+  <span className={`${styles.color1}`}>BY  {blog.name} </span>
+
   </p>
 </div>
 <div className="col-12 mt-4 ">
@@ -88,20 +138,26 @@ export default function blogDetail() {
 
 <div className={`col-12 border likeContainer d-flex ${styles.likeContainer}`}>
 
-  <span className={`${styles.span1} fs-3 me-md-5 ms-md-5 ms-3 me-3 `}>
+  <span className={`${styles.span1} fs-3 me-md-5 ms-md-5 ms-3 me-3 `} onClick={()=>{handleClickHeart(blog.id)}}>
 
    <Image src={heart} height={20} width={20} className='me-2'/>{blog.likes_count}
   </span>
-  <span className={`${styles.span1} fs-3 `}>
+ 
+  <span className={`${styles.span1} fs-3 `}  onClick={()=>{handleClickStar(blog.id)}}>
 
-   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.likes_count}
+   <Image src={chiiLikes} height={20} width={20} className='me-2'/>{blog.favorite_count}
   </span>
  
-  <span className={`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>
+ <span className={auth.userData.id==blog.author? `${styles.span3X} ${styles.meAuto} fs-3 me-md-5   me-3`:`${styles.span3} ${styles.meAuto} fs-3 me-md-5   me-3`}>
+ <Link href={`/blog/edit/${blog.id}`}>
+
   <FaPencil  />
+ </Link>
 
 </span>
-  <span className={`${styles.span3}  fs-3 `}>
+
+
+  <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 `}>
   <FaTrashCan  />
 
 </span>
@@ -121,12 +177,12 @@ export default function blogDetail() {
             <h2 className="mt-5 mb-4">相關文章推薦</h2>
         </div>
             {favBlog.map((item) => (
-              <div className="card mb-3" key={item.id}>
+              <div className={`card mb-3 ${styles.card1}`} key={item.id} onClick={() => handleLinkClick(item.id)}>
                 <div className="row g-0">
                   <div className="col-md-4">
-
+                 
                   <Image
-                      src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+                      src={item.img_name? `http://localhost:3005/img-blog/${item.img_name}` :`http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`}
                       className="img-fluid"
                       alt="..."
                       width={400}
@@ -138,6 +194,8 @@ export default function blogDetail() {
                         objectFit: 'cover',
                       }}
                     />
+             
+              
                     {/* If you have an image URL, replace the placeholder */}
                     {/* <img
                       src="https://via.placeholder.com/150"

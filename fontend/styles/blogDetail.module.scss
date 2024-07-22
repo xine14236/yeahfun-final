@@ -19,10 +19,22 @@ margin-block: 5px;
 .span3{
   padding-inline: 20px;
 background: var( --secondary-2);
-cursor: pointer;;
+cursor: pointer;
+display:none;
 border-radius: 20px;
 padding-block: 5px;
 margin-block: 5px;
+
+}
+.span3X{
+  padding-inline: 20px;
+background: var( --secondary-2);
+cursor: pointer;;
+display:none;
+border-radius: 20px;
+padding-block: 5px;
+margin-block: 5px;
+
 
 }
 
@@ -32,12 +44,28 @@ margin-block: 5px;
   
 
 }
+.likeContainer:hover .span3X{
+  
+  display: block;
+}
 
 .cc{
   padding-left: 0;
   padding-right: 0;
   
 
+}
+
+.color1{
+  color: var( --gray-600);
+}
+
+.card1{
+  cursor: pointer;
+
+}
+.card1:hover{
+  color: var(--secondary-3);
 }
 
 .meAuto{
@@ -59,4 +87,17 @@ margin-block: 5px;
 
 .contentWrapper em {
   font-style: italic;
+}
+
+.contentWrapper img {
+  max-width: 500px;
+            max-height: 350px;
+            display: block;   /* 使图片独占一行 */
+            margin: 1rem 0;
+}
+
+.contentWrapper a {
+  color: var(--secondary-3);
+  font-weight: bold; 
+
 }

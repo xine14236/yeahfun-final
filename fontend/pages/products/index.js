@@ -2,8 +2,10 @@ import ListLayout from '@/components/layout/list-layout'
 import { P_LIST } from '@/configs/api-path'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useLoader } from '@/hooks/use-loader'
+import NextBreadCrumb from '@/components/common/next-breadcrumb'
 import styles from '@/styles/list.module.scss'
-import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
+import { Select, Input, Slider, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
 import dayjs from 'dayjs'
 
@@ -14,9 +16,8 @@ dayjs.extend(customParseFormat)
 import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 
 import GoTop from '@/components/home/go-top'
-
+import Loading from '@/components/list/loading'
 import Image from 'next/image'
-import { set } from 'lodash'
 
 export default function Products() {
   const router = useRouter()
@@ -36,8 +37,7 @@ export default function Products() {
   const [tag, setTag] = useState([])
   const [dateRange, setDateRange] = useState([])
   const [priceRange, setPriceRange] = useState([0, 5000])
-
-  
+  const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const tagOptions = [
     '草地',
@@ -116,6 +116,7 @@ export default function Products() {
 
   useEffect(() => {
     if (!router.isReady) return
+    showLoader()
     if (router.query.location) {
       setLocation(router.query.location)
     }
@@ -138,8 +139,9 @@ export default function Products() {
       .then((r) => r.json())
       .then((resData) => {
         setProducts(resData)
-        // setPageCount(resData.data.pageCount)
       })
+      .then(delay(3000)) // 延時3秒後再停止載入器，只有手動控制有用，自動關閉會無用
+      .then(hideLoader)
       .catch((error) => console.error('Error fetching data:', error))
   }, [router])
 
@@ -257,14 +259,8 @@ export default function Products() {
           </button>
         </form>
       </div>
-      {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
-      <ScrollMotionContainer
-        once={true}
-        element="div"
-        className={`${styles.myCardList} ${styles.section02}`}
-      >
-        <ScrollMotionItem element="div" type="up" className="title">
-          {/* <div className="title"> */}
+      <div className={`${styles.myCardList} ${styles.section02}`}>
+        <div className="title">
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -273,32 +269,31 @@ export default function Products() {
           />
           <div className="titleContent">
             <h3 className="titleText">List</h3>
-            <p>目錄</p>
+            {/* <p>目錄</p> */}
+            <NextBreadCrumb isHomeIcon isChevron bgClass="" />
           </div>
-          {/* </div> */}
-        </ScrollMotionItem>
-        <ScrollMotionItem
-          element="div"
-          type="up"
-          className={`container-fluid ${styles.listContainer}`}
-        >
+        </div>
+
+        <div className={`container-fluid ${styles.listContainer}`}>
           <div className="row">
-            <ProductList products={products} />
+            {loading ? <Loading /> : <ProductList products={products} />}
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-              <Pagination
-                pageCount={products.pageCount}
-                onPageChange={handlePageClick}
-                page={products.page}
-              />
+              {loading ? (
+                ''
+              ) : (
+                <Pagination
+                  pageCount={products.pageCount}
+                  onPageChange={handlePageClick}
+                  page={products.page}
+                />
+              )}
             </div>
           </div>
-          {/* </div> */}
-        </ScrollMotionItem>
-      </ScrollMotionContainer>
-      {/* </div> */}
+        </div>
+      </div>
       <GoTop />
     </>
   )

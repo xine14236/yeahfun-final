@@ -51,7 +51,10 @@ export default function MyNavbar() {
                 </Link>
               </li>
               <li className={`nav-item ${styles.navItem}`}>
-                <Link className={`nav-link p-0 ${styles.navMenuA}`} href="#/">
+                <Link
+                  className={`nav-link p-0 ${styles.navMenuA}`}
+                  href="/about"
+                >
                   <h3>About us</h3>
                 </Link>
               </li>

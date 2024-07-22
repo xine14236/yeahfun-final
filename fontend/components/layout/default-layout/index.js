@@ -4,10 +4,10 @@ import MyNavbar from './my-navbar'
 import MyFooter from './my-footer'
 import Head from 'next/head'
 import NextBreadCrumb from '@/components/common/next-breadcrumb'
-// import { useLoader } from '@/hooks/use-loader'
+import { useLoader } from '@/hooks/use-loader'
 
 export default function DefaultLayout({ title = 'Default', children }) {
-  // const { loader } = useLoader()
+  const { loader } = useLoader()
 
   return (
     <>
@@ -21,8 +21,7 @@ export default function DefaultLayout({ title = 'Default', children }) {
           <NextBreadCrumb isHomeIcon isChevron bgClass="" />
           {children}
         </div>
-        {/* 全域的載入動畫指示器 */}
-        {/* {loader()} */}
+        {loader()}
       </main>
       <MyFooter />
     </>
