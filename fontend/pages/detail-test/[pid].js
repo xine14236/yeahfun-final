@@ -14,9 +14,11 @@ import GoTop from '@/components/home/go-top'
 import Swal from 'sweetalert2'
 import Modal from 'react-modal'
 import { SlClose } from 'react-icons/sl'
+import dayjs from 'dayjs'
 
 export default function DetailTest() {
   const router = useRouter()
+  const query = router.query
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
   const [tag, setTag] = useState([])
@@ -150,6 +152,9 @@ export default function DetailTest() {
       </>
     )
   })
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day')
+  }
 
   // 將 precautions 字串拆分成陣列
   const precautionsArray = store.precautions ? store.precautions.split(',') : []
@@ -355,7 +360,17 @@ export default function DetailTest() {
         <div className="inputDate">
           <p style={{ color: 'white' }}>入住日期</p>
           <Space direction="vertical" size={12}>
-            <RangePicker onChange={setDateRange} />
+            <RangePicker
+              onChange={(e) => {
+                setDateRange(e)
+              }}
+              defaultValue={
+                query.startDate && query.endDate
+                  ? [dayjs(query.startDate), dayjs(query.endDate)]
+                  : [dayjs(), dayjs().add(1, 'day')]
+              }
+              disabledDate={disabledDate}
+            />
           </Space>
         </div>
         <div className="inputNumber" style={{ color: 'white' }}>
