@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
@@ -94,10 +95,10 @@ export default function Index() {
       const resData = await res.json()
       console.log(resData)
       if (resData.status === 'success') {
-        alert('刪除成功')
+        toast.success('刪除成功')
         getBlog()
       } else {
-        alert('刪除失敗')
+        toast.error('刪除失敗')
       }
     } catch (e) {
       console.error(e)
@@ -219,6 +220,7 @@ export default function Index() {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫

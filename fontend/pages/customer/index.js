@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
-// import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
@@ -22,6 +22,7 @@ export default function Index() {
     gender: '',
     birthday: '',
     address: '',
+    // introduction: '',
   })
   //   const [errors, setErrors] = useState({
   //     email: '',
@@ -81,6 +82,7 @@ export default function Index() {
           gender: user.gender,
           birthday: user.birthday,
           address: user.address,
+          // introduction: user.introduction,
         })
         setTimeout(() => {
           setIsLoading(false)
@@ -127,7 +129,7 @@ export default function Index() {
       const resData = await res.json()
       console.log(resData)
 
-      alert('修改成功')
+      toast.success('修改成功')
     } catch (e) {
       console.error(e)
     }
@@ -264,7 +266,7 @@ export default function Index() {
                   onChange={handleFieldChange}
                 />
               </div>
-              {/* <div className="mb-3">
+              {/* <div className={styles.memberList}>
                 <label htmlFor="introduction" className="form-label">
                   自我介紹
                 </label>
@@ -274,6 +276,7 @@ export default function Index() {
                   className="form-control"
                   rows="4"
                   cols="50"
+                  value={customer.introduction}
                 ></textarea>
               </div> */}
               {/* <div className="memberList">
@@ -307,6 +310,7 @@ export default function Index() {
           </form>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫

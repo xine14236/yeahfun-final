@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+// import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
