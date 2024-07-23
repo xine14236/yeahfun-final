@@ -36,6 +36,12 @@
   background: var(--white, #fff);
   transition: background-color 0.3s, color 0.3s;
 }
+.memberAsideList:hover {
+  border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+  background: var(--white);
+  color: var(--primary-1);
+}
+
 .memberAsideList.clicked {
   display: flex;
   height: 50.626px;
