@@ -153,7 +153,11 @@ export default function Index() {
           <div className={styles.memberFrame}>
             <div className={styles.collectInfoFrame}>
               {collect.map((v, i) => (
-                <span key={v.id} className={styles.collectCard}>
+                <Link
+                  href={`/detail-test/${v.id}`}
+                  key={v.id}
+                  className={styles.collectCard}
+                >
                   <div>
                     <Image
                       className={styles.chiiListImage}
@@ -208,7 +212,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                </span>
+                </Link>
               ))}
             </div>
           </div>
