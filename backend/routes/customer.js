@@ -200,7 +200,7 @@ router.delete('/:id/blog/:favId', async function (req, res) {
 
   // 刪除資料
   const [affectedRows] = await db.query(
-    'DELETE FROM favorite_blog WHERE customer_id = ? AND blog_id = ?',
+    'DELETE FROM favorite_blog WHERE customer_id = ? AND id = ?',
     [id, favId]
   )
 

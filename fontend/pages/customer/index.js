@@ -298,7 +298,7 @@ export default function Index() {
             </div>
             <button
               type="submit"
-              className={styles.btnSquare}
+              className="btnOrangePc"
               onSubmit={handleSubmit}
             >
               修改

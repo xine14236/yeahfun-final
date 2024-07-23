@@ -82,8 +82,8 @@ export default function Index() {
       console.error(e)
     }
   }
-  const handleClickDelete = async (id) => {
-    const url = `http://localhost:3005/api/customer/${userId}/blog/${id}`
+  const handleClickDelete = async (favId) => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog/${favId}`
     try {
       const res = await fetch(url, {
         method: 'DELETE',
