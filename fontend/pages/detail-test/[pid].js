@@ -168,15 +168,16 @@ export default function DetailTest() {
     if (router.isReady) {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
+
+      if (router.query.startDate && router.query.endDate) {
+        setDateRange([
+          dayjs(router.query.startDate),
+          dayjs(router.query.endDate),
+        ])
+      } else {
+        setDateRange([dayjs(), dayjs().add(1, 'day')])
+      }
     }
-    // if (router.query.startDate && router.query.endDate) {
-    //   {
-    //     setDateRange([
-    //       dayjs(router.query.startDate),
-    //       dayjs(router.query.endDate),
-    //     ])
-    //   }
-    // }
   }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (e) => {
