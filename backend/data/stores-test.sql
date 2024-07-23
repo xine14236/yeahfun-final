@@ -345,3 +345,8 @@ GROUP BY
     s.name, 
     s.address
     LIMIT 6;
+
+        SELECT title,content,img_name,home_blog.id 
+    FROM home_blog
+    LEFT JOIN blog_img ON home_blog.id = blog_img.blog_id
+    LIMIT 6;

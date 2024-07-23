@@ -154,16 +154,15 @@ export default function DetailTest() {
       </>
     )
   })
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day')
+  }
 
   // 將 precautions 字串拆分成陣列
   const precautionsArray = store.precautions ? store.precautions.split(',') : []
 
   // 將取得img資料字串拆分成陣列
   const imgArray = img.img_name ? img.img_name.split(',') : []
-
-  const disabledDate = (current) => {
-    return current && current < dayjs().endOf('day')
-  }
 
   useEffect(() => {
     if (router.isReady) {
@@ -372,13 +371,15 @@ export default function DetailTest() {
           <p style={{ color: 'white' }}>入住日期</p>
           <Space direction="vertical" size={12}>
             <RangePicker
+              onChange={(e) => {
+                setDateRange(e)
+              }}
               defaultValue={
                 query.startDate && query.endDate
                   ? [dayjs(query.startDate), dayjs(query.endDate)]
                   : [dayjs(), dayjs().add(1, 'day')]
               }
               disabledDate={disabledDate}
-              onChange={setDateRange}
             />
           </Space>
         </div>
