@@ -11,6 +11,9 @@ import FavStoreBtn2 from '@/components/icons/fav-store-btn2'
 import Swiper from 'swiper'
 import Carousel from '@/components/product/detail/carousel'
 import GoTop from '@/components/home/go-top'
+import Swal from 'sweetalert2'
+import Modal from 'react-modal'
+import { SlClose } from 'react-icons/sl'
 import dayjs from 'dayjs'
 
 export default function DetailTest() {
@@ -25,6 +28,7 @@ export default function DetailTest() {
   const { addCart } = useCart()
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -66,7 +70,12 @@ export default function DetailTest() {
 
   const handleAddToCart = (store) => {
     if (dateRange.length === 0) {
-      alert('請輸入日期')
+      // alert('請輸入日期')
+      Swal.fire({
+        title: '請填寫入住和退房日！',
+        text: 'Please enter your check-in and check-out dates.',
+        icon: 'question',
+      })
       return
     }
 
@@ -82,6 +91,15 @@ export default function DetailTest() {
       startDate: dateRange[0].format('YYYY-MM-DD'),
       endDate: dateRange[1].format('YYYY-MM-DD'),
       storeImage: store.img,
+    })
+
+    // alert('已加入購物車')
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Yeah! 已加入購物車',
+      showConfirmButton: false,
+      timer: 1500,
     })
   }
 
@@ -199,7 +217,52 @@ export default function DetailTest() {
                 height: 'auto',
                 borderRadius: '5px',
               }}
+              onClick={() => setModalIsOpen(true)}
             />
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={() => setModalIsOpen(false)}
+              contentLabel="Example Modal"
+              className="ImageModal"
+              style={{
+                content: {
+                  position: 'relative',
+                  marginTop: '10%', // 設定距離上方的高度
+                  width: '60%', // 設定寬度
+                  height: 'auto', // 設定高度
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  marginBottom: '0',
+                },
+              }}
+            >
+              <Image
+                src={`/detail/${imgArray[0]}`}
+                alt="Your description"
+                width={500} // 圖片的實際寬度
+                height={100} // 圖片的實際高度
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '5px',
+                }}
+              />
+              <SlClose
+                onClick={() => setModalIsOpen(false)}
+                className="closeImageModal"
+                style={{
+                  position: 'absolute',
+                  width: '30px',
+                  height: '30px',
+                  top: '10px',
+                  right: '10px',
+                  color: 'rgb(56, 155, 135)',
+                  backgroundColor: 'white',
+                  border: 'white',
+                  borderRadius: '50px',
+                }}
+              ></SlClose>
+            </Modal>
           </figure>
 
           {imgArray.slice(1, 5).map((img, index) => (
@@ -575,6 +638,32 @@ export default function DetailTest() {
             grid-row: 1 / 3;
             display: flex;
           }
+           {
+            /* .ImageModal被蓋掉暫寫行內樣式 {
+            position: 'absolute',
+            width: '30px',
+            height: '30px',
+            top: '10px',
+            right: '10px',
+            color: 'rgb(56, 155, 135)',
+            backgroundColor: 'white',
+            border: 'white',
+            borderRadius: '50px',
+          } */
+          }
+           {
+            /* .closeImageModal被蓋掉暫寫行內樣式 {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 10px;
+            right: 10px;
+            color: rgb(56, 155, 135);
+            background-color: white;
+            border: white;
+            border-radius: 50px;
+          } */
+          }
           .campPrecaution {
             display: inline;
             justify-content: space-between;
@@ -608,7 +697,7 @@ export default function DetailTest() {
             padding: 20px 40px;
             justify-content: space-evenly;
             border-radius: 50px;
-            background: var(--secondary-3, #fdaf17);
+            background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
           }
           .inputNumber {
             display: flex;
