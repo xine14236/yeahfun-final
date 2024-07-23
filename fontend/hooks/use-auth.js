@@ -63,6 +63,8 @@ export function AuthProvider({ children }) {
           userData: {
             id: 0,
             email: '',
+            name: '',
+            phone: '',
           },
         }
 
@@ -101,6 +103,8 @@ export function AuthProvider({ children }) {
           userData: {
             id: payload.id,
             email: payload.email,
+            name: payload.name,
+            phone: payload.phone,
           },
         }
 
@@ -139,6 +143,8 @@ export function AuthProvider({ children }) {
           userData: {
             id: customer.id,
             email: customer.email,
+            name: customer.name,
+            phone: customer.phone,
           },
         }
         // console.log(nextAuth);
