@@ -5,6 +5,9 @@ import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
+import { FaRegTrashCan } from 'react-icons/fa6'
+import { SlMagnifier } from 'react-icons/sl'
+
 // import { set } from 'lodash'
 
 export default function Index() {
@@ -79,6 +82,28 @@ export default function Index() {
       console.error(e)
     }
   }
+  const handleClickDelete = async (favId) => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog/${favId}`
+    try {
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const resData = await res.json()
+      console.log(resData)
+      if (resData.status === 'success') {
+        alert('刪除成功')
+        getBlog()
+      } else {
+        alert('刪除失敗')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -154,6 +179,8 @@ export default function Index() {
                   <tr>
                     <th scope="col">部落照片</th>
                     <th scope="col">部落名稱</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                     {/* <th scope="col">部落內容</th> */}
                   </tr>
                 </thead>
@@ -173,6 +200,16 @@ export default function Index() {
                         />
                       </td>
                       <td>{v.title}</td>
+                      <td>
+                        <Link href={`/blog/${v.id}`}>
+                          <SlMagnifier />
+                        </Link>
+                      </td>
+                      <td>
+                        <FaRegTrashCan
+                          onClick={() => handleClickDelete(v.id)}
+                        />
+                      </td>
                       {/* <td className={styles.content}>{v.content}</td> */}
                     </tr>
                   ))}

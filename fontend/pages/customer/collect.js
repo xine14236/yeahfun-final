@@ -5,6 +5,8 @@ import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
+// import Star from '@/components/icons/star'
+// import FavStoreBtn3 from '../icons/fav-store-btn3'
 // import { set } from 'lodash'
 
 export default function Index() {
@@ -151,7 +153,11 @@ export default function Index() {
           <div className={styles.memberFrame}>
             <div className={styles.collectInfoFrame}>
               {collect.map((v, i) => (
-                <span key={v.id} className={styles.collectCard}>
+                <Link
+                  href={`/detail-test/${v.id}`}
+                  key={v.id}
+                  className={styles.collectCard}
+                >
                   <div>
                     <Image
                       className={styles.chiiListImage}
@@ -201,12 +207,12 @@ export default function Index() {
                           </div>
                         </div>
                       </div>
-                      <div className={styles.chiiLocationName}>
+                      <h4 className={styles.chiiLocationName}>
                         {v.store_name}
-                      </div>
+                      </h4>
                     </div>
                   </div>
-                </span>
+                </Link>
               ))}
             </div>
           </div>

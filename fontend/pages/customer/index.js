@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+// import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
@@ -298,7 +299,7 @@ export default function Index() {
             </div>
             <button
               type="submit"
-              className={styles.btnSquare}
+              className="btnOrangePc"
               onSubmit={handleSubmit}
             >
               修改
