@@ -21,7 +21,7 @@
   max-width: 400px;
   flex-direction: column;
   align-items: flex-start;
-  padding-left:0;
+  padding-left: 0;
   background-color: var(--white, #fff);
 }
 .memberAsideList {
@@ -185,7 +185,7 @@
   background: var(--secondary-3, #fdaf17);
   color: var(--white, #fff);
 }
-.collectCard { 
+.collectCard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -205,8 +205,8 @@
 .chiiCardBody {
   display: flex;
   width: 300px;
-  height: 120px;
-  padding: 24px;
+  // height: 120px;
+  padding: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -264,7 +264,7 @@
 .chiiStarIcon {
   width: 16px;
   height: 14px;
-  color: #fdaf17;
+  color: var(--white, #fff);
 }
 .chiiStarPoint {
   color: var(--white, #fff);
@@ -278,18 +278,14 @@
 .chiiLocationName {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  // -webkit-line-clamp: 1;
   align-self: stretch;
   overflow: hidden;
   color: #000;
   text-overflow: ellipsis;
-
-  /* h4 */
-  font-family: Inter;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+}
+.chiiLocationName:hover {
+  color: var(--secondary-3, #fdaf17);
 }
 
 // order

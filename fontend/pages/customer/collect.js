@@ -207,9 +207,9 @@ export default function Index() {
                           </div>
                         </div>
                       </div>
-                      <div className={styles.chiiLocationName}>
+                      <h4 className={styles.chiiLocationName}>
                         {v.store_name}
-                      </div>
+                      </h4>
                     </div>
                   </div>
                 </Link>
