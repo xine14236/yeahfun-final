@@ -2,25 +2,22 @@ import ListLayout from '@/components/layout/list-layout'
 import { P_LIST } from '@/configs/api-path'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useLoader } from '@/hooks/use-loader'
+
 import styles from '@/styles/list.module.scss'
-import { Select, Input, Slider, Checkbox, DatePicker } from 'antd'
+import { Select, Input, Slider, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
-import ReactPaginate from 'react-paginate'
-import LeftArrow from '@/components/icons/left-arrow'
-import RightArrow from '@/components/icons/right-arrow'
-import Link from 'next/link'
-import Location from '@/components/icons/location'
-import Star from '@/components/icons/star'
-import Favor from '@/components/icons/favor'
 import dayjs from 'dayjs'
+
+import Pagination from '@/components/list/pagination'
+import ProductList from '@/components/list/product-list'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
 import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 
 import GoTop from '@/components/home/go-top'
-
+import Loading from '@/components/list/loading'
 import Image from 'next/image'
-import { set } from 'lodash'
 
 export default function Products() {
   const router = useRouter()
@@ -40,6 +37,7 @@ export default function Products() {
   const [tag, setTag] = useState([])
   const [dateRange, setDateRange] = useState([])
   const [priceRange, setPriceRange] = useState([0, 5000])
+  const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const tagOptions = [
     '草地',
@@ -118,6 +116,7 @@ export default function Products() {
 
   useEffect(() => {
     if (!router.isReady) return
+    showLoader()
     if (router.query.location) {
       setLocation(router.query.location)
     }
@@ -140,8 +139,9 @@ export default function Products() {
       .then((r) => r.json())
       .then((resData) => {
         setProducts(resData)
-        // setPageCount(resData.data.pageCount)
       })
+      .then(delay(3000)) // 延時3秒後再停止載入器，只有手動控制有用，自動關閉會無用
+      .then(hideLoader)
       .catch((error) => console.error('Error fetching data:', error))
   }, [router])
 
@@ -285,79 +285,20 @@ export default function Products() {
           className={`container-fluid ${styles.listContainer}`}
         >
           <div className="row">
-            <div className="col-sm-12 col-12">
-              {/* {productChunks.map((chunk, chunkIndex) => ( */}
-              <div className="row">
-                {products.stores.map((v) => (
-                  <div className="col-12 col-sm-4" key={v.stores_id}>
-                    <div className={`card ${styles.productCard}`}>
-                      <div className={styles.favor}>
-                        <Favor size={40} />
-                      </div>
-                      <Link href={`/detail-test/${v.stores_id}`}>
-                        <Image
-                          src={`/detail/${v.img_name.split(',')[0]}`}
-                          className={styles.cardImage}
-                          alt="tents"
-                          width={300}
-                          height={200}
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                          }}
-                        />
-                      </Link>
-                      <div className={`card-body ${styles.cardBody}`}>
-                        <div className={styles.cardTags}>
-                          <div className={styles.cardTagLocation}>
-                            <Location className={styles.iconLocation} />
-                            <p>{v.address}</p>
-                          </div>
-                          <div className={styles.cardTagStar}>
-                            <Star className={styles.iconStar} />
-                            <p>{v.comment_star}</p>
-                          </div>
-                        </div>
-                        <div className={`card-title ${styles.cardTitle}`}>
-                          <h4>
-                            <Link href={`/detail-test/${v.stores_id}`}>
-                              {v.name}
-                            </Link>
-                          </h4>
-                          <h5>${v.lowest_normal_price}/晚</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {loading ? <Loading /> : <ProductList products={products} />}
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-              <ReactPaginate
-                previousLabel={<LeftArrow />}
-                nextLabel={<RightArrow />}
-                breakLabel={'...'}
-                breakClassName={'breakItem item'}
-                pageCount={products.pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={'pagination'}
-                pageClassName={'pageItem item'}
-                pageLinkClassName={'pageLink link'}
-                previousClassName={'previousItem item'}
-                previousLinkClassName={'previousLink link'}
-                nextClassName={'nextItem item'}
-                nextLinkClassName={'nextLink link'}
-                breakLinkClassName={'breakLink link'}
-                activeClassName={'active'}
-                disabledClassName={'disabledItem'}
-                disabledLinkClassName={'disabledLink link'}
-                forcePage={products.page - 1} // 確保分頁按鈕顯示正確的頁碼
-              />
+              {loading ? (
+                ''
+              ) : (
+                <Pagination
+                  pageCount={products.pageCount}
+                  onPageChange={handlePageClick}
+                  page={products.page}
+                />
+              )}
             </div>
           </div>
           {/* </div> */}

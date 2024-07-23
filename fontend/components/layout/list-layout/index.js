@@ -1,8 +1,10 @@
 import Footer from './footer'
 import Header from './header'
 import Head from 'next/head'
+import { useLoader } from '@/hooks/use-loader'
 
-export default function ListLayout({ title = 'HomeList', children }) {
+export default function ListLayout({ title = '野放 || YeahFun', children }) {
+  const { loader } = useLoader()
   return (
     <>
       <Head>
@@ -10,7 +12,10 @@ export default function ListLayout({ title = 'HomeList', children }) {
         <meta name="viewport" content="width=device-width" />
       </Head>
       <Header />
-      <main>{children}</main>
+      <main>
+        {children}
+        {loader()}
+      </main>
       <Footer />
     </>
   )

@@ -32,7 +32,7 @@
 // .orderBys {
 //   display: flex;
 //   height: 100%;
-//   justify-content: end;
+//   justify-content: flex-end;
 //   flex-direction: column;
 // }
 
@@ -154,7 +154,7 @@
   // background: var(--secondary-3, #ffb998);
   /* border-radius: 10px; */
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
-  z-index: 1;
+  z-index: 2;
 }
 
 .searchBarSort {
@@ -178,9 +178,9 @@
 .keyword,
 .orderBys {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   gap: 5px;
   white-space: nowrap;
 }
@@ -190,12 +190,7 @@
 .price input {
   width: 100%;
 }
-//  {
-//   height: 100%;
-//   display: flex;
-//   justify-content: end;
-//   align-items: end;
-// }
+
 .types,
 .keyword {
   width: 150px;
@@ -218,22 +213,12 @@
 }
 
 @media (max-width: 576px) {
-  .searchBarSort {
-    display: flex;
-  }
-  .sort {
-    display: none;
-  }
-
-  .searchBar {
-    justify-content: start;
-  }
   .productSearchForm {
     display: flex;
     flex-direction: column;
     margin-top: 30px;
-    justify-content: start;
-    align-items: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 20px;
     padding: 40px 30px;
   }
@@ -246,8 +231,8 @@
   .types {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 10px;
     width: 100%;
   }
@@ -260,9 +245,8 @@
     display: none;
   }
   .searchBar {
-    justify-content: start;
+    justify-content: flex-start;
     position: relative;
-    z-index: -1;
   }
   .searchBarSort {
     flex-direction: column;
@@ -276,7 +260,7 @@
   .orderByNone {
     display: flex;
     margin-block: 10px;
-    justify-content: end;
+    justify-content: flex-end;
     gap: 5px;
   }
   .orderBys,

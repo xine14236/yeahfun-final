@@ -168,7 +168,7 @@ router.get('/',authenticate, async (req, res) => {
 })
 
 // 收藏 還沒有連接會員
-router.get('/fav/:b_id', async (req, res) => {
+router.get('/fav/:b_id',authenticate, async (req, res) => {
   const output = {
     success: false,
     action: '',
@@ -192,13 +192,13 @@ router.get('/fav/:b_id', async (req, res) => {
   // 3.該項有沒有加入過
   const sql2 = `SELECT id FROM favorite_blog WHERE customer_id=? AND blog_id=?`
   // ********************先用req給
-  const [rows2] = await db.query(sql2, [req.query.customer, req.params.b_id])
+  const [rows2] = await db.query(sql2, [req.user.id, req.params.b_id])
   let result
   if (rows2.length < 1) {
     // 沒有加入過
     output.action = 'add'
     const sql3 = `INSERT INTO favorite_blog (customer_id, blog_id) VALUES (?, ?)`
-    ;[result] = await db.query(sql3, [req.query.customer, req.params.b_id])
+    ;[result] = await db.query(sql3, [req.user.id, req.params.b_id])
   } else {
     // 已經加入了
     output.action = 'remove'
@@ -211,7 +211,7 @@ router.get('/fav/:b_id', async (req, res) => {
 })
 
 // 喜歡
-router.get('/like/:b_id', async (req, res) => {
+router.get('/like/:b_id',authenticate , async (req, res) => {
   const output = {
     success: false,
     action: '',
@@ -235,13 +235,13 @@ router.get('/like/:b_id', async (req, res) => {
   // 3.該項有沒有加入過
   const sql2 = `SELECT id FROM likes_blog WHERE customer_id=? AND blog_id=?`
   // ********************先用req給
-  const [rows2] = await db.query(sql2, [req.query.customer, req.params.b_id])
+  const [rows2] = await db.query(sql2, [req.user.id, req.params.b_id])
   let result
   if (rows2.length < 1) {
     // 沒有加入過
     output.action = 'add'
     const sql3 = `INSERT INTO likes_blog (customer_id, blog_id) VALUES (?, ?)`
-    ;[result] = await db.query(sql3, [req.query.customer, req.params.b_id])
+    ;[result] = await db.query(sql3, [req.user.id, req.params.b_id])
   } else {
     // 已經加入了
     output.action = 'remove'
@@ -265,6 +265,45 @@ router.get('/create', authenticate , async (req, res) => {
   const [result] = await db.query(sql,[req.user.id])
   // insertId
   res.json({success:true,data:result})
+})
+
+router.post('/save',authenticate, async (req, res) => {
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const memberId = req.user.id || null
+  const sql = `UPDATE blog set title=?, author=? , content=? where id=?`
+  const [result]= await db.query(sql,[req.body.title, memberId, req.body.content, req.body.blogId])
+  output.result1=result
+  output.info='新增成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
+    await db.query(deleteSql, [req.body.blogId]);
+
+    const tags = req.body.tags || [];
+    if (!tags.includes(7)) {
+      tags.push(7);
+    }
+
+    // 插入新的标签
+    const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
+    const [insertResult] = await db.query(insertSql, [tagValues]);
+
+    output.result2 = insertResult;
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
 })
 
 
@@ -349,6 +388,61 @@ if (req.files) {
 
 })
 
+router.get('/edit/:bid', authenticate , async (req, res) => {
+ 
+  const sql = ` SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids
+   FROM blog b Left join  blog_category bc ON b.id=bc.blog_id   where b.id=${req.params.bid} GROUP BY b.id
+    `
+ 
+ 
+  const [rows] = await db.query(sql)
+  const row=rows[0]
+  // insertId
+  res.json({success:true,data:{
+    blog:row
+  }})
+})
+
+router.post('/update' , async (req, res) => {
+ 
+  const output={
+    success:false,
+    info:'',
+    
+  }
+ 
+  const sql = `UPDATE blog set title=? , content=? where id=?`
+  const [result]= await db.query(sql,[req.body.title, req.body.content, req.body.blogId])
+  output.result1=result
+  output.info='修改成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
+    await db.query(deleteSql, [req.body.blogId]);
+
+    const tags = req.body.tags || [];
+   
+if(tags.length > 0){
+    // 插入新的标签
+    const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
+    const [insertResult] = await db.query(insertSql, [tagValues]);
+
+    output.result2 = insertResult;
+}
+
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
+})
+
 router.get('/:bid', async (req, res) => {
   const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count
@@ -371,8 +465,10 @@ router.get('/:bid', async (req, res) => {
   const row1 = rows1[0]
 
   const sql2 = `SELECT   b.id, b.title, b.create_at, 
+  bi.img_name,
     COALESCE(lb.likes_count, 0) AS likes_count
    FROM blog b 
+   Left join blog_img bi on b.id=bi.blog_id
    Left join  (SELECT blog_id, COUNT(*) AS likes_count FROM likes_blog GROUP BY blog_id) lb ON b.id = lb.blog_id  
    Where b.title is not null
   GROUP BY b.id ORDER BY likes_count DESC ,b.id DESC
@@ -381,7 +477,9 @@ LIMIT 5 `
 const dateFormat3 = 'YYYYMMDD'
   const [row2]=await db.query(sql2)
   row2.forEach((r) => {
-   
+    if(r.img_name){
+      r.img_name=r.img_name.split(',')[0]
+    }
     // "JS 的Date 類型 轉換成日期格式的字串"
     if (r.create_at) {
       r.create_at = moment(r.create_at).format(dateFormat3)

@@ -20,9 +20,16 @@ import { LoaderProvider } from '@/hooks/use-loader'
 
 import DefaultLayout from '@/components/layout/default-layout'
 // 自訂用載入動畫元件
-import { CatLoader, NoLoader } from '@/hooks/use-loader/components'
+import {
+  CatLoader,
+  NoLoader,
+  CircleLoader,
+} from '@/hooks/use-loader/components'
 
 import { CartProviderNew } from '@/hooks/cart-hook'
+
+import Modal from 'react-modal'
+Modal.setAppElement('#__next')
 
 export default function MyApp({ Component, pageProps }) {
   // 導入bootstrap的JS函式庫
@@ -39,7 +46,7 @@ export default function MyApp({ Component, pageProps }) {
     <CartProviderNew>
       <ConfigProvider theme={theme}>
         <AuthProvider>
-          <LoaderProvider close={2} CustomLoader={CatLoader}>
+          <LoaderProvider close={4} CustomLoader={CircleLoader}>
             <CartProvider>
               {getLayout(<Component {...pageProps} />)}
             </CartProvider>
