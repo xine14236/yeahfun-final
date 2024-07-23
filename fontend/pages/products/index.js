@@ -276,7 +276,11 @@ export default function Products() {
 
         <div className={`container-fluid ${styles.listContainer}`}>
           <div className="row">
-            {loading ? <Loading /> : <ProductList products={products} />}
+            {loading ? (
+              <Loading />
+            ) : (
+              <ProductList products={products} query={query} />
+            )}
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}

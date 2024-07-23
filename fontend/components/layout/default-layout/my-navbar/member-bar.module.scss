@@ -8,9 +8,19 @@
 }
 .iconShoppingCart {
   color: var(--black);
+  position: relative;
 }
 .iconShoppingCart:hover {
   color: var(--secondary-3);
+}
+.redSpot {
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }
 .navA {
   color: var(--black);

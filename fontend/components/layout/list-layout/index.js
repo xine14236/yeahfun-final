@@ -3,7 +3,7 @@ import Header from './header'
 import Head from 'next/head'
 import { useLoader } from '@/hooks/use-loader'
 
-export default function ListLayout({ title = 'HomeList', children }) {
+export default function ListLayout({ title = '野放 || YeahFun', children }) {
   const { loader } = useLoader()
   return (
     <>
