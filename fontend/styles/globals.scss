@@ -66,7 +66,23 @@ body {
     // title
     'Luckiest Guy';
 }
-
+.dropdown-toggle::after {
+  display: none;
+}
+.nav-link {
+  color: var(--black);
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--secondary-4);
+}
+.dropdown-menu {
+  z-index: 10;
+  width: 200px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
 .form-member {
   max-width: 330px;
   padding: 1rem;
@@ -400,12 +416,11 @@ a {
 
 .ql-editor a {
   color: var(--secondary-3) !important;
-  font-weight: bold !important; 
-  
+  font-weight: bold !important;
 }
 .ql-editor img {
   max-width: 500px;
-            max-height: 350px;
-            display: block;   /* 使图片独占一行 */
-            margin: 1rem 0;
+  max-height: 350px;
+  display: block; /* 使图片独占一行 */
+  margin: 1rem 0;
 }
