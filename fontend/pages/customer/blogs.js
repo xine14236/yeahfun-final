@@ -202,12 +202,16 @@ export default function Index() {
                       </td>
                       <td>{v.title}</td>
                       <td>
-                        <Link href={`/blog/${v.id}`}>
+                        <Link
+                          href={`/blog/${v.id}`}
+                          className={styles.blogIcon}
+                        >
                           <SlMagnifier />
                         </Link>
                       </td>
                       <td>
                         <FaRegTrashCan
+                          className={styles.blogIcon}
                           onClick={() => handleClickDelete(v.id)}
                         />
                       </td>
