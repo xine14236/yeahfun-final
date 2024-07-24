@@ -134,7 +134,21 @@ router.get('/:id/collect', async function (req, res) {
     })
   }
 })
+// GET - 得到個別會員資料(注意，有動態參數時要寫在GET區段最後面)
+router.get('/:id', async function (req, res) {
+  const id = Number(req.params.id)
+  const [rows] = await db.query('SELECT * FROM customer WHERE id = ?', [id])
+  const customer = rows[0]
+  // 不回傳密碼
+  delete customer.password
 
+  // 標準回傳JSON
+  return res.json({
+    status: 'success',
+    data: { customer },
+  })
+})
+// PUT - 新增會員資料
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字
   const id = Number(req.params.id)
@@ -179,19 +193,42 @@ router.get('/', async function (req, res) {
   })
 })
 
-// GET - 得到個別會員資料(注意，有動態參數時要寫在GET區段最後面)
-router.get('/:id', async function (req, res) {
+// DELETE - 刪除收藏部落格
+router.delete('/:id/blog/:favId', async function (req, res) {
   const id = Number(req.params.id)
-  const [rows] = await db.query('SELECT * FROM customer WHERE id = ?', [id])
-  const customer = rows[0]
-  // 不回傳密碼
-  delete customer.password
+  const favId = Number(req.params.favId)
 
-  // 標準回傳JSON
-  return res.json({
-    status: 'success',
-    data: { customer },
-  })
+  // 刪除資料
+  const [affectedRows] = await db.query(
+    'DELETE FROM favorite_blog WHERE customer_id = ? AND id = ?',
+    [id, favId]
+  )
+
+  // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
+  if (!affectedRows) {
+    return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
+  }
+
+  // 回傳
+  return res.json({ status: 'success', data: null })
 })
+// DELETE - 刪除口袋名單
+router.delete('/:id/collect/:collectId', async function (req, res) {
+  const id = Number(req.params.id)
+  const collectId = Number(req.params.collectId)
 
+  // 刪除資料
+  const [affectedRows] = await db.query(
+    'DELETE FROM favorite WHERE uid = ? AND id = ?',
+    [id, collectId]
+  )
+
+  // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
+  if (!affectedRows) {
+    return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
+  }
+
+  // 回傳
+  return res.json({ status: 'success', data: null })
+})
 export default router

@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
+import { FaRegTrashCan } from 'react-icons/fa6'
+import { SlMagnifier } from 'react-icons/sl'
+
 // import { set } from 'lodash'
 
 export default function Index() {
@@ -79,6 +83,28 @@ export default function Index() {
       console.error(e)
     }
   }
+  const handleClickDelete = async (favId) => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog/${favId}`
+    try {
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const resData = await res.json()
+      console.log(resData)
+      if (resData.status === 'success') {
+        toast.success('刪除成功')
+        getBlog()
+      } else {
+        toast.error('刪除失敗')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -154,6 +180,8 @@ export default function Index() {
                   <tr>
                     <th scope="col">部落照片</th>
                     <th scope="col">部落名稱</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                     {/* <th scope="col">部落內容</th> */}
                   </tr>
                 </thead>
@@ -173,6 +201,20 @@ export default function Index() {
                         />
                       </td>
                       <td>{v.title}</td>
+                      <td>
+                        <Link
+                          href={`/blog/${v.id}`}
+                          className={styles.blogIcon}
+                        >
+                          <SlMagnifier />
+                        </Link>
+                      </td>
+                      <td>
+                        <FaRegTrashCan
+                          className={styles.blogIcon}
+                          onClick={() => handleClickDelete(v.id)}
+                        />
+                      </td>
                       {/* <td className={styles.content}>{v.content}</td> */}
                     </tr>
                   ))}
@@ -182,12 +224,22 @@ export default function Index() {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

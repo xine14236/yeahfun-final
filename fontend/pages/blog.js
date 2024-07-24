@@ -354,6 +354,7 @@ export default function Blog() {
                         width: '100%',
                         height: 'auto',
                         minHeight: '280px',
+                        maxHeight: '400px',
                         objectFit: 'cover',
                       }}
                     />

@@ -18,7 +18,6 @@ import dayjs from 'dayjs'
 
 export default function DetailTest() {
   const router = useRouter()
-  const query = router.query
   const [campsites, setCampsites] = useState([])
   const [store, setStore] = useState([])
   const [tag, setTag] = useState([])
@@ -29,6 +28,9 @@ export default function DetailTest() {
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const query = router.query
+  console.log(query)
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -167,6 +169,14 @@ export default function DetailTest() {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
     }
+    // if (router.query.startDate && router.query.endDate) {
+    //   {
+    //     setDateRange([
+    //       dayjs(router.query.startDate),
+    //       dayjs(router.query.endDate),
+    //     ])
+    //   }
+    // }
   }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (e) => {
@@ -390,7 +400,6 @@ export default function DetailTest() {
       <hr />
       <div className="row">
         <h3 className="campSubtitle">住宿選擇</h3>
-        <Link href="/product/cart">前往購物車</Link>
         <div className="cardContainer">
           {filteredCampsites
             .filter((campsite) => campsite.type === 'bed')
