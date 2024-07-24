@@ -253,7 +253,16 @@ export default function Index() {
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v1.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={200}
+          height={200}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )
