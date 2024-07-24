@@ -191,7 +191,9 @@ export default function Cart() {
           className={`btnGreenPc transition mt-5`}
           onClick={checkout}
         >
-          <div>前往結帳頁面</div>
+          <div className="py-2" style={{ fontSize: '20px' }}>
+            前往結帳頁面
+          </div>
         </Link>
       </div>
       <style jsx>
@@ -265,8 +267,8 @@ export default function Cart() {
           .checkoutButton {
             height: 200px;
             display: flex;
-            justify-content: flex-end; /* Aligns the button to the right */
-            align-items: start; /* Aligns the button to the top */
+            justify-content: flex-end;
+            align-items: start;
           }
           .checkout {
             padding: 10px 80px;
