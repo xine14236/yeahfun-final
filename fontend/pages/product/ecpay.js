@@ -27,6 +27,11 @@ export default function ECPayIndex() {
     returnMessage: '',
   })
 
+  const [level, setLevel] = useState({
+    levels:0,
+    coin:0
+  })
+
   // 格式化日期函數
   const formatDate = (dateString, includeWeekday = true) => {
     const date = new Date(dateString)
@@ -80,12 +85,81 @@ export default function ECPayIndex() {
     sumTotal()
   }, [cartItems])
 
-  // 每次cartItems变化时重新计算总金额
-  useEffect(() => {
-    sumTotal()
-  }, [cartItems])
 
-  //const userid = auth?.useData?.id
+  
+  const getLevel = async () => {
+    const userId = auth.userData.id;
+    const url = `http://localhost:3005/api/level/${userId}`;
+    try {
+      const res = await fetch(url);
+      const resData = await res.json();
+      console.log('Get Level Response:', resData);
+  
+      if (resData.status === 'success') {
+        const { levels = 0, coin = 0 } = resData.data.level || {};
+        setLevel({ levels, coin });
+      } else {
+        setLevel({ levels: 0, coin: 0 });
+      }
+    } catch (e) {
+      console.error('Error fetching level:', e);
+      setLevel({ levels: 0, coin: 0 });
+    }
+  };
+  
+  useEffect(() => {
+    if (auth.userData && auth.userData.id) {
+      getLevel();
+    }
+  }, [auth.userData]);
+  
+
+  // 等級規則
+  const rule = (levels) => {
+    console.log('Current Levels:', levels);
+    let newLevels = Number(levels) + 100;
+    let newCoin = level.coin;
+  
+    if (newLevels <= 200) {
+      newCoin += 10;
+    } else if (newLevels <= 400) {
+      newCoin += 20;
+    } else if (newLevels <= 600) {
+      newCoin += 30;
+    } else if (newLevels <= 800) {
+      newCoin += 40;
+    } else if (newLevels <= 1000) {
+      newCoin += 50;
+    } else {
+      newCoin += 60;
+    }
+  
+    console.log('Calculated newLevels:', newLevels);
+    console.log('Calculated newCoin:', newCoin);
+  
+    return { newLevels, newCoin };
+  };
+
+  // 更新levels和coin
+  const updateLevel = async (newLevels, newCoin) => {
+    const userId = auth.userData.id;
+    const url = `http://localhost:3005/api/level/update-level`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newLevels, newCoin })
+      });
+      const resData = await res.json();
+      console.log(resData);
+  
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
 
   const createOrderAndPay = async () => {
     const products = cartItems.map((v) => ({
@@ -108,6 +182,19 @@ export default function ECPayIndex() {
     if (res.data.status === 'success') {
       setOrder(res.data.data.order)
       toast.success('已成功建立訂單')
+
+      // 更新等级和金币
+    const currentLevels = level.levels || 0;
+    const { newLevels, newCoin } = rule(currentLevels);
+    
+     // 直接更新資料庫
+    updateLevel(newLevels, newCoin);
+
+    // 更新前端狀態
+    setLevel({
+      levels: newLevels,
+      coin: newCoin,
+    });
 
       if (window.confirm('確認要導向至ECPay進行付款?')) {
         window.location.href = `http://localhost:3005/api/ecpay/payment?orderId=${res.data.data.order.orderId}`
@@ -411,13 +498,6 @@ export default function ECPayIndex() {
 
   return (
     <>
-      <h1>ECPay測試</h1>
-      <p>
-        會員登入狀態(需登入才能進行交易): {auth.isAuth ? '已登入' : '未登入'}
-      </p>
-      <p>
-        <Link href="/test/user">連至會員登入頁面</Link>
-      </p>
       {result.returnCode ? confirmOrder : orderDisplay}
       {/* 土司訊息視窗用 */}
       <Toaster />
