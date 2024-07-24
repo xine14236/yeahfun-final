@@ -28,6 +28,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const [swiperInstances, setSwiperInstances] = useState([])
+  const [swiperInstances2, setSwiperInstances2] = useState([])
 
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
   const { showLoader, hideLoader, loading, delay } = useLoader()
