@@ -255,11 +255,11 @@ export default function Index() {
     <>
       <div className={styles.loadingPage}>
         <Image
-          src="/chameleon/v1.svg"
+          src="/chameleon/v7.svg"
           alt="Chameleon"
           className={styles.loadingPageImg}
-          width={200}
-          height={200}
+          width={150}
+          height={150}
         />
         <h2>正向伺服器查詢是否有權限進入...</h2>
       </div>
