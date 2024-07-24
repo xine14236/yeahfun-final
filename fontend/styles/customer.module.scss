@@ -185,6 +185,27 @@
   background: var(--secondary-3, #fdaf17);
   color: var(--white, #fff);
 }
+.collectCardFrame {
+  display: flex;
+  position: relative;
+}
+.collectCross {
+  display: flex;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--secondary-3, #fdaf17);
+  color: var(--secondary-3, #fdaf17);
+  width: 20px;
+  height: 20px;
+  background-color: var(--white, #fff);
+}
+.collectCross:hover {
+  border: 1px solid var(--white, #fff);
+  background-color: var(--secondary-3, #fdaf17);
+  color: var(--white, #fff);
+}
 .collectCard {
   display: flex;
   flex-direction: column;
