@@ -12,7 +12,7 @@ const ProductList = ({ products = {}, query = '' }) => {
   const [swiperInstances, setSwiperInstances] = useState([])
 
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
-  const [fav, setFav] = useState(true)
+  const [fav, setFav] = useState(false)
 
   useEffect(() => {
     setSwiperInstances((prevInstances) =>

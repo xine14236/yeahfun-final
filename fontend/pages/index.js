@@ -28,6 +28,8 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const [swiperInstances, setSwiperInstances] = useState([])
+  const [swiperInstances2, setSwiperInstances2] = useState([])
+
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
   const { showLoader, hideLoader, loading, delay } = useLoader()
   const [fav, setFav] = useState(true)
@@ -189,7 +191,6 @@ export default function Home() {
       return newInstances
     })
   }
-
   return (
     <>
       <Header />
@@ -481,7 +482,8 @@ export default function Home() {
           onSlideChange={handleSlideChange}
           navigation={true}
           modules={[Pagination, Navigation]}
-          className="mySwiper"
+          className="mySwiper3"
+          allowTouchMove={false}
         >
           {tags.map((tagSet, idx) => (
             <SwiperSlide key={idx}>
@@ -490,14 +492,47 @@ export default function Home() {
                   <div className={`row ${styles.myRow}`}>
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
-                        <div className="card">
-                          <Link href="#/">
-                            {/* <svg className={styles.iconLike}>
-                            <use href="#like" />
-                          </svg> */}
-                          </Link>
+                        <div className={`card ${styles.productCard}`}>
+                          <div className={styles.favor}>
+                            <FavStoreBtn3
+                              width={45}
+                              onClick={() => {
+                                setFav(!fav)
+                                console.log(fav)
+                              }}
+                              fav={fav}
+                            />
+                          </div>
                           <Link href={`/detail-test/${v.stores_id}`}>
-                            <Image
+                            <Swiper
+                              spaceBetween={30}
+                              centeredSlides={true}
+                              loop={true}
+                              pagination={true}
+                              modules={[Pagination]}
+                              className="mySwiper1"
+                            >
+                              {v.img_name
+                                .split(',')
+                                .slice(0, 6)
+                                .map((img, index) => (
+                                  <SwiperSlide key={index}>
+                                    <Image
+                                      src={`/detail/${img}`}
+                                      className={styles.cardImage}
+                                      alt="tents"
+                                      width={640}
+                                      height={427}
+                                      style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  </SwiperSlide>
+                                ))}
+                            </Swiper>
+                            {/* <Image
                               src={`/detail/${v.img_name.split(',')[0]}`}
                               className={styles.cardImage}
                               alt="tents"
@@ -507,8 +542,8 @@ export default function Home() {
                                 width: '100%',
                                 height: 'auto',
                                 objectFit: 'contain',
-                              }}
-                            />
+                              }} */}
+                            {/* /> */}
                           </Link>
                           <div className={styles.cardBody}>
                             <div className={styles.cardTags}>
