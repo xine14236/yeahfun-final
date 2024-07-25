@@ -1,10 +1,163 @@
+import { useState, useEffect } from 'react'
 import React from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Coin() {
+  const router = useRouter()
+  const { auth } = useAuth()
+
+  const [coupons, setCoupons] = useState([])
+  const [donations, setDonations] = useState([])
+  const [coin, setCoin] = useState(0)
+  const [selectedItem, setSelectedItem] = useState(null)
+
+  const getCoupons = async () => {
+    const url = `http://localhost:3005/api/coin/coupons`
+
+    const res = await fetch(url)
+    const resData = await res.json()
+
+    if (resData.status === 'success') {
+      setCoupons(resData.data.coupons)
+    } else {
+      console.error('Failed to fetch coupons:', resData.message)
+    }
+  }
+
+  useEffect(() => {
+    getCoupons()
+  }, [])
+
+  const getDonations = async () => {
+    const url = `http://localhost:3005/api/coin/donations`
+
+    const res = await fetch(url)
+    const resData = await res.json()
+
+    if (resData.status === 'success') {
+      setDonations(resData.data.donations)
+    } else {
+      console.error('Failed to fetch donations:', resData.message)
+    }
+  }
+
+  useEffect(() => {
+    getDonations()
+  }, [coin])
+
+  const getCoin = async () => {
+    const userId = auth.userData.id
+    console.log(`Fetching coin data for userId: ${userId}`) // 添加调试信息
+    const url = `http://localhost:3005/api/coin/${userId}`
+
+    const res = await fetch(url)
+    const resData = await res.json()
+
+    if (resData.status === 'success') {
+      const coinValue = Number(resData.coin)
+      if (!isNaN(coinValue)) {
+        setCoin(coinValue)
+      } else {
+        console.error('Coin value is NaN')
+      }
+    } else {
+      console.error('Failed to fetch coin:', resData.message)
+    }
+  }
+
+  useEffect(() => {
+    if (auth.userData) {
+      getCoin()
+    }
+  }, [auth.userData])
+
+  const handleItemClick = (item, type) => {
+    setSelectedItem({ ...item, type })
+    console.log('Selected item:', item, 'Type:', type)
+  }
+
+  const handleConfirmExchange = () => {
+    if (selectedItem) {
+      console.log(
+        `Confirm exchange for item ID: ${selectedItem.id}, coin: ${selectedItem.coin}, type: ${selectedItem.type}`
+      )
+      if (selectedItem.type === 'coupon') {
+        // 处理优惠券兑换逻辑
+        console.log('Processing coupon exchange...')
+      } else if (selectedItem.type === 'donation') {
+        // 处理捐赠兑换逻辑
+        console.log('Processing donation exchange...')
+      }
+    }
+  }
+
+  const exchange = async () => {
+
+    //扣到金幣
+    const newCoin = coin - selectedItem.coin;
+    setCoin(newCoin);
+    const userId = auth.userData.id;
+
+    const urlUpdateCoin = `http://localhost:3005/api/coin/updateCoin`
+    try {
+      const res = await fetch(urlUpdateCoin, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newCoin }),
+      })
+      const resData = await res.json()
+      console.log(resData)
+    } catch (e) {
+      console.error(e)
+    }
+
+    //判斷type，存入各自的背包
+
+    if (selectedItem.type === 'coupon') {
+      const urlCoupon = `http://localhost:3005/api/coin/plusCoupon`
+      try {
+        const res = await fetch(urlCoupon, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: auth.userData.id,
+            couponId: selectedItem.id,
+          }),
+        })
+        const resData = await res.json()
+        console.log(resData)
+      } catch (e) {
+        console.error(e)
+      }
+    } else if (selectedItem.type === 'donation') {
+      const urlDonation = `http://localhost:3005/api/coin/plusDonation`
+      try {
+        const res = await fetch(urlDonation, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: auth.userData.id,
+            donationId: selectedItem.id,
+          }),
+        })
+        const resData = await res.json()
+        console.log(resData)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+
   return (
     <>
-
       <section className="banner">
         <h1 className="bannerH1">YeahFun Coin</h1>
         <p className="bannerP">Explore our exclusive items!</p>
@@ -12,7 +165,6 @@ export default function Coin() {
       <section className="storeCategories">
         <div className="category">
           <div className="d-flex align-items-end">
-
             <h2 className="littleTitle flex-grow-1">優惠券 | Coupon</h2>
             <div className="littleImg">
               <Image
@@ -22,85 +174,83 @@ export default function Coin() {
                 height={33}
               />
             </div>
-
           </div>
           <div className="items">
-            <div className="coinItem">
-              <img className="itemImg" src="/coin/coupon1.jpg" alt="Coupon 1" />
-              <h3 className="fs-4 itemH3">暑假出遊囉~</h3>
-              <div className="description">單筆訂單打95折</div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="price mb-0">金幣：5 枚</p>
-                <button
-                  type="button"
-                  className="btn btn-primary buyNow"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  兌換
-                </button>
-              </div>
-            </div>
-            <div className="coinItem">
-              <img className="itemImg" src="/coin/coupon2.jpg" alt="Coupon 2" />
-              <h3 className="fs-4 itemH3">其實我有很多金幣...</h3>
-              <div className="description">單筆訂單折扣現金500元</div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="price mb-0">金幣：1000 枚</p>
-                <button className="btn btn-primary buyNow">兌換</button>
-              </div>
-            </div>
+            {donations.length > 0 ? (
+              coupons.map((v, i) => (
+                <div key={i} className="coinItem">
+                  <img
+                    className="itemImg"
+                    src={`/coin/${v.img}`}
+                    alt={v.name}
+                  />
+                  <h3 className="fs-4">{v.name}</h3>
+                  <div className="description">{v.directions}</div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p className="price mb-0">金幣：{v.coin} 枚</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary buyNow"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                      onClick={() => handleItemClick(v, 'coupon')}
+                    >
+                      兌換
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>暫時沒有優惠劵</p>
+            )}
           </div>
-        </div>
-        <div className="category">
-          <div className="d-flex align-items-end">
-          <h2 className="littleTitle flex-grow-1">愛心捐助 | Love Donation</h2>
-            <div className="littleImg">
-              <Image
-                src="/images/homepage/title-tree.png"
-                alt="tree"
-                width={66}
-                height={33}
-              />
-            </div>
-          </div>
-          <div className="items">
-            <div className="coinItem">
-              <img
-                className="itemImg"
-                src="/coin/donation1.jpg"
-                alt="Donation 1"
-              />
-              <h3 className="fs-4">兒童基金會</h3>
-              <div className="description">捐助10元</div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="price mb-0">金幣：10 枚</p>
-                <button
-                  type="button"
-                  className="btn btn-primary buyNow"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  兌換
-                </button>
+          <div className="category">
+            <div className="d-flex align-items-end">
+              <h2 className="littleTitle flex-grow-1">
+                愛心捐助 | Love Donation
+              </h2>
+              <div className="littleImg">
+                <Image
+                  src="/images/homepage/title-tree.png"
+                  alt="tree"
+                  width={66}
+                  height={33}
+                />
               </div>
             </div>
-            <div className="coinItem">
-              <img
-                className="itemImg"
-                src="/coin/donation2.jpg"
-                alt="Donation 2"
-              />
-              <h3 className="fs-4">動物救援</h3>
-              <div className="description">捐助10元</div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="price mb-0">金幣：10 枚</p>
-                <button className="btn btn-primary buyNow">兌換</button>
-              </div>
+            <div className="items">
+              {donations.length > 0 ? (
+                donations.map((v, i) => (
+                  <div key={i} className="coinItem">
+                    <img
+                      className="itemImg"
+                      src={`/coin/${v.img}`}
+                      alt={v.name}
+                    />
+                    <h3 className="fs-4">{v.name}</h3>
+                    <div className="description">{v.directions}</div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <p className="price mb-0">金幣：{v.coin} 枚</p>
+                      <button
+                        type="button"
+                        className="btn btn-primary buyNow"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        onClick={() => handleItemClick(v, 'donation')}
+                      >
+                        兌換
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>沒有可捐助的項目</p>
+              )}
             </div>
           </div>
         </div>
       </section>
+
       <div
         className="modal fade"
         id="exampleModal"
@@ -112,7 +262,7 @@ export default function Coin() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Modal title
+                確定兌換 ?
               </h5>
               <button
                 type="button"
@@ -121,17 +271,25 @@ export default function Coin() {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body">...</div>
+            <div className="modal-body">
+              目前還有{coin}點
+              <br />
+              此次兌換後將扣除{selectedItem ? selectedItem.coin : 0}點
+            </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Close
+                取消
               </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={exchange}
+              >
+                確定
               </button>
             </div>
           </div>
@@ -162,12 +320,9 @@ export default function Coin() {
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
           }
 
-          .storeCategories {
-            padding: 40px 50px;
-          }
-
           .category {
-            margin-bottom: 40px;
+            margin-bottom: 80px;
+            margin-top: 40px;
           }
 
           .littleTitle {
@@ -268,7 +423,7 @@ export default function Coin() {
             background-color: #e67e00;
           }
 
-          @media (max-width: 768px) {
+          @media (max-width: 990px) {
             .items {
               flex-direction: column;
             }
