@@ -7,7 +7,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import Image from 'next/image'
 import styles from './comment.module.css'
-import { clearConfig } from 'dompurify';
+
 
 const { TextArea } = Input;
 
