@@ -4,30 +4,19 @@ import styles from '@/components/layout/list-layout/list-navbar/list-member-bar.
 import ShoppingBag from '@/components/icons/shopping-bag'
 import Opensuse from '@/components/icons/opensuse'
 import { useAuth } from '@/hooks/use-auth'
-//購物車有商品時顯示紅點
-import { useState, useEffect } from 'react'
-import { useCart } from '@/hooks/cart-hook'
 
-export default function MemberBar() {
+export default function ListMemberBar() {
   const { auth, handleLogout } = useAuth()
-  //購物車有商品時顯示紅點
-  const [showRedDot, setShowRedDot] = useState(false)
-  const { addCart, cartItems } = useCart()
   const userName = auth.userData.name
   const userMail = auth.userData.email
-
-  useEffect(() => {
-    setShowRedDot(cartItems && cartItems.length > 0)
-  }, [cartItems])
-
   return (
-    <ul className="navbar-nav pe-2 ms-auto d-flex gap-4 align-items-center">
-      <li
-        // className="nav-item dropdown"
-        className={` dropdown ${styles['dropdown']}`}
-      >
+    <>
+      <ul className="navbar-nav pe-2 ms-auto d-flex gap-4 align-items-center">
         {auth.userData.id ? (
-          <>
+          <li
+            // className="nav-item dropdown"
+            className={` dropdown ${styles['dropdown']}`}
+          >
             <Link
               className={`dropdown-toggle btn ${styles.DropdownToggle}`}
               href="/customer"
@@ -77,7 +66,7 @@ export default function MemberBar() {
                 </Link>
               </li>
             </ul>
-          </>
+          </li>
         ) : (
           <li>
             <Link href="/welcome/login" className={`btnOrangePc transition`}>
@@ -85,15 +74,12 @@ export default function MemberBar() {
             </Link>
           </li>
         )}
-      </li>
-      <li>
-        {/* <button className={`btnOrangePc transition`}>登入/註冊</button> */}
-        <Link href={`/product/cart`} className={styles.iconShoppingCart}>
-          <ShoppingBag size={34} className={styles.iconShoppingCart} />
-          {showRedDot && <div className={styles.redSpot} />}
-          {/* <div className={styles.redSpot}></div> */}
-        </Link>
-      </li>
-    </ul>
+        <li>
+          <Link href={`/product/cart`} className={styles.iconShoppingCartA}>
+            <ShoppingBag size={34} className={styles.iconShoppingCart} />
+          </Link>
+        </li>
+      </ul>
+    </>
   )
 }
