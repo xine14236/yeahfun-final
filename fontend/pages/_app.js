@@ -28,6 +28,9 @@ import {
 
 import { CartProviderNew } from '@/hooks/cart-hook'
 
+import Modal from 'react-modal'
+Modal.setAppElement('#__next')
+
 export default function MyApp({ Component, pageProps }) {
   // 導入bootstrap的JS函式庫
   useEffect(() => {

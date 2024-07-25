@@ -12,7 +12,7 @@ import styles from './next-breadcrumb.module.scss'
  * @component
  * @param {object} props
  * @param {boolean} [props.omitRoot=false] omit root node(home)
- * @param {JSX.Element} [props.homeIcon=<i className="bi bi-house-door-fill"></i>]
+//  * @param {JSX.Element} [props.homeIcon=<i className="bi bi-house-door-fill"></i>]
  * @param {boolean} [props.isHomeIcon=false] with home icon
  * @param {boolean} [props.isChevron=false] with chevron divider (`>`)
  * @param {string} [props.bgClass='bg-body-tertiary'] background css class
@@ -20,7 +20,7 @@ import styles from './next-breadcrumb.module.scss'
  */
 export default function NextBreadCrumb({
   omitRoot = false,
-  homeIcon = <i className="bi bi-house-door-fill"></i>,
+  // homeIcon = <i className="bi bi-house-door-fill"></i>,
   isHomeIcon = false,
   isChevron = false,
   bgClass = 'bg-body-tertiary',
@@ -106,7 +106,7 @@ export default function NextBreadCrumb({
               href="/"
               className="link-body-emphasis fw-semibold text-decoration-none"
             >
-              {!isHomeIcon ? pathsLocaleMap['home'] : homeIcon}
+              {!isHomeIcon ? pathsLocaleMap['home'] : '首頁'}
             </Link>
           </li>
         )}

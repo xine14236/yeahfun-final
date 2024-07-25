@@ -1,3 +1,19 @@
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
 .body {
   background-color: var(--secondary-4, #fffcf0);
   width: 100%;
@@ -21,7 +37,7 @@
   max-width: 400px;
   flex-direction: column;
   align-items: flex-start;
-
+  padding-left: 0;
   background-color: var(--white, #fff);
 }
 .memberAsideList {
@@ -36,6 +52,12 @@
   background: var(--white, #fff);
   transition: background-color 0.3s, color 0.3s;
 }
+.memberAsideList:hover {
+  border: 1px solid var(--primary-1); /* 明確指定邊框寬度、樣式和顏色 */
+  background: var(--white);
+  color: var(--primary-1);
+}
+
 .memberAsideList.clicked {
   display: flex;
   height: 50.626px;
@@ -113,6 +135,19 @@
   align-self: stretch;
   border-radius: 10px;
   background: #fff;
+  flex-wrap: wrap;
+}
+.collectInfoFrame {
+  display: flex;
+  flex-direction: row; /* 水平排列 */
+  flex-wrap: wrap; /* 允許換行 */
+  justify-content: center; /* 靠左對齊 */
+  min-height: 600px;
+  padding: 10px;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #fff;
 }
 .memberList {
   display: flex;
@@ -166,25 +201,49 @@
   background: var(--secondary-3, #fdaf17);
   color: var(--white, #fff);
 }
+.collectCardFrame {
+  display: flex;
+  position: relative;
+}
+.collectCross {
+  display: flex;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--secondary-3, #fdaf17);
+  color: var(--secondary-3, #fdaf17);
+  width: 20px;
+  height: 20px;
+  background-color: var(--white, #fff);
+}
+.collectCross:hover {
+  border: 1px solid var(--white, #fff);
+  background-color: var(--secondary-3, #fdaf17);
+  color: var(--white, #fff);
+}
 .collectCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
+  // flex: 1 1 calc(30% - 20px); /* 調整為每行 3 個卡片，減去間距 */
+  box-sizing: border-box; /* 確保內邊距和邊框包含在寬度內 */
+  margin: 10px; /* 設置卡片之間的間距 */
 }
 
 .chiiListImage {
-  width: 376px;
-  height: 264px;
+  width: 300px;
+  height: 200px;
   border-radius: 10px;
   background: #d9d9d9;
 }
 
 .chiiCardBody {
   display: flex;
-  width: 372px;
-  height: 120px;
-  padding: 24px;
+  width: 300px;
+  // height: 120px;
+  padding: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -242,7 +301,7 @@
 .chiiStarIcon {
   width: 16px;
   height: 14px;
-  color: #fdaf17;
+  color: var(--white, #fff);
 }
 .chiiStarPoint {
   color: var(--white, #fff);
@@ -256,18 +315,14 @@
 .chiiLocationName {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  // -webkit-line-clamp: 1;
   align-self: stretch;
   overflow: hidden;
   color: #000;
   text-overflow: ellipsis;
-
-  /* h4 */
-  font-family: Inter;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+}
+.chiiLocationName:hover {
+  color: var(--secondary-3, #fdaf17);
 }
 
 // order
@@ -279,7 +334,7 @@
   font-weight: 600;
   line-height: normal;
   border-collapse: separate;
-  border-radius: 10px; 
+  border-radius: 10px;
   overflow: hidden;
 }
 .infoFrame th {
@@ -293,7 +348,27 @@
   text-align: center;
   color: var(--grey-800, #575757);
   border-bottom: var(--grey-400, #c4c4c4) 1px solid;
+  font-size: 20px;
 }
-.orderTr{
+.orderTr {
   border-radius: 10px;
+}
+
+.blogIcon:hover {
+  color: var(--secondary-3, #fdaf17);
+}
+
+.loadingPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--secondary-4, #fffcf0);
+}
+
+.loadingPageImg {
+  animation: bounce 1.5s infinite;
+  background-color: var(--secondary-4, #fffcf0);
 }

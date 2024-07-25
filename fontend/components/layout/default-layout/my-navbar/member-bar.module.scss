@@ -1,41 +1,64 @@
 .iconOpensuse {
   transform: scaleX(-1);
   color: var(--primary-1);
-  transition: color 0.5s ease;
+  height: 40px;
 }
-.iconOpensuse:hover {
+.DropdownToggle {
+  padding: 0px;
+}
+.member:hover {
   color: var(--secondary-3);
 }
 .iconShoppingCart {
   color: var(--black);
+  position: relative;
 }
 .iconShoppingCart:hover {
   color: var(--secondary-3);
 }
-.navA {
-  color: var(--black);
-  position: relative;
+.redSpot {
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }
-.navA:hover {
+.dropdown:hover .dropdown-menu {
+  display: block;
+  right: 0px;
+  left: auto;
+}
+
+.dropdown:hover .iconOpensuse,
+.dropdown:hover h5 {
   color: var(--secondary-3);
 }
 
-.navA::after {
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  content: '';
-  background-color: var(--secondary-3);
-  width: 0%;
-  height: 2px;
-  transition: all 0.5s;
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
 }
-.navA:hover::after {
-  width: 100%;
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
 }
 
+// mobile disable animation
+@media only screen and (max-width: 992px) {
+  .slideIn {
+    animation: none !important;
+  }
+}
 @media (max-width: 576px) {
   .iconOpensuse {
     display: none;

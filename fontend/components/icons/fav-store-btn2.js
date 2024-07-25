@@ -6,6 +6,7 @@ export default function FavStoreBtn2({
   initFull = false,
   handler = () => {},
   color = '#feaf18',
+  width,
 }) {
   const [full, setFull] = useState(initFull)
 
@@ -23,7 +24,7 @@ export default function FavStoreBtn2({
       role="button"
       tabIndex="0"
     >
-      {full ? <FavorActive size={30} /> : <Favor size={30} />}
+      {full ? <FavorActive width={width} /> : <Favor width={width} />}
     </span>
   )
 }

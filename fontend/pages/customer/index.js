@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
@@ -20,6 +22,7 @@ export default function Index() {
     gender: '',
     birthday: '',
     address: '',
+    // introduction: '',
   })
   //   const [errors, setErrors] = useState({
   //     email: '',
@@ -29,8 +32,9 @@ export default function Index() {
   //     birthday: '',
   //     address: '',
   //   })
-  // 按鈕換色
 
+  // 按鈕換色
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -50,10 +54,16 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
   }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -72,6 +82,7 @@ export default function Index() {
           gender: user.gender,
           birthday: user.birthday,
           address: user.address,
+          // introduction: user.introduction,
         })
         setTimeout(() => {
           setIsLoading(false)
@@ -118,7 +129,7 @@ export default function Index() {
       const resData = await res.json()
       console.log(resData)
 
-      alert('修改成功')
+      toast.success('修改成功')
     } catch (e) {
       console.error(e)
     }
@@ -162,103 +173,6 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
           <form
             name="form1"
             onSubmit={handleSubmit}
@@ -352,7 +266,7 @@ export default function Index() {
                   onChange={handleFieldChange}
                 />
               </div>
-              {/* <div className="mb-3">
+              {/* <div className={styles.memberList}>
                 <label htmlFor="introduction" className="form-label">
                   自我介紹
                 </label>
@@ -362,6 +276,7 @@ export default function Index() {
                   className="form-control"
                   rows="4"
                   cols="50"
+                  value={customer.introduction}
                 ></textarea>
               </div> */}
               {/* <div className="memberList">
@@ -387,7 +302,7 @@ export default function Index() {
             </div>
             <button
               type="submit"
-              className={styles.btnSquare}
+              className="btnOrangePc"
               onSubmit={handleSubmit}
             >
               修改
@@ -395,12 +310,22 @@ export default function Index() {
           </form>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

@@ -18,7 +18,23 @@ router.get('/:id/order', async function (req, res) {
   }
   try {
     const [rows] = await db.query(
-      'SELECT orders.*, store.name AS store_name, stores_img.img_name AS store_img_name FROM orders JOIN store ON orders.store_id = store.stores_id LEFT JOIN (SELECT stores_id, MIN(img_name) AS img_name FROM stores_img GROUP BY stores_id) AS stores_img ON orders.store_id = stores_img.stores_id WHERE orders.customer_id = ?',
+      `SELECT
+      purchase_item.id AS item_id, 
+      purchase_order.user_id AS user_id,
+      purchase_order.id AS order_id,
+      store.name AS store_name,
+      rooms_campsites.name AS rooms_name,
+      purchase_item.startdate AS startdate,
+      purchase_item.enddate AS enddate,
+      purchase_item.price AS price,
+      rooms_campsites.img AS img 
+      FROM 
+      purchase_item
+      JOIN purchase_order ON purchase_order.id = purchase_item.purchase_order_id
+      JOIN store ON purchase_item.store_id = store.stores_id
+      JOIN rooms_campsites ON purchase_item.room_id = rooms_campsites.rooms_campsites_id
+      WHERE purchase_order.user_id = ?
+      ORDER BY startdate ASC`,
       [id]
     )
     const order = rows
@@ -37,6 +53,44 @@ router.get('/:id/order', async function (req, res) {
   }
 })
 
+// GET - 得到部落格資料
+router.get('/:id/blog', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      `SELECT
+        favorite_blog.id,
+        blog.title,
+        blog.content,
+        blog_img.img_name 
+        FROM favorite_blog
+        JOIN blog ON favorite_blog.blog_id = blog.id
+        LEFT JOIN blog_img ON favorite_blog.blog_id = blog_img.blog_id
+        WHERE customer_id = 1`,
+      [id]
+    )
+
+    const blog = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { blog },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
 // GET - 得到口袋名單資料
 router.get('/:id/collect', async function (req, res) {
   const id = Number(req.params.id)
@@ -80,7 +134,21 @@ router.get('/:id/collect', async function (req, res) {
     })
   }
 })
+// GET - 得到個別會員資料(注意，有動態參數時要寫在GET區段最後面)
+router.get('/:id', async function (req, res) {
+  const id = Number(req.params.id)
+  const [rows] = await db.query('SELECT * FROM customer WHERE id = ?', [id])
+  const customer = rows[0]
+  // 不回傳密碼
+  delete customer.password
 
+  // 標準回傳JSON
+  return res.json({
+    status: 'success',
+    data: { customer },
+  })
+})
+// PUT - 新增會員資料
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字
   const id = Number(req.params.id)
@@ -125,19 +193,42 @@ router.get('/', async function (req, res) {
   })
 })
 
-// GET - 得到個別會員資料(注意，有動態參數時要寫在GET區段最後面)
-router.get('/:id', async function (req, res) {
+// DELETE - 刪除收藏部落格
+router.delete('/:id/blog/:favId', async function (req, res) {
   const id = Number(req.params.id)
-  const [rows] = await db.query('SELECT * FROM customer WHERE id = ?', [id])
-  const customer = rows[0]
-  // 不回傳密碼
-  delete customer.password
+  const favId = Number(req.params.favId)
 
-  // 標準回傳JSON
-  return res.json({
-    status: 'success',
-    data: { customer },
-  })
+  // 刪除資料
+  const [affectedRows] = await db.query(
+    'DELETE FROM favorite_blog WHERE customer_id = ? AND id = ?',
+    [id, favId]
+  )
+
+  // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
+  if (!affectedRows) {
+    return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
+  }
+
+  // 回傳
+  return res.json({ status: 'success', data: null })
 })
+// DELETE - 刪除口袋名單
+router.delete('/:id/collect/:collectId', async function (req, res) {
+  const id = Number(req.params.id)
+  const collectId = Number(req.params.collectId)
 
+  // 刪除資料
+  const [affectedRows] = await db.query(
+    'DELETE FROM favorite WHERE uid = ? AND id = ?',
+    [id, collectId]
+  )
+
+  // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
+  if (!affectedRows) {
+    return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
+  }
+
+  // 回傳
+  return res.json({ status: 'success', data: null })
+})
 export default router

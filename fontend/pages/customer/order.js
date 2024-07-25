@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
 import Loader from '@/components/loader'
 import Link from 'next/link'
@@ -22,8 +23,9 @@ export default function Index() {
     address: '',
   })
   const [order, setOrder] = useState([])
-  const [img, setImg] = useState([])
-
+  // const [img, setImg] = useState([])
+  // 按鈕換色
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -43,6 +45,11 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
@@ -80,11 +87,6 @@ export default function Index() {
       const res = await fetch(url)
       const resData = await res.json()
       console.log(resData)
-      const resDataImg = resData.data.order.map((v) => {
-        return v.store_img_name.split(',')
-      })
-      setImg(resDataImg)
-      // const imgArray = store_img_name ? img.img_name.split(',') : []
 
       if (resData.status === 'success' && Array.isArray(resData.data.order)) {
         // const order = resData.data.order
@@ -185,6 +187,7 @@ export default function Index() {
                   <tr>
                     <th scope="col">營地照片</th>
                     <th scope="col">營地名稱</th>
+                    <th scope="col">房型名稱</th>
                     <th scope="col">日期</th>
                     <th scope="col">價格</th>
                     <th scope="col">訂單狀態</th>
@@ -192,21 +195,22 @@ export default function Index() {
                 </thead>
                 <tbody>
                   {order.map((v, i) => (
-                    <tr key={v.id}>
+                    <tr key={v.item_id}>
                       <td>
                         <Image
-                          src={`/detail/${img[i][0]}`}
+                          src={`/productDetail/${v.img}`}
                           alt="camp1"
                           width={160}
                           height={120}
                         />
                       </td>
                       <td>{v.store_name}</td>
+                      <td>{v.rooms_name}</td>
                       <td>
-                        {v.checkin_date}~{v.checkout_date}
+                        {v.startdate} ~ {v.enddate}
                       </td>
-                      <td> {v.total_price}</td>
-                      <td>{v.payment_status}</td>
+                      <td> {v.price}</td>
+                      <td>已付款</td>
                     </tr>
                   ))}
                 </tbody>
@@ -220,7 +224,16 @@ export default function Index() {
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

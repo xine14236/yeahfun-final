@@ -7,32 +7,68 @@ import { useAuth } from '@/hooks/use-auth'
 
 export default function ListMemberBar() {
   const { auth, handleLogout } = useAuth()
+  const userName = auth.userData.name
+  const userMail = auth.userData.email
   return (
     <>
-      <div
-        className={`d-flex justify-content-start align-items-center gap-4 ${styles.navbarActions}`}
-      >
-        {auth.userData.id ? (
-          <>
-            <Link href="/customer" className={styles.iconOpensuseA}>
+      <ul className="navbar-nav pe-2 ms-auto d-flex gap-4 align-items-center">
+        <li className={` dropdown ${styles['dropdown']}`}>
+          <Link
+            className={`dropdown-toggle btn ${styles.DropdownToggle}`}
+            href="/customer"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="會員中心"
+          >
+            <h5 className={` ${styles.member}`}>
               <Opensuse size={70} className={styles.iconOpensuse} />
-            </Link>
-            <Link href="/customer" className={styles.navA}>
-              <h5>會員中心</h5>
-            </Link>
-            <Link href="#/" onClick={handleLogout} className={styles.navA}>
-              <h5>登出</h5>
-            </Link>
-          </>
-        ) : (
-          <Link href="/welcome/login" className={`btnOrangePc transition`}>
-            <div>登入/註冊</div>
+              會員中心
+            </h5>
+            <p className="d-none d-md-inline d-lg-none">會員中心</p>
           </Link>
-        )}
-        <Link href={`/product/cart`} className={styles.iconShoppingCartA}>
-          <ShoppingBag size={34} className={styles.iconShoppingCart} />
-        </Link>
-      </div>
+          <ul
+            className={`dropdown-menu dropdown-menu-end p-4  ${styles['slideIn']} ${styles['dropdown-menu']}`}
+          >
+            <li>
+              <h6 className="text-center">會員中心</h6>
+              <p className="text-center">
+                會員姓名: {userName}
+                <br />
+                帳號: {userMail}
+              </p>
+            </li>
+            <li>
+              <hr className="dropdown-divider" />
+            </li>
+            <li>
+              <Link className="dropdown-item text-center" href="/customer">
+                會員管理區
+              </Link>
+            </li>
+
+            <li>
+              <Link className="dropdown-item text-center " href="/about">
+                兌換
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="#/"
+                onClick={handleLogout}
+                className="dropdown-item text-center "
+              >
+                登出
+              </Link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <Link href={`/product/cart`} className={styles.iconShoppingCartA}>
+            <ShoppingBag size={34} className={styles.iconShoppingCart} />
+          </Link>
+        </li>
+      </ul>
     </>
   )
 }

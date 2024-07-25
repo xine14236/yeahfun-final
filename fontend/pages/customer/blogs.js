@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
+import { FaRegTrashCan } from 'react-icons/fa6'
+import { SlMagnifier } from 'react-icons/sl'
+
 // import { set } from 'lodash'
 
 export default function Index() {
@@ -12,7 +17,7 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  // const [blog, setBlog] = useState([])
+  const [blog, setBlog] = useState([])
   // const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
@@ -23,16 +28,8 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  //   const [errors, setErrors] = useState({
-  //     email: '',
-  //     name: '',
-  //     phone: '',
-  //     gender: '',
-  //     birthday: '',
-  //     address: '',
-  //   })
   // 按鈕換色
-
+  const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const links = [
@@ -52,10 +49,62 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  useEffect(() => {
+    const currentPath = router.pathname
+    const currentIndex = links.findIndex((link) => link.href === currentPath)
+    setSelectedIndex(currentIndex)
+  }, [router.pathname])
 
   const handleClick = (index) => {
     setSelectedIndex(index)
   }
+
+  const getBlog = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      // const resDataImg = resData.data.blog.map((v) => {
+      //   return v.img_name.split(',')
+      // })
+      // setImg(resDataImg)
+
+      if (resData.status === 'success' && Array.isArray(resData.data.blog)) {
+        // const order = resData.data.order
+        setBlog(resData.data.blog)
+        // 設定會員資料(除了密碼)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1500)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  const handleClickDelete = async (favId) => {
+    const url = `http://localhost:3005/api/customer/${userId}/blog/${favId}`
+    try {
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const resData = await res.json()
+      console.log(resData)
+      if (resData.status === 'success') {
+        toast.success('刪除成功')
+        getBlog()
+      } else {
+        toast.error('刪除失敗')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -84,48 +133,13 @@ export default function Index() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    // 阻擋表單預設送出行為
-    e.preventDefault()
-
-    try {
-      const updatedCustomer = {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        gender: customer.gender,
-        birthday: customer.birthday,
-        address: customer.address,
-      }
-
-      if (customer.password) {
-        updatedCustomer.password = customer.password
-      }
-
-      const url = `http://localhost:3005/api/customer/${userId}/profile`
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCustomer),
-      })
-
-      const resData = await res.json()
-      console.log(resData)
-
-      alert('修改成功')
-    } catch (e) {
-      console.error(e)
-    }
-  }
   useEffect(() => {
     // console.log('userId:', userId);
     console.log('auth:', auth)
 
     if (userId) {
       getCustomer()
+      getBlog()
     } else {
       console.log('need check')
       handleCheck()
@@ -159,121 +173,73 @@ export default function Index() {
               </Link>
             ))}
           </ul>
-          {/* <ul className={styles.memberAside}>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-              onClick={handleClick}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/user.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText}>個人資訊</span>
-            </Link>
-            <Link
-              href=""
-              className={`${styles.memberAsideList} ${
-                isClicked ? styles.clicked : ''
-              }`}
-            >
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/shopping-bag.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                我的行程
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/star.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-
-              <span href="" className={styles.memberAsideListText}>
-                口袋名單
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/comment.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                我的評價
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/coupon.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                Fun優惠
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tent.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span href="" className={styles.memberAsideListText}>
-                FUN部落
-              </span>
-            </Link>
-            <Link href="" className={styles.memberAsideList}>
-              <Image
-                className={styles.memberAsideListIcon}
-                src="/icon/tree-1.svg"
-                alt="User"
-                width={30}
-                height={30}
-              />
-              <span className={styles.memberAsideListText} href="">
-                FUN成就
-              </span>
-            </Link>
-          </ul> */}
           <div className={styles.memberFrame}>
-            <div className={styles.infoFrame}></div>
-            <button
-              type="submit"
-              className={styles.btnSquare}
-              onSubmit={handleSubmit}
-            >
-              修改
-            </button>
+            <div className={styles.infoFrame}>
+              <table className="table">
+                <thead className={styles.orderTr}>
+                  <tr>
+                    <th scope="col">部落照片</th>
+                    <th scope="col">部落名稱</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    {/* <th scope="col">部落內容</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {blog.map((v, i) => (
+                    <tr key={v.id}>
+                      <td>
+                        <Image
+                          src={
+                            v.img_name
+                              ? `http://localhost:3005/img-blog/${v.img_name}`
+                              : `http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`
+                          }
+                          alt="img"
+                          width={160}
+                          height={120}
+                        />
+                      </td>
+                      <td>{v.title}</td>
+                      <td>
+                        <Link
+                          href={`/blog/${v.id}`}
+                          className={styles.blogIcon}
+                        >
+                          <SlMagnifier />
+                        </Link>
+                      </td>
+                      <td>
+                        <FaRegTrashCan
+                          className={styles.blogIcon}
+                          onClick={() => handleClickDelete(v.id)}
+                        />
+                      </td>
+                      {/* <td className={styles.content}>{v.content}</td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

@@ -179,15 +179,19 @@ export default function Cart() {
       )}
 
       <div className="checkoutButton">
-        <button
+        {/* <button
           className="btn btn-primary btn-lg mt-5 checkout"
           disabled={cartItems.length === 0}
           onClick={checkout}
         >
           結帳
-        </button>
-        <Link href="/product/ecpay" className="mt-5">
-          前往結帳頁面
+        </button> */}
+        <Link
+          href="/product/ecpay"
+          className={`btnGreenPc transition mt-5`}
+          onClick={checkout}
+        >
+          <div>前往結帳頁面</div>
         </Link>
       </div>
       <style jsx>

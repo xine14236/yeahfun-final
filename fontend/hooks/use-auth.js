@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
+import toast from 'react-hot-toast'
+
 // import { checkAuth, getFavs } from '@/services/user'
 
 // 1. 建立與導出它
@@ -63,13 +65,15 @@ export function AuthProvider({ children }) {
           userData: {
             id: 0,
             email: '',
+            name: '',
+            phone: '',
           },
         }
 
         setAuth(nextAuth)
       }
 
-      alert('成功登出')
+      toast.success('成功登出')
       router.push('/welcome/login')
     } catch (e) {
       console.error(e)
@@ -101,12 +105,14 @@ export function AuthProvider({ children }) {
           userData: {
             id: payload.id,
             email: payload.email,
+            name: payload.name,
+            phone: payload.phone,
           },
         }
 
         setAuth(nextAuth)
 
-        alert('登入成功')
+        toast.success('登入成功')
         router.push('/')
       }
     } catch (e) {
@@ -139,6 +145,8 @@ export function AuthProvider({ children }) {
           userData: {
             id: customer.id,
             email: customer.email,
+            name: customer.name,
+            phone: customer.phone,
           },
         }
         // console.log(nextAuth);
@@ -148,7 +156,7 @@ export function AuthProvider({ children }) {
         if (protectedRoutes.includes(router.pathname)) {
           // 減緩跳轉時間
           setTimeout(() => {
-            alert('無進入權限，請先登入!')
+            toast.error('無進入權限，請先登入!')
             router.push(loginRoute)
           }, 1500)
         }
