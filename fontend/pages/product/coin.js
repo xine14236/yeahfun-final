@@ -1,83 +1,160 @@
-import { useState, useEffect } from 'react';
-import React from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useAuth } from '@/hooks/use-auth';
+import { useState, useEffect } from 'react'
+import React from 'react'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Coin() {
-  const router = useRouter();
-  const { auth } = useAuth();
+  const router = useRouter()
+  const { auth } = useAuth()
 
-  const [coupons, setCoupons] = useState([]);
-  const [donations, setDonations] = useState([]);
-  const [coin, setCoin] = useState(0);
+  const [coupons, setCoupons] = useState([])
+  const [donations, setDonations] = useState([])
+  const [coin, setCoin] = useState(0)
+  const [selectedItem, setSelectedItem] = useState(null)
 
   const getCoupons = async () => {
-    const url = `http://localhost:3005/api/coin/coupons`;
+    const url = `http://localhost:3005/api/coin/coupons`
 
-    const res = await fetch(url);
-    const resData = await res.json();
+    const res = await fetch(url)
+    const resData = await res.json()
 
     if (resData.status === 'success') {
-      setCoupons(resData.data.coupons);
+      setCoupons(resData.data.coupons)
     } else {
-      console.error('Failed to fetch coupons:', resData.message);
+      console.error('Failed to fetch coupons:', resData.message)
     }
-  };
+  }
 
   useEffect(() => {
-    getCoupons();
-  }, []);
+    getCoupons()
+  }, [])
 
   const getDonations = async () => {
-    const url = `http://localhost:3005/api/coin/donations`;
+    const url = `http://localhost:3005/api/coin/donations`
 
-    const res = await fetch(url);
-    const resData = await res.json();
+    const res = await fetch(url)
+    const resData = await res.json()
 
     if (resData.status === 'success') {
-      setDonations(resData.data.donations);
+      setDonations(resData.data.donations)
     } else {
-      console.error('Failed to fetch donations:', resData.message);
+      console.error('Failed to fetch donations:', resData.message)
     }
-  };
+  }
 
   useEffect(() => {
-    getDonations();
-  }, [coin]);
+    getDonations()
+  }, [coin])
 
   const getCoin = async () => {
-    const userId = auth.userData.id;
-    const url = `http://localhost:3005/api/coin/${userId}`;
+    const userId = auth.userData.id
+    console.log(`Fetching coin data for userId: ${userId}`) // 添加调试信息
+    const url = `http://localhost:3005/api/coin/${userId}`
 
-    try {
-        const res = await fetch(url);
-        const resData = await res.json();
+    const res = await fetch(url)
+    const resData = await res.json()
 
-        if (resData.status === 'success') {
-            console.log('Coin data:', resData.coin);
-            const coinValue = Number(resData.coin);
-            console.log('Parsed coin value:', coinValue);
-            if (!isNaN(coinValue)) {
-                setCoin(coinValue);
-            } else {
-                console.error('Coin value is NaN');
-            }
-        } else {
-            console.error('Failed to fetch coin:', resData.message);
-        }
-    } catch (error) {
-        console.error('Error fetching coin:', error);
+    if (resData.status === 'success') {
+      const coinValue = Number(resData.coin)
+      if (!isNaN(coinValue)) {
+        setCoin(coinValue)
+      } else {
+        console.error('Coin value is NaN')
+      }
+    } else {
+      console.error('Failed to fetch coin:', resData.message)
     }
-};
+  }
 
-useEffect(() => {
+  useEffect(() => {
     if (auth.userData) {
-        getCoin();
+      getCoin()
     }
-}, [auth.userData]);
+  }, [auth.userData])
 
+  const handleItemClick = (item, type) => {
+    setSelectedItem({ ...item, type })
+    console.log('Selected item:', item, 'Type:', type)
+  }
 
+  const handleConfirmExchange = () => {
+    if (selectedItem) {
+      console.log(
+        `Confirm exchange for item ID: ${selectedItem.id}, coin: ${selectedItem.coin}, type: ${selectedItem.type}`
+      )
+      if (selectedItem.type === 'coupon') {
+        // 处理优惠券兑换逻辑
+        console.log('Processing coupon exchange...')
+      } else if (selectedItem.type === 'donation') {
+        // 处理捐赠兑换逻辑
+        console.log('Processing donation exchange...')
+      }
+    }
+  }
+
+  const exchange = async () => {
+
+    //扣到金幣
+    const newCoin = coin - selectedItem.coin;
+    setCoin(newCoin);
+    const userId = auth.userData.id;
+
+    const urlUpdateCoin = `http://localhost:3005/api/coin/updateCoin`
+    try {
+      const res = await fetch(urlUpdateCoin, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newCoin }),
+      })
+      const resData = await res.json()
+      console.log(resData)
+    } catch (e) {
+      console.error(e)
+    }
+
+    //判斷type，存入各自的背包
+
+    if (selectedItem.type === 'coupon') {
+      const urlCoupon = `http://localhost:3005/api/coin/plusCoupon`
+      try {
+        const res = await fetch(urlCoupon, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: auth.userData.id,
+            couponId: selectedItem.id,
+          }),
+        })
+        const resData = await res.json()
+        console.log(resData)
+      } catch (e) {
+        console.error(e)
+      }
+    } else if (selectedItem.type === 'donation') {
+      const urlDonation = `http://localhost:3005/api/coin/plusDonation`
+      try {
+        const res = await fetch(urlDonation, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: auth.userData.id,
+            donationId: selectedItem.id,
+          }),
+        })
+        const resData = await res.json()
+        console.log(resData)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
 
   return (
     <>
@@ -105,7 +182,7 @@ useEffect(() => {
                   <img
                     className="itemImg"
                     src={`/coin/${v.img}`}
-                    alt="Donation 1"
+                    alt={v.name}
                   />
                   <h3 className="fs-4">{v.name}</h3>
                   <div className="description">{v.directions}</div>
@@ -116,6 +193,7 @@ useEffect(() => {
                       className="btn btn-primary buyNow"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleModal"
+                      onClick={() => handleItemClick(v, 'coupon')}
                     >
                       兌換
                     </button>
@@ -147,7 +225,7 @@ useEffect(() => {
                     <img
                       className="itemImg"
                       src={`/coin/${v.img}`}
-                      alt="Donation 1"
+                      alt={v.name}
                     />
                     <h3 className="fs-4">{v.name}</h3>
                     <div className="description">{v.directions}</div>
@@ -158,6 +236,7 @@ useEffect(() => {
                         className="btn btn-primary buyNow"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal"
+                        onClick={() => handleItemClick(v, 'donation')}
                       >
                         兌換
                       </button>
@@ -195,7 +274,7 @@ useEffect(() => {
             <div className="modal-body">
               目前還有{coin}點
               <br />
-              此次兌換後會剩下多少點
+              此次兌換後將扣除{selectedItem ? selectedItem.coin : 0}點
             </div>
             <div className="modal-footer">
               <button
@@ -205,7 +284,11 @@ useEffect(() => {
               >
                 取消
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={exchange}
+              >
                 確定
               </button>
             </div>
@@ -352,5 +435,5 @@ useEffect(() => {
         `}
       </style>
     </>
-  );
+  )
 }
