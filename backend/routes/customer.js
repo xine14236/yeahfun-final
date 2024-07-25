@@ -213,22 +213,22 @@ router.delete('/:id/blog/:favId', async function (req, res) {
   return res.json({ status: 'success', data: null })
 })
 // DELETE - 刪除口袋名單
-// router.delete('/:id/collect/:collectId', async function (req, res) {
-//   const id = Number(req.params.id)
-//   const collectId = Number(req.params.collectId)
+router.delete('/:id/collect/:collectId', async function (req, res) {
+  const id = Number(req.params.id)
+  const collectId = Number(req.params.collectId)
 
-//   // 刪除資料
-//   const [affectedRows] = await db.query(
-//     'DELETE FROM favorite WHERE uid = ? AND id = ?',
-//     [id, collectId]
-//   )
+  // 刪除資料
+  const [affectedRows] = await db.query(
+    'DELETE FROM favorite WHERE uid = ? AND id = ?',
+    [id, collectId]
+  )
 
-//   // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
-//   if (!affectedRows) {
-//     return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
-//   }
+  // 沒有刪除到任何資料 -> 失敗或沒有資料被刪除
+  if (!affectedRows) {
+    return res.json({ status: 'error', message: '刪除失敗或沒有資料被刪除' })
+  }
 
-//   // 回傳
-//   return res.json({ status: 'success', data: null })
-// })
+  // 回傳
+  return res.json({ status: 'success', data: null })
+})
 export default router

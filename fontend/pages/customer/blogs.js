@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import toast, { Toaster } from 'react-hot-toast'
 import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
@@ -94,10 +95,10 @@ export default function Index() {
       const resData = await res.json()
       console.log(resData)
       if (resData.status === 'success') {
-        alert('刪除成功')
+        toast.success('刪除成功')
         getBlog()
       } else {
-        alert('刪除失敗')
+        toast.error('刪除失敗')
       }
     } catch (e) {
       console.error(e)
@@ -201,12 +202,16 @@ export default function Index() {
                       </td>
                       <td>{v.title}</td>
                       <td>
-                        <Link href={`/blog/${v.id}`}>
+                        <Link
+                          href={`/blog/${v.id}`}
+                          className={styles.blogIcon}
+                        >
                           <SlMagnifier />
                         </Link>
                       </td>
                       <td>
                         <FaRegTrashCan
+                          className={styles.blogIcon}
                           onClick={() => handleClickDelete(v.id)}
                         />
                       </td>
@@ -219,12 +224,22 @@ export default function Index() {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   )
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

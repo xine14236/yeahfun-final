@@ -443,6 +443,46 @@ if(tags.length > 0){
 res.json(output)
 })
 
+router.post('/bccreate',authenticate, async (req, res) => {
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const memberId = req.user.id || null
+  const sql = `UPDATE blog set title=?, author=? , content=? where id=?`
+  const [result]= await db.query(sql,[req.body.title, memberId, req.body.content, req.body.blogId])
+  output.result1=result
+  output.info='新增成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    const deleteSql = `DELETE FROM blog_category WHERE blog_id=?`;
+    await db.query(deleteSql, [req.body.blogId]);
+
+    const tags = req.body.tags || [];
+    if (!tags.includes(7)) {
+      tags.push(7);
+    }
+
+    // 插入新的标签
+    const insertSql = `INSERT INTO blog_category (blog_id, blog_category_id) VALUES ?`;
+    const tagValues = tags.map(tag => [req.body.blogId, tag]);
+    const [insertResult] = await db.query(insertSql, [tagValues]);
+
+    output.result2 = insertResult;
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
+})
+
+
 router.get('/:bid', async (req, res) => {
   const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count
@@ -474,6 +514,8 @@ router.get('/:bid', async (req, res) => {
   GROUP BY b.id ORDER BY likes_count DESC ,b.id DESC
 LIMIT 5 `
 
+
+
 const dateFormat3 = 'YYYYMMDD'
   const [row2]=await db.query(sql2)
   row2.forEach((r) => {
@@ -486,11 +528,24 @@ const dateFormat3 = 'YYYYMMDD'
     
     }
   })
-  
+
+  const sql3 = `Select bc.*,  bci.img_name, c.name from blog_comment bc left join blog_comment_img bci on bc.id=bci.blog_comment_id left join customer c on bc.customer_id=c.id where bc.blog_id=${req.params.bid} `
+  const [rows3]= await db.query(sql3)
+const dateFormat4 = 'YYYY-MM-DD HH:mm:ss'
+  const comments = rows3.map(comment => {
+    return {
+      ...comment,
+      created_at: comment.created_at ? moment(comment.created_at).format(dateFormat4) : null,
+      images: comment.img_name ? comment.img_name.split(',') : [],
+      
+    };
+  });
+
   res.json({
     success: true,
     data: { blog: row1,
-      favBlog:row2
+      favBlog:row2,
+      comment:comments
      },
   })
 })
