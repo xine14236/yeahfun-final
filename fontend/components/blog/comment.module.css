@@ -1,0 +1,13 @@
+.commentMeta {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .row2{
+    border-bottom: 5px solid var(--primary-1);
+    margin-left: 1px;
+    margin-bottom: 10px;
+  }
