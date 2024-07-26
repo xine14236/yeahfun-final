@@ -7,6 +7,8 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link'
 import CommentList from '@/components/blog/commentList';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -14,6 +16,7 @@ import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 import Image from 'next/image'
 import heart from '@/assets/heart.svg'
 import chiiLikes from '@/assets/chiiLike.svg'
+import { clearConfig } from 'dompurify';
 export default function blogDetail() {
   const { auth } = useAuth()
   const [blog, setBlog] = useState({
@@ -32,6 +35,7 @@ export default function blogDetail() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [comments, setComments] = useState([]);
+  const MySwal = withReactContent(Swal)
 
   const getBlog = async (bid) => {
     try {
@@ -58,6 +62,7 @@ export default function blogDetail() {
 
   
   const handleClickStar = async (id)=>{
+    
     const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`,{
       credentials: 'include', 
     method: 'GET', // or POST/PUT depending on your use case
@@ -94,6 +99,79 @@ export default function blogDetail() {
     }
     getBlog(router.query.bid)
   }
+
+  const handleEdit = async (id, newText) => {
+    const payload = { comment: newText, BCId: id };
+try{
+  await fetch('http://localhost:3005/api/blog/Cedit', {
+    method: 'POST',
+    credentials: 'include', 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.success==true) {
+        MySwal.fire({
+          title: '成功!',
+          text: 'BLOG留言編輯成功',
+          icon: 'success',
+        }).then(
+          // Navigate to another page with insertId in the route
+          getBlog(router.query.bid)
+        );
+      } else {
+        MySwal.fire({
+          title: '錯誤!',
+          text: data.message,
+          icon: 'error',
+        });
+      }
+})
+
+}catch(ex){
+  console.log(ex)
+}
+  };
+
+  const handleDelete = (id) => {
+    setComments(comments.filter(comment => comment.id !== id));
+  };
+
+  const handleAddImage = async (id, files) => {
+
+    const formData = new FormData();
+     for (const file of files) {
+      formData.append("photos", file);
+    }
+    try {
+      const response = await fetch(`http://localhost:3005/api/blog/Cuploads/${id}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        MySwal.fire({
+          title: '成功!',
+          text: '圖片上傳成功',
+          icon: 'success',
+        }).then(() => {
+          fetchComments(); // Refresh the comments
+        });
+      } else {
+        MySwal.fire({
+          title: '錯誤!',
+          text: '圖片上傳失敗',
+          icon: 'error',
+        });
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -167,7 +245,7 @@ export default function blogDetail() {
 </div>
 <hr />
 <div className="col-12">
-<CommentList comments={comments} setComments={setComments} />
+<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete} handleAddImage={handleAddImage} />
 </div>
 </div>
       </div>

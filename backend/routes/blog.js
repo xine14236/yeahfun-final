@@ -483,6 +483,35 @@ res.json(output)
 })
 
 
+router.post('/Cedit/',authenticate, async (req, res) => {
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const memberId = req.user.id || null
+  const sql = `UPDATE blog_comment set  customer_id=? , comment=?, created_at=NOW() where id=?`
+  const [result]= await db.query(sql,[ memberId, req.body.comment, req.body.BCId])
+  output.result=result
+  output.info='新增成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result = result;
+
+  
+
+  
+
+
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
+})
+
 router.get('/:bid', async (req, res) => {
   const sql = `SELECT   b.*, c.name, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids, GROUP_CONCAT(DISTINCT bcn.blog_category_name SEPARATOR ',') AS category_names, COALESCE(fb.favorite_count, 0) AS favorite_count, 
     COALESCE(lb.likes_count, 0) AS likes_count
@@ -529,7 +558,7 @@ const dateFormat3 = 'YYYYMMDD'
     }
   })
 
-  const sql3 = `Select bc.*,  bci.img_name, c.name from blog_comment bc left join blog_comment_img bci on bc.id=bci.blog_comment_id left join customer c on bc.customer_id=c.id where bc.blog_id=${req.params.bid} `
+  const sql3 = `Select bc.*,  bci.img_name, c.name from blog_comment bc left join blog_comment_img bci on bc.id=bci.blog_comment_id left join customer c on bc.customer_id=c.id where bc.blog_id=${req.params.bid} ORDER BY created_at DESC ,id asc `
   const [rows3]= await db.query(sql3)
 const dateFormat4 = 'YYYY-MM-DD HH:mm:ss'
   const comments = rows3.map(comment => {

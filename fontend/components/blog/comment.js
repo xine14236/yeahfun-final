@@ -12,7 +12,7 @@ import styles from './comment.module.css'
 const { TextArea } = Input;
 
 
-const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
+const Comment = ({ comment, onEdit, onDelete, onAddImages }) => {
     const textAreaRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(comment.comment || '');
@@ -30,14 +30,13 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
     }
   };
 
-  const handleImageUpload = ({ file }) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      onAddImage(reader.result);
-    };
-    reader.readAsDataURL(file);
-    // console.log('123')
-    // return false; // Prevent upload
+  const handleImageUpload = ({ fileList }) => {
+    if (fileList.length > 3) {
+      alert('You can only upload up to 3 images.');
+      return false;
+    }
+    onAddImages(fileList);
+    return false; // Prevent upload
   };
 
   useEffect(() => {
@@ -69,7 +68,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
         Delete
       </Menu.Item>
       <Menu.Item key="3" icon={<AiOutlinePicture />}>
-        <Upload showUploadList={false} beforeUpload={handleImageUpload}>
+      <Upload showUploadList={false} beforeUpload={handleImageUpload} multiple >
           <Button type="text">Add Image</Button>
         </Upload>
       </Menu.Item>
