@@ -372,3 +372,39 @@
   animation: bounce 1.5s infinite;
   background-color: var(--secondary-4, #fffcf0);
 }
+
+.couponFrame {
+  display: flex;
+  width: 400px;
+  height: 128px;
+  padding: 20px;
+  align-items: center;
+  gap: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--secondary-3, #fdaf17);
+  background: var(--white, #fff);
+}
+.couponFrameCircle {
+  display: flex;
+  padding: 10px;
+  width: 107px;
+  height: 107px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--secondary-3, #fdaf17);
+}
+.couponFrameContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  h3{
+    color: var(--secondary-3, #fdaf17);
+  }
+  h5{
+    color: var(--grey-600, #8c8c8c);
+  }
+}
