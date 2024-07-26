@@ -139,7 +139,7 @@ export default function Cart() {
                   </div>
                   <div className="minusButton py-1">
                     <button
-                      className="btn btn-primary"
+                      className="btn btnGreenPc"
                       onClick={() => handleRemove(store.rooms_campsites_id)}
                     >
                       <FaMinus />
@@ -217,6 +217,7 @@ export default function Cart() {
             overflow: hidden;
           }
           .cartInfoContent {
+            width: 380px;
             display: flex;
             justify-content: space-around;
             flex-direction: column;
@@ -274,6 +275,9 @@ export default function Cart() {
           .totalMount {
             display: flex;
             justify-content: flex-end;
+          }
+          .btnGreenPc {
+            padding: 10px 15px;
           }
         `}
       </style>
