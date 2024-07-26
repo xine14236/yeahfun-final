@@ -6,6 +6,7 @@ import { FaPencil } from "react-icons/fa6";
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link'
+import CommentList from '@/components/blog/commentList';
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -30,6 +31,7 @@ export default function blogDetail() {
   const [favBlog, setFavBlog] = useState([])
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const [comments, setComments] = useState([]);
 
   const getBlog = async (bid) => {
     try {
@@ -38,7 +40,7 @@ export default function blogDetail() {
       if (resData.success === true) {
         setFavBlog(resData.data.favBlog)
         setBlog(resData.data.blog)
-       
+        setComments(resData.data.comment);
   
         setTimeout(() => {
           setIsLoading(false)
@@ -161,10 +163,12 @@ export default function blogDetail() {
   <FaTrashCan  />
 
 </span>
-  
+ 
 </div>
 <hr />
-<div className="col-12"></div>
+<div className="col-12">
+<CommentList comments={comments} setComments={setComments} />
+</div>
 </div>
       </div>
       </div>
