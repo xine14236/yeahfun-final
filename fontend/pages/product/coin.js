@@ -3,6 +3,8 @@ import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
+import GoTop from '@/components/home/go-top'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export default function Coin() {
   const router = useRouter()
@@ -12,6 +14,12 @@ export default function Coin() {
   const [donations, setDonations] = useState([])
   const [coin, setCoin] = useState(0)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [error, setError] = useState('')
+
+
+  useEffect(() => {
+    import('bootstrap/dist/js/bootstrap.bundle.min.js')
+  }, [])
 
   const getCoupons = async () => {
     const url = `http://localhost:3005/api/coin/coupons`
@@ -74,85 +82,86 @@ export default function Coin() {
   }, [auth.userData])
 
   const handleItemClick = (item, type) => {
-    setSelectedItem({ ...item, type })
-    console.log('Selected item:', item, 'Type:', type)
-  }
-
-  const handleConfirmExchange = () => {
-    if (selectedItem) {
-      console.log(
-        `Confirm exchange for item ID: ${selectedItem.id}, coin: ${selectedItem.coin}, type: ${selectedItem.type}`
-      )
-      if (selectedItem.type === 'coupon') {
-        // 处理优惠券兑换逻辑
-        console.log('Processing coupon exchange...')
-      } else if (selectedItem.type === 'donation') {
-        // 处理捐赠兑换逻辑
-        console.log('Processing donation exchange...')
-      }
+    if (coin < item.coin) {
+      setError('金幣不足')
+    } else {
+      setError('')
+      setSelectedItem({ ...item, type })
+      console.log('Selected item:', item, 'Type:', type)
     }
   }
 
   const exchange = async () => {
+    if (selectedItem && coin >= selectedItem.coin) {
+      //扣到金幣
+      const newCoin = coin - selectedItem.coin
+      setCoin(newCoin)
+      const userId = auth.userData.id
 
-    //扣到金幣
-    const newCoin = coin - selectedItem.coin;
-    setCoin(newCoin);
-    const userId = auth.userData.id;
-
-    const urlUpdateCoin = `http://localhost:3005/api/coin/updateCoin`
-    try {
-      const res = await fetch(urlUpdateCoin, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, newCoin }),
-      })
-      const resData = await res.json()
-      console.log(resData)
-    } catch (e) {
-      console.error(e)
-    }
-
-    //判斷type，存入各自的背包
-
-    if (selectedItem.type === 'coupon') {
-      const urlCoupon = `http://localhost:3005/api/coin/plusCoupon`
+      const urlUpdateCoin = `http://localhost:3005/api/coin/updateCoin`
       try {
-        const res = await fetch(urlCoupon, {
+        const res = await fetch(urlUpdateCoin, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            userId: auth.userData.id,
-            couponId: selectedItem.id,
-          }),
+          body: JSON.stringify({ userId, newCoin }),
         })
         const resData = await res.json()
         console.log(resData)
       } catch (e) {
         console.error(e)
       }
-    } else if (selectedItem.type === 'donation') {
-      const urlDonation = `http://localhost:3005/api/coin/plusDonation`
-      try {
-        const res = await fetch(urlDonation, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: auth.userData.id,
-            donationId: selectedItem.id,
-          }),
-        })
-        const resData = await res.json()
-        console.log(resData)
-      } catch (e) {
-        console.error(e)
+
+      //判斷type，存入各自的背包
+
+      if (selectedItem.type === 'coupon') {
+        const urlCoupon = `http://localhost:3005/api/coin/plusCoupon`
+        try {
+          const res = await fetch(urlCoupon, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: auth.userData.id,
+              couponId: selectedItem.id,
+            }),
+          })
+          const resData = await res.json()
+          console.log(resData)
+        } catch (e) {
+          console.error(e)
+        }
+      } else if (selectedItem.type === 'donation') {
+        const urlDonation = `http://localhost:3005/api/coin/plusDonation`
+        try {
+          const res = await fetch(urlDonation, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: auth.userData.id,
+              donationId: selectedItem.id,
+            }),
+          })
+          const resData = await res.json()
+          console.log(resData)
+        } catch (e) {
+          console.error(e)
+        }
       }
+       // 每次兌換完關閉對話窗
+       if (typeof window !== 'undefined') {
+        import('bootstrap/dist/js/bootstrap.bundle.min.js').then((bootstrap) => {
+          const modal = document.getElementById('exampleModal')
+          const modalInstance = bootstrap.Modal.getInstance(modal)
+          modalInstance.hide()
+        })
+      }
+    } else {
+      setError('金幣不足，無法兌換')
     }
   }
 
@@ -252,49 +261,57 @@ export default function Coin() {
       </section>
 
       <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex={-1}
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                確定兌換 ?
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body">
-              目前還有{coin}點
-              <br />
-              此次兌換後將扣除{selectedItem ? selectedItem.coin : 0}點
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                取消
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={exchange}
-              >
-                確定
-              </button>
-            </div>
-          </div>
-        </div>
+  className="modal fade"
+  id="exampleModal"
+  tabIndex={-1}
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">
+          確定兌換 ?
+        </h5>
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        />
       </div>
+      <div className="modal-body">
+        目前還有 {coin} 點
+        <br />
+        此次兌換後將扣除 {selectedItem ? selectedItem.coin : 0} 點
+        {error && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
+      </div>
+      <div className="modal-footer">
+        <button
+          type="button"
+          className="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          取消
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={exchange}
+          disabled={coin < (selectedItem ? selectedItem.coin : 0)}
+        >
+          確定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <GoTop />
 
       <style jsx>
         {`
