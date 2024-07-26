@@ -90,7 +90,7 @@ export default function Home() {
 
         // 設置更新後的產品資料
         setProducts(updatedProductsWithFavor)
-      } 
+      }
     } catch (e) {
       console.error(e)
     }
@@ -399,7 +399,7 @@ export default function Home() {
           className={`row justify-content-center ${styles.rowActivity1}`}
         >
           {/* <div className={`row justify-content-center ${styles.rowActivity1}`}> */}
-          {/* <Swiper
+          <Swiper
             loop={true}
             watchSlidesProgress={true}
             slidesPerView={4}
@@ -447,7 +447,7 @@ export default function Home() {
                 </div>
               )
             })}
-          </Swiper> */}
+          </Swiper>
           {/* </div> */}
         </ScrollMotionItem>
         <div className={`row justify-content-center ${styles.rowActivity2}`}>

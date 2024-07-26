@@ -14,7 +14,7 @@ export default function MyNavbar() {
   return (
     <>
       <nav
-        className={`navbar navbar-expand-lg navbar-light py-3 py-sm-3 ${styles.navbar}`}
+        className={`navbar navbar-expand-lg navbar-light py-2 py-sm-3 ${styles.navbar}`}
       >
         <GreenLogo width={90} className={styles.homeLogo} />
 

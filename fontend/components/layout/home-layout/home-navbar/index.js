@@ -12,7 +12,7 @@ export default function HomeNavbar() {
   return (
     <>
       <nav
-        className={`navbar navbar-expand-lg navbar-light py-3 py-sm-3 ${styles.navbar}`}
+        className={`navbar navbar-expand-lg navbar-light py-2 py-sm-3 ${styles.navbar}`}
       >
         <div className={`container-fluid ${styles.myContainer}`}>
           <Link className={` ${styles.HomepageName}`} href="/">
