@@ -307,6 +307,33 @@ res.json(output)
 })
 
 
+router.post('/createCom',authenticate, async (req, res) => {
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const memberId = req.user.id || null
+  const sql = `Insert blog_comment ( comment, blog_id , customer_id) values (?,?,?)`
+  const [result]= await db.query(sql,[req.body.comText, req.body.blogId, memberId ])
+  output.result1=result
+  output.info='新增成功'
+
+  if (result.affectedRows > 0) {
+    output.success = true;
+    output.info = '更新成功';
+    output.result1 = result;
+
+    // 删除旧的标签
+    
+  } else {
+    output.info = '没有找到对应的博客';
+  }
+
+res.json(output)
+})
+
+
 router.post('/uploads/:bid', upload.array('photos', 10),  async (req, res) => {
   const bid2 = req.params.bid 
 let pictureNameArray=[]

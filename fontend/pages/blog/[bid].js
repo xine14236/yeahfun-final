@@ -36,6 +36,7 @@ export default function blogDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const [comments, setComments] = useState([]);
   const MySwal = withReactContent(Swal)
+  const [comText,setComText]=useState('')
 
   const getBlog = async (bid) => {
     try {
@@ -173,11 +174,58 @@ try{
     }
   };
 
+  const handleSubmit = async () => {
+    const payload = {
+     comText,
+     blogId:router.query.bid
+    };
+
+    console.log(payload)
+  try{
+    await fetch('http://localhost:3005/api/blog/createCom', {
+      method: 'POST',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+          MySwal.fire({
+            title: '成功!',
+            text: 'BLOG留言已創建',
+            icon: 'success',
+          }).then(() => {
+            // Navigate to another page with insertId in the route
+            getBlog(router.query.bid)
+          });
+        } else {
+          MySwal.fire({
+            title: '錯誤!',
+            text: 'BLOG留言失敗',
+            icon: 'error',
+          });
+        }
+  })
+  }catch(error){
+    console.error('Error saving blog:', error);
+    MySwal.fire({
+      title: '錯誤!',
+      text: '保存時出現錯誤!',
+      icon: 'error',
+      confirmButtonText: '確認',
+    });
+  }
+  };
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
 
       getBlog(router.query.bid)
+     
     }
     // 以下為注解掉eslint的警告一行
     // eslint-disable-next-line
@@ -245,7 +293,7 @@ try{
 </div>
 <hr />
 <div className="col-12">
-<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete} handleAddImage={handleAddImage} />
+<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete} handleAddImage={handleAddImage} getBlog={getBlog} forBId={router.query.bid} comText={comText} setComText={setComText} handleSubmit={handleSubmit} />
 </div>
 </div>
       </div>
