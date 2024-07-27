@@ -200,7 +200,8 @@ export default function Cart() {
         {`
           .emptyCart {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 70px;
+            height: 50vh;
           }
           .wrap {
             height: 320px;

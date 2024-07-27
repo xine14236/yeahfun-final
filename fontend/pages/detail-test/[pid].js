@@ -97,7 +97,7 @@ export default function DetailTest() {
 
     // alert('已加入購物車')
     Swal.fire({
-      position: 'top-end',
+      position: 'center',
       icon: 'success',
       title: 'Yeah! 已加入購物車',
       showConfirmButton: false,
@@ -610,7 +610,7 @@ export default function DetailTest() {
       </div>
       <div className="row">
         <h3 className="campSubtitle">周邊景點</h3>
-        <div className="container">
+        <div className="container" style={{ marginBottom: '80px' }}>
           <Carousel />
         </div>
       </div>
