@@ -571,7 +571,7 @@ export default function DetailTest() {
                   className="modal fade  modal-xl "
                   id="exampleModal"
                   tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
+                  labelled="exampleModalLabel"
                   aria-hidden="true"
                 >
                   <div className="modal-dialog">
@@ -677,7 +677,7 @@ export default function DetailTest() {
                   className="modal fade  modal-xl "
                   id={`exampleModal${campsite.rooms_campsites_id}`}
                   tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
+                  labelled="exampleModalLabel"
                   aria-hidden="true"
                 >
                   <div className="modal-dialog">
