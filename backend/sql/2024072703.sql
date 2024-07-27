@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-07-27 22:11:33
+-- 產生時間： 2024-07-27 23:38:18
 -- 伺服器版本： 8.0.36
 -- PHP 版本： 8.0.30
 
@@ -1449,8 +1449,6 @@ ALTER TABLE `comment`
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `coupon`
 --
-
---
 ALTER TABLE `coupon`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
@@ -1579,12 +1577,6 @@ ALTER TABLE `blog_comment`
 --
 ALTER TABLE `blog_img`
   ADD CONSTRAINT `blog_id` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 資料表的限制式 `coupon`
---
--- ALTER TABLE `coupon`
---   ADD CONSTRAINT `coupon_ibfk_1` FOREIGN KEY (`owners_id`) REFERENCES `owners` (`owners_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 資料表的限制式 `favorite_blog`
