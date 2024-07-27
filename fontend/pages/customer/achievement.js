@@ -161,7 +161,26 @@ export default function Index() {
             onSubmit={handleSubmit}
             className={styles.memberFrame}
           >
-            <div className={styles.infoFrame}></div>
+            <div className={styles.infoFrame}>
+              <div className={styles.achieveFrame}>
+                <div className={styles.achieveFrameCircle}>
+                  <Image
+                    className={styles.achieveFrameImage}
+                    src="/chameleon/grey.svg"
+                    alt="chameleon"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+                <div className={styles.achieveFrameContent}>
+                  <h3>入門Fun</h3>
+                  <div className={styles.achieveFrameText}>
+                    <h5>入門會員</h5>
+                    <h5>註冊後即為入門會員</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>

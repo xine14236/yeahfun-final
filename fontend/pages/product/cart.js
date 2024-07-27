@@ -139,7 +139,7 @@ export default function Cart() {
                   </div>
                   <div className="minusButton py-1">
                     <button
-                      className="btn btn-primary"
+                      className="btn btnGreenPc"
                       onClick={() => handleRemove(store.rooms_campsites_id)}
                     >
                       <FaMinus />
@@ -191,14 +191,17 @@ export default function Cart() {
           className={`btnGreenPc transition mt-5`}
           onClick={checkout}
         >
-          <div>前往結帳頁面</div>
+          <div className="py-2" style={{ fontSize: '20px' }}>
+            前往結帳頁面
+          </div>
         </Link>
       </div>
       <style jsx>
         {`
           .emptyCart {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 70px;
+            height: 50vh;
           }
           .wrap {
             height: 320px;
@@ -217,6 +220,7 @@ export default function Cart() {
             overflow: hidden;
           }
           .cartInfoContent {
+            width: 380px;
             display: flex;
             justify-content: space-around;
             flex-direction: column;
@@ -265,8 +269,8 @@ export default function Cart() {
           .checkoutButton {
             height: 200px;
             display: flex;
-            justify-content: flex-end; /* Aligns the button to the right */
-            align-items: start; /* Aligns the button to the top */
+            justify-content: flex-end;
+            align-items: start;
           }
           .checkout {
             padding: 10px 80px;
@@ -274,6 +278,9 @@ export default function Cart() {
           .totalMount {
             display: flex;
             justify-content: flex-end;
+          }
+          .btnGreenPc {
+            padding: 10px 15px;
           }
         `}
       </style>

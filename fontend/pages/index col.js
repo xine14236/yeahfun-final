@@ -17,6 +17,7 @@ import FavStoreBtn3 from '@/components/icons/fav-store-btn3'
 import GoTop from '@/components/home/go-top'
 import Header from '@/components/home/header'
 import Section05 from '@/components/home/section05'
+// import FavFcon from '@/components/fav-test/fav-icon'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -28,6 +29,8 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const [swiperInstances, setSwiperInstances] = useState([])
+  const [swiperInstances2, setSwiperInstances2] = useState([])
+
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
   const { showLoader, hideLoader, loading, delay } = useLoader()
   const [fav, setFav] = useState(true)
@@ -189,12 +192,17 @@ export default function Home() {
       return newInstances
     })
   }
-
   return (
     <>
       <Header />
+      <ScrollMotionContainer
+        once={true}
+        amount={0.1}
+        element="div"
+        className={`${styles.myCardList} ${styles.section02}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section02}`}> */}
 
-      <div className={`${styles.myCardList} ${styles.section02}`}>
         <Image
           className={styles.section02DecorateTop}
           src="/images/homepage/decorate.png"
@@ -202,7 +210,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -213,8 +222,10 @@ export default function Home() {
             <h3 className="titleText">HOT</h3>
             <p>熱門營地</p>
           </div>
-        </div>
-        <div className="container">
+          {/* </div> */}
+        </ScrollMotionItem>
+        <ScrollMotionItem element="div" type="up" className="container">
+          {/* <div className="container"> */}
           <div className="cards">
             <div className={`row ${styles.myRow}`}>
               {products.map((v, i) => (
@@ -233,6 +244,7 @@ export default function Home() {
                         }}
                         fav={fav}
                       />
+                      {/* <FavFcon id={v.id} /> */}
                     </div>
                     <Link href={`/detail-test/${v.stores_id}`}>
                       <Swiper
@@ -295,10 +307,18 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
+          {/* </div> */}
+        </ScrollMotionItem>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={styles.section03}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.4}
+        element="div"
+        className={styles.section03}
+      >
+        {/* <div className={styles.section03}> */}
         <Image
           className={styles.section04DecorateTop}
           src="/images/homepage/decorate.png"
@@ -306,7 +326,8 @@ export default function Home() {
           width={1920}
           height={80}
         />
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
@@ -317,7 +338,8 @@ export default function Home() {
             <h3 className="titleText">Activity</h3>
             <p>最新消息</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <Image
           className={styles.section03Bg}
           src="/images/homepage/home-bg01.jpg"
@@ -326,7 +348,12 @@ export default function Home() {
           height={1080}
           style={{ width: '100%' }}
         />
-        <div className={`row justify-content-center ${styles.rowActivity1}`}>
+        <ScrollMotionItem
+          element="div"
+          type="up"
+          className={`row justify-content-center ${styles.rowActivity1}`}
+        >
+          {/* <div className={`row justify-content-center ${styles.rowActivity1}`}> */}
           <Swiper
             loop={true}
             watchSlidesProgress={true}
@@ -348,7 +375,11 @@ export default function Home() {
                     <Link href={`/blog/${v.id}`}>
                       <div className={`card ${styles.activityCard}`}>
                         <Image
-                          src="/images/homepage/tent02.jpg"
+                          src={
+                            v.img_name
+                              ? `http://localhost:3005/img-blog/${v.img_name}`
+                              : `http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`
+                          }
                           className={styles.activityImg}
                           alt="blog"
                           width={400}
@@ -372,7 +403,8 @@ export default function Home() {
               )
             })}
           </Swiper>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
         <div className={`row justify-content-center ${styles.rowActivity2}`}>
           {blog.map((v, i) => {
             return (
@@ -405,11 +437,19 @@ export default function Home() {
             )
           })}
         </div>
-      </div>
+        {/* </div> */}
+      </ScrollMotionContainer>
 
-      <div className={`${styles.myCardList} ${styles.section04}`}>
+      <ScrollMotionContainer
+        once={true}
+        // amount={0.6}
+        element="div"
+        className={`${styles.myCardList} ${styles.section04}`}
+      >
+        {/* <div className={`${styles.myCardList} ${styles.section04}`}> */}
         {/* 代辦事項: like hover，輪播動畫*/}
-        <div className="title">
+        <ScrollMotionItem element="div" type="up" className="title">
+          {/* <div className="title"> */}
           <Image
             src="/images/homepage/title-tree.png"
             alt="blog"
@@ -420,7 +460,8 @@ export default function Home() {
             <h3 className="titleText">theme</h3>
             <p>主題營地</p>
           </div>
-        </div>
+          {/* </div> */}
+        </ScrollMotionItem>
 
         <div className={styles.paginationButtons}>
           {tags.map((tagSet, index) => (
@@ -435,6 +476,7 @@ export default function Home() {
             </button>
           ))}
         </div>
+
         <Swiper
           onSwiper={setSwiperInstance}
           slidesPerView={1}
@@ -442,7 +484,8 @@ export default function Home() {
           onSlideChange={handleSlideChange}
           navigation={true}
           modules={[Pagination, Navigation]}
-          className="mySwiper"
+          className="mySwiper3"
+          allowTouchMove={false}
         >
           {tags.map((tagSet, idx) => (
             <SwiperSlide key={idx}>
@@ -451,14 +494,47 @@ export default function Home() {
                   <div className={`row ${styles.myRow}`}>
                     {tagSet.data.map((v, i) => (
                       <div className="col-12 col-sm-4" key={i}>
-                        <div className="card">
-                          <Link href="#/">
-                            {/* <svg className={styles.iconLike}>
-                            <use href="#like" />
-                          </svg> */}
-                          </Link>
+                        <div className={`card ${styles.productCard}`}>
+                          <div className={styles.favor}>
+                            <FavStoreBtn3
+                              width={45}
+                              onClick={() => {
+                                setFav(!fav)
+                                console.log(fav)
+                              }}
+                              fav={fav}
+                            />
+                          </div>
                           <Link href={`/detail-test/${v.stores_id}`}>
-                            <Image
+                            <Swiper
+                              spaceBetween={30}
+                              centeredSlides={true}
+                              loop={true}
+                              pagination={true}
+                              modules={[Pagination]}
+                              className="mySwiper1"
+                            >
+                              {v.img_name
+                                .split(',')
+                                .slice(0, 6)
+                                .map((img, index) => (
+                                  <SwiperSlide key={index}>
+                                    <Image
+                                      src={`/detail/${img}`}
+                                      className={styles.cardImage}
+                                      alt="tents"
+                                      width={640}
+                                      height={427}
+                                      style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  </SwiperSlide>
+                                ))}
+                            </Swiper>
+                            {/* <Image
                               src={`/detail/${v.img_name.split(',')[0]}`}
                               className={styles.cardImage}
                               alt="tents"
@@ -468,8 +544,8 @@ export default function Home() {
                                 width: '100%',
                                 height: 'auto',
                                 objectFit: 'contain',
-                              }}
-                            />
+                              }} */}
+                            {/* /> */}
                           </Link>
                           <div className={styles.cardBody}>
                             <div className={styles.cardTags}>
@@ -499,7 +575,9 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+
+        {/* </div> */}
+      </ScrollMotionContainer>
 
       <Section05 />
 
