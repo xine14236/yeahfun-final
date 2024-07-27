@@ -8,6 +8,7 @@ import '@/styles/react-paginate.scss'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import '@/styles/swiper.scss'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { ConfigProvider } from 'antd'
 import theme from '@/theme/themeConfig'

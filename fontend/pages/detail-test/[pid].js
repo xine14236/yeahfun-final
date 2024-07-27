@@ -13,9 +13,11 @@ import Carousel from '@/components/product/detail/carousel'
 import GoTop from '@/components/home/go-top'
 import Swal from 'sweetalert2'
 import Modal from 'react-modal'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { SlClose } from 'react-icons/sl'
 import { useLoader } from '@/hooks/use-loader'
 import { Select } from 'antd'
+// import ModalTest from '@/components/product/detail/modalTest'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -29,7 +31,7 @@ export default function DetailTest() {
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const { showLoader, hideLoader, loading, delay } = useLoader()
+  // const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -222,9 +224,11 @@ export default function DetailTest() {
                 height: 'auto',
                 borderRadius: '5px',
               }}
-              onClick={() => setModalIsOpen(true)}
+              // onClick={() => setModalIsOpen(true)}
+              data-bs-toggle="modal" //告訴Bootstrap這裡要觸發一個modal
+              data-bs-target="#modal2" //告訴Bootstrap要觸發哪個modal
             />
-            <Modal
+            {/* <Modal
               isOpen={modalIsOpen}
               onRequestClose={() => setModalIsOpen(false)}
               contentLabel="Example Modal"
@@ -267,7 +271,7 @@ export default function DetailTest() {
                   borderRadius: '50px',
                 }}
               ></SlClose>
-            </Modal>
+            </Modal> */}
           </figure>
 
           {imgArray.slice(1, 5).map((img, index) => (
@@ -278,10 +282,101 @@ export default function DetailTest() {
                 width={500}
                 height={300}
                 style={{ width: '100%', height: 'auto', borderRadius: '5px' }}
+                data-bs-toggle="modal"
+                data-bs-target={`#modal${index}`}
               />
             </div>
           ))}
         </div>
+        {/* Modal2 */}
+        <div className="modal fade  modal-xl " id="modal2">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                <Image
+                  src={`/detail/${imgArray[0]}`}
+                  alt="Your description"
+                  width={500} // 圖片的實際寬度
+                  height={100} // 圖片的實際高度
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '5px',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Modal3 */}
+        {imgArray.slice(1, 5).map((img, index) =>(
+          <div
+            className="modal fade  modal-xl "
+            id={`modal${index}`}
+            key={index}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  />
+                </div>
+                <div className="modal-body">
+                  <Image
+                    src={`/detail/${img}`}
+                    alt="Camping scene"
+                    width={500}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '5px',
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+        {/* <div className="modal fade  modal-xl " id={`#modal${index}`}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                <Image
+                  src={`/detail/${img}`}
+                  alt="Camping scene"
+                  width={500}
+                  height={300}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '5px',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div> */}
       </div>
       <div className="row storeNormalInfo">
         <div className="col-md-6 campPrecaution">
@@ -667,6 +762,7 @@ export default function DetailTest() {
             grid-column: 1 / 2;
             grid-row: 1 / 3;
             display: flex;
+            margin: 0px;
           }
            {
             /* .ImageModal被蓋掉暫寫行內樣式 {
