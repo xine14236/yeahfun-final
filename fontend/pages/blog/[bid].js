@@ -199,6 +199,7 @@ try{
             icon: 'success',
           }).then(() => {
             // Navigate to another page with insertId in the route
+            setComText('')
             getBlog(router.query.bid)
           });
         } else {
