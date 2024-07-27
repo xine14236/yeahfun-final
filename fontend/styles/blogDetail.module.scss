@@ -101,3 +101,11 @@ margin-block: 5px;
   font-weight: bold; 
 
 }
+
+.paddingEnd{
+ min-height: 400px;
+ @media (max-width: 768px) {
+  min-height: 200px;
+}
+
+}
