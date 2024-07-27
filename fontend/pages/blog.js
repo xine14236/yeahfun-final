@@ -5,6 +5,7 @@ import styles from '@/styles/blog.module.scss'
 import heart from '@/assets/heart.svg'
 import chiiLikes from '@/assets/chiiLike.svg'
 import chiiLikes2 from '@/assets/chiiLike2.svg'
+import chiiLikes3 from '@/assets/chiiLike3.svg'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import { DatePicker, Space,Modal } from 'antd'
@@ -329,7 +330,7 @@ export default function Blog() {
             onMouseLeave={handleMouseLeave}>
            
             <div onClick={()=>{handleClickStar(v.id)}}>
-     {v.fav_id? <Image src={chiiLikes2} className={` ${styles.starBoxShow}`}  /> : <Image src={chiiLikes} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />}
+     {v.fav_id? <Image src={chiiLikes2} className={` ${styles.starBoxShow}`}  /> : <Image src={chiiLikes3} className={` ${hoveredBlogId === v.id ? styles.starBoxShow : styles.starBox}`}  />}
       </div>
               {/* 卡片内容会在这里动态生成 */}
               <div
