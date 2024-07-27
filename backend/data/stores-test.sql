@@ -350,3 +350,8 @@ GROUP BY
     FROM home_blog
     LEFT JOIN blog_img ON home_blog.id = blog_img.blog_id
     LIMIT 6;
+
+        SELECT pid FROM favorite WHERE uid = 2
+
+
+ SELECT pid FROM favorite WHERE pid = 13 AND uid =1
