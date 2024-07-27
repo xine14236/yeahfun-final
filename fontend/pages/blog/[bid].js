@@ -292,7 +292,7 @@ try{
  
 </div>
 <hr />
-<div className="col-12">
+<div className={`col-12 ${styles.paddingEnd}`}>
 <CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete} handleAddImage={handleAddImage} getBlog={getBlog} forBId={router.query.bid} comText={comText} setComText={setComText} handleSubmit={handleSubmit} />
 </div>
 </div>
