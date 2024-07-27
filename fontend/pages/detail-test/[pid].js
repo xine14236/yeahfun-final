@@ -14,6 +14,8 @@ import GoTop from '@/components/home/go-top'
 import Swal from 'sweetalert2'
 import Modal from 'react-modal'
 import { SlClose } from 'react-icons/sl'
+import { useLoader } from '@/hooks/use-loader'
+import { Select } from 'antd'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -27,6 +29,7 @@ export default function DetailTest() {
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const { showLoader, hideLoader, loading, delay } = useLoader()
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -93,7 +96,7 @@ export default function DetailTest() {
 
     // alert('已加入購物車')
     Swal.fire({
-      position: 'top-end',
+      position: 'center',
       icon: 'success',
       title: 'Yeah! 已加入購物車',
       showConfirmButton: false,
@@ -164,13 +167,20 @@ export default function DetailTest() {
     }
   }, [router, router.query.pid])
 
-  const handlePeopleFilterChange = (e) => {
-    setPeopleFilter(e.target.value)
+  const handlePeopleFilterChange = (value) => {
+    setPeopleFilter(value)
   }
 
   const filteredCampsites = peopleFilter
     ? campsites.filter((campsite) => campsite.people >= peopleFilter)
     : campsites
+
+  // useEffect(() => {
+  //   showLoader()
+  //   getStoreInformation()
+  //     .then(() => delay(3000))
+  //     .then(hideLoader)
+  // }, [])
 
   return (
     <>
@@ -360,7 +370,41 @@ export default function DetailTest() {
         </div>
         <div className="inputNumber" style={{ color: 'white' }}>
           入住人數
-          <select value={peopleFilter} onChange={handlePeopleFilterChange}>
+          <Select
+            style={{ width: 120 }}
+            placeholder="請選擇人數"
+            onChange={handlePeopleFilterChange}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            } // 選項過濾
+            options={[
+              {
+                value: '1',
+                label: '1人',
+              },
+              {
+                value: '2',
+                label: '2人',
+              },
+              {
+                value: '3',
+                label: '3人',
+              },
+              {
+                value: '4',
+                label: '4人',
+              },
+              {
+                value: '5',
+                label: '5人',
+              },
+              {
+                value: '6',
+                label: '6人以上',
+              },
+            ]}
+          />
+          {/* <select value={peopleFilter} onChange={handlePeopleFilterChange}>
             <option value="">選擇人數</option>
             <option value="1">1人</option>
             <option value="2">2人</option>
@@ -368,7 +412,7 @@ export default function DetailTest() {
             <option value="4">4人</option>
             <option value="5">5人</option>
             <option value="6">6人以上</option>
-          </select>
+          </select> */}
         </div>
       </div>
 
@@ -590,6 +634,7 @@ export default function DetailTest() {
         </div>
       </div>
       <GoTop />
+
       <style jsx>
         {`
           .storeTitle {
@@ -763,6 +808,13 @@ export default function DetailTest() {
               #ff8c00 51%,
               #fb955e 100%
             );
+          }
+           {
+            /* @media screen and (max-width: 640px) {
+            .campGallery {
+              display: flex;
+            }
+          } */
           }
         `}
       </style>
