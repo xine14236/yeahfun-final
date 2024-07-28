@@ -92,7 +92,7 @@ export default function DetailTest() {
         setStore(resData.data.store)
         setTag(resData.data.tag)
         setImg(resData.data.img)
-        console.log(resData.data.img)
+        console.log(resData.data.store)
       }
     } catch (e) {
       console.error(e)
@@ -181,7 +181,7 @@ export default function DetailTest() {
   })
 
   // 將 precautions 字串拆分成陣列
-  const precautionsArray = store.precautions ? store.precautions.split(',') : []
+  const precautionsArray = store.precautions ? store.precautions.split(' ') : []
 
   // 將取得img資料字串拆分成陣列
   const imgArray = img.img_name ? img.img_name.split(',') : []
@@ -393,6 +393,7 @@ export default function DetailTest() {
             {precautionsArray.map((precaution, index) => (
               <li key={index} style={{ lineHeight: '2.4' }}>
                 {precaution}
+                <br />
               </li>
             ))}
           </div>
@@ -464,57 +465,51 @@ export default function DetailTest() {
         </div>
       </div>
       <div className="campAreaSearchBar">
-        <div className="inputDate">
-          <p style={{ color: 'white' }}>入住日期</p>
+        <div className="inputDate" style={{ color: 'white' }}>
+          入住日期
           <Space direction="vertical" size={12}>
             <RangePicker onChange={setDateRange} />
           </Space>
         </div>
         <div className="inputNumber" style={{ color: 'white' }}>
           入住人數
-          <Select
-            style={{ width: 120 }}
-            placeholder="請選擇人數"
-            onChange={handlePeopleFilterChange}
-            filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-            } // 選項過濾
-            options={[
-              {
-                value: '1',
-                label: '1人',
-              },
-              {
-                value: '2',
-                label: '2人',
-              },
-              {
-                value: '3',
-                label: '3人',
-              },
-              {
-                value: '4',
-                label: '4人',
-              },
-              {
-                value: '5',
-                label: '5人',
-              },
-              {
-                value: '6',
-                label: '6人以上',
-              },
-            ]}
-          />
-          {/* <select value={peopleFilter} onChange={handlePeopleFilterChange}>
-            <option value="">選擇人數</option>
-            <option value="1">1人</option>
-            <option value="2">2人</option>
-            <option value="3">3人</option>
-            <option value="4">4人</option>
-            <option value="5">5人</option>
-            <option value="6">6人以上</option>
-          </select> */}
+          <div className="select">
+            <Select
+              placeholder="請選擇人數"
+              onChange={handlePeopleFilterChange}
+              filterOption={(input, option) =>
+                (option?.label ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              } // 選項過濾
+              options={[
+                {
+                  value: '1',
+                  label: '1人',
+                },
+                {
+                  value: '2',
+                  label: '2人',
+                },
+                {
+                  value: '3',
+                  label: '3人',
+                },
+                {
+                  value: '4',
+                  label: '4人',
+                },
+                {
+                  value: '5',
+                  label: '5人',
+                },
+                {
+                  value: '6',
+                  label: '6人以上',
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
@@ -773,32 +768,6 @@ export default function DetailTest() {
             display: flex;
             margin: 0px;
           }
-           {
-            /* .ImageModal被蓋掉暫寫行內樣式 {
-            position: 'absolute',
-            width: '30px',
-            height: '30px',
-            top: '10px',
-            right: '10px',
-            color: 'rgb(56, 155, 135)',
-            backgroundColor: 'white',
-            border: 'white',
-            borderRadius: '50px',
-          } */
-          }
-           {
-            /* .closeImageModal被蓋掉暫寫行內樣式 {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            top: 10px;
-            right: 10px;
-            color: rgb(56, 155, 135);
-            background-color: white;
-            border: white;
-            border-radius: 50px;
-          } */
-          }
           .campPrecaution {
             display: inline;
             justify-content: space-between;
@@ -835,10 +804,13 @@ export default function DetailTest() {
             background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
           }
           .inputNumber {
-            display: flex;
-            width: 370px;
-            align-items: center;
-            gap: 18px;
+          display: flex;
+          width: 370px;
+          align-items: center;
+          gap: 18px;
+          }
+          .inputNumber Select {
+            width: 120px;
           }
           .inputDate {
             display: flex;
@@ -914,27 +886,58 @@ export default function DetailTest() {
               #fb955e 100%
             );
           }
-           {
-            @media screen and (max-width: 640px) {
-              .storeTitleWrap {
-                display: flex;
-                flex-direction: column;
-              }
-              .storeTitleWrap .briefIntroduce {
-                order: 2;
-                display: block;
-                width: 100%;
-              }
-              .storeTitleWrap .campTags {
-                order: 1;
-                display: block;
-                width: 100%;
-              }
-              .campGallery {
-                display: flex;
-              }
+
+          @media screen and (max-width: 640px) {
+            .storeTitleWrap {
+              display: flex;
+              flex-direction: column;
             }
-          }
+            .storeTitleWrap .briefIntroduce {
+              order: 2;
+              display: block;
+              width: 100%;
+            }
+            .storeTitleWrap .campTags {
+              order: 1;
+              display: block;
+              width: 100%;
+            }
+            .campGallery {
+              display: flex;
+            }
+            .campSubtitle {
+              margin-top: 20px;
+              margin-bottom: -2px;
+            }
+            .campPrecaution {
+              display: block;
+            }
+            .campPrecaution li {
+              position: relative;
+              list-style-type: disc;
+              text-indent: -1.3em;
+              padding-left: 1em;
+            }
+            .campAreaSearchBar {
+              display: flex;
+              flex-direction: column;
+              padding: 10px 10px 10px 20px;
+              border-radius: 20px;
+            }
+            .inputDate {
+              order: 2;
+              width: 80%;
+            }
+            .inputNumber {
+              order: 1;
+              width: 50%;
+            }
+            .select {
+              width: 100%;
+            }
+            .cardContainer {
+              display: ruby;
+            }
         `}
       </style>
     </>
