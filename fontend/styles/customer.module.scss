@@ -378,6 +378,7 @@
   width: 400px;
   height: 128px;
   padding: 20px;
+  margin: 10px;
   align-items: center;
   gap: 20px;
   border-radius: 10px;
@@ -405,6 +406,9 @@
     color: var(--secondary-3, #fdaf17);
   }
   h5 {
+    color: var(--grey-600, #8c8c8c);
+  }
+  p{
     color: var(--grey-600, #8c8c8c);
   }
 }

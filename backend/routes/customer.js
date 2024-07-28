@@ -195,6 +195,49 @@ router.get('/:id', async function (req, res) {
     data: { customer },
   })
 })
+// GET - 得到優惠券資料
+router.get('/:id/coupon', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      `SELECT
+    couponbag.id,
+    coupon.id,
+    coupon.name,
+    coupon.directions,
+    coupon.img,
+    coupon.time_start,
+    coupon.time_end
+    FROM
+    couponbag
+    JOIN coupon ON couponbag.coupon_id=coupon.id 
+    WHERE
+    couponbag.user_id = ?`,
+      [id]
+    )
+
+    const coupon = rows
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { coupon },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
+
 // PUT - 新增會員資料
 router.put('/:id/profile', async function (req, res) {
   // 轉為數字

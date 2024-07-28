@@ -134,7 +134,7 @@ export default function Register() {
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     id="password"
-                    placeholder="請輸入您的密碼(需含有8字元以上英文字母數字和符號)"
+                    placeholder="請輸入您的密碼"
                     value={user.password}
                     onChange={handleFieldChange}
                   />
