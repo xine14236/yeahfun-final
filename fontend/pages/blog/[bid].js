@@ -137,9 +137,9 @@ try{
 }
   };
 
-  const handleDelete = (id) => {
-    setComments(comments.filter(comment => comment.id !== id));
-  };
+  // const handleDelete = (id) => {
+  //   setComments(comments.filter(comment => comment.id !== id));
+  // };
 
   const handleAddImage = async (id, files) => {
 
@@ -221,6 +221,110 @@ try{
   }
   };
 
+  const handleDelete = (postId) => {
+    MySwal.fire({
+      title: '您確定要刪除嗎?',
+      text: '按下確認將刪除此文章!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: '取消',
+      confirmButtonText: '確定刪除!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the fetch operation
+        fetch(`http://localhost:3005/api/blog/delete/${postId}`, {
+          credentials: 'include',
+          method: 'DELETE', // Use DELETE method for deletion
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            MySwal.fire({
+              title: '已刪除!',
+              text: '博客文章已刪除',
+              icon: 'success',
+            }).then(() => {
+              // Navigate to another page after deletion
+              router.push('/blog'); // Redirect to the blog list page
+            });
+          } else {
+            MySwal.fire({
+              title: '錯誤!',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+        })
+        .catch((error) => {
+          // Handle fetch error
+          console.error('Error:', error);
+          Swal.fire({
+            title: '錯誤!',
+            text: '發生了一些錯誤，請稍後再試。',
+            icon: 'error',
+          });
+        });
+      }
+    });
+  };
+
+  const handleDelete2 = (postId) => {
+    MySwal.fire({
+      title: '您確定要刪除嗎?',
+      text: '按下確認將刪除此留言!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: '取消',
+      confirmButtonText: '確定刪除!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the fetch operation
+        fetch(`http://localhost:3005/api/blog/Cdelete/${postId}`, {
+          credentials: 'include',
+          method: 'DELETE', // Use DELETE method for deletion
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            MySwal.fire({
+              title: '已刪除!',
+              text: '留言已刪除',
+              icon: 'success',
+            }).then(() => {
+              // Navigate to another page after deletion
+              getBlog(router.query.bid)// Redirect to the blog list page
+            });
+          } else {
+            MySwal.fire({
+              title: '錯誤!',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+        })
+        .catch((error) => {
+          // Handle fetch error
+          console.error('Error:', error);
+          Swal.fire({
+            title: '錯誤!',
+            text: '發生了一些錯誤，請稍後再試。',
+            icon: 'error',
+          });
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
@@ -286,7 +390,7 @@ try{
 </span>
 
 
-  <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 `}>
+  <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 ` } onClick={(e)=>{handleDelete(router.query.bid)}}>
   <FaTrashCan  />
 
 </span>
@@ -294,7 +398,7 @@ try{
 </div>
 <hr />
 <div className={`col-12 ${styles.paddingEnd}`}>
-<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete} handleAddImage={handleAddImage} getBlog={getBlog} forBId={router.query.bid} comText={comText} setComText={setComText} handleSubmit={handleSubmit} />
+<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete2} handleAddImage={handleAddImage} getBlog={getBlog} forBId={router.query.bid} comText={comText} setComText={setComText} handleSubmit={handleSubmit} />
 </div>
 </div>
       </div>
