@@ -97,7 +97,7 @@ export default function DetailTest() {
 
     // alert('已加入購物車')
     Swal.fire({
-      position: 'top-end',
+      position: 'center',
       icon: 'success',
       title: 'Yeah! 已加入購物車',
       showConfirmButton: false,
@@ -168,15 +168,16 @@ export default function DetailTest() {
     if (router.isReady) {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
+
+      if (router.query.startDate && router.query.endDate) {
+        setDateRange([
+          dayjs(router.query.startDate),
+          dayjs(router.query.endDate),
+        ])
+      } else {
+        setDateRange([dayjs(), dayjs().add(1, 'day')])
+      }
     }
-    // if (router.query.startDate && router.query.endDate) {
-    //   {
-    //     setDateRange([
-    //       dayjs(router.query.startDate),
-    //       dayjs(router.query.endDate),
-    //     ])
-    //   }
-    // }
   }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (e) => {
@@ -609,7 +610,7 @@ export default function DetailTest() {
       </div>
       <div className="row">
         <h3 className="campSubtitle">周邊景點</h3>
-        <div className="container">
+        <div className="container" style={{ marginBottom: '80px' }}>
           <Carousel />
         </div>
       </div>

@@ -22,9 +22,7 @@ export default function Carousel() {
         navigation={true}
         centeredSlides={true}
         loop={true}
-        pagination={{
-          type: 'fraction',
-        }}
+        pagination={false}
         modules={[Navigation, Pagination, History]}
         className="mySwiper"
       >

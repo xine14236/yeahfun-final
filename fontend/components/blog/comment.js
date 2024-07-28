@@ -1,22 +1,24 @@
 // Comment.js
 import React, { useEffect, useRef, useState } from 'react';
-import { Menu, Dropdown, Button, Input, Upload } from 'antd';
+import { Menu, Dropdown, Button, Input, Upload, message } from 'antd';
 import { AiOutlineMore, AiOutlineEdit, AiOutlineDelete, AiOutlinePicture, AiOutlineCheck } from 'react-icons/ai';
 import { z } from 'zod';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import Image from 'next/image'
 import styles from './comment.module.css'
+import { useAuth } from '@/hooks/use-auth';
 
 
 const { TextArea } = Input;
 
 
-const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
+const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=>{} }) => {
     const textAreaRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(comment.comment || '');
   const [error, setError] = useState('');
+  const { auth } = useAuth()
 
   const handleSave = () => {
     const schema = z.string().max(200, "Cannot exceed 200 characters");
@@ -30,20 +32,36 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
     }
   };
 
-  const handleImageUpload = ({ file }) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      onAddImage(reader.result);
-    };
-    reader.readAsDataURL(file);
-    // console.log('123')
-    // return false; // Prevent upload
+  // const handleImageUpload = ({ fileList }) => {
+  //   if (fileList.length > 3) {
+  //     alert('You can only upload up to 3 images.');
+  //     return false;
+  //   }
+  //   onAddImages(fileList);
+  //   return false; // Prevent upload
+  // };
+  const props = {
+    name: 'photos',
+    action: `http://localhost:3005/api/blog/Cuploads/${comment.id}`,
+    multiple: true,
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+        getBlog(forBId)
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
   };
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (textAreaRef.current && !textAreaRef.current.contains(event.target)) {
-        handleSave();
+        setIsEditing(false);
       }
     };
 
@@ -58,7 +76,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
     };
   }, [isEditing]);
 
- 
+
 
   const menu = (
     <Menu>
@@ -69,19 +87,24 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
         Delete
       </Menu.Item>
       <Menu.Item key="3" icon={<AiOutlinePicture />}>
-        <Upload showUploadList={false} beforeUpload={handleImageUpload}>
+      <Upload  {...props} >
           <Button type="text">Add Image</Button>
         </Upload>
       </Menu.Item>
     </Menu>
   );
+  const menu2 =(
+    <Menu>
+   
+  </Menu>
+  )
 
   return (
     <div className={`row mt-4 px-3 w-100   ${styles.row2} `}>
       <div className='col-4'>
       <div className=''>
         <Image
-                      src={`http://localhost:3005/avatar/default.png`}
+                      src={`http://localhost:3005/avatar/1.webp`}
                       className="img-fluid"
                       alt="..."
                       width={30}
@@ -116,7 +139,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImage }) => {
         )}
         <div className={styles.commentMeta}>
           {comment.created_at}   
-          <Dropdown overlay={menu} trigger={['click']}>
+          <Dropdown overlay= {auth.userData.id==comment.customer_id?menu : menu2} trigger={['click']}>
             <Button type="text" icon={<AiOutlineMore />} />
           </Dropdown>
         </div>
