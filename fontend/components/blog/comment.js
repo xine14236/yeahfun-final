@@ -7,6 +7,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import Image from 'next/image'
 import styles from './comment.module.css'
+import { useAuth } from '@/hooks/use-auth';
 
 
 const { TextArea } = Input;
@@ -17,6 +18,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(comment.comment || '');
   const [error, setError] = useState('');
+  const { auth } = useAuth()
 
   const handleSave = () => {
     const schema = z.string().max(200, "Cannot exceed 200 characters");
@@ -74,7 +76,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
     };
   }, [isEditing]);
 
- 
+
 
   const menu = (
     <Menu>
@@ -91,6 +93,11 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
       </Menu.Item>
     </Menu>
   );
+  const menu2 =(
+    <Menu>
+   
+  </Menu>
+  )
 
   return (
     <div className={`row mt-4 px-3 w-100   ${styles.row2} `}>
@@ -132,7 +139,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
         )}
         <div className={styles.commentMeta}>
           {comment.created_at}   
-          <Dropdown overlay={menu} trigger={['click']}>
+          <Dropdown overlay= {auth.userData.id==comment.customer_id?menu : menu2} trigger={['click']}>
             <Button type="text" icon={<AiOutlineMore />} />
           </Dropdown>
         </div>
