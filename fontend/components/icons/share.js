@@ -72,7 +72,7 @@ export default function Share({ size, color, className }) {
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-centered">
-            <div className="row modal-content">
+            <div className="row modal-content" style={{ alignItems: 'center' }}>
               <div className="col-8 modal-header ">
                 <h5 className="modal-title" id="shareModalLabel">
                   分享營地資訊
