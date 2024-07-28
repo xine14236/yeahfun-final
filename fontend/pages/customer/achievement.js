@@ -43,6 +43,38 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+  const level = [
+    {
+      icon: '/chameleon/v1.svg',
+      title: '入門會員',
+      text: '註冊後即為入門會員',
+    },
+    {
+      icon: '/chameleon/v2.svg',
+      title: '晨曦會員',
+      text: '消費兩筆即為晨曦會員',
+    },
+    {
+      icon: '/chameleon/v3.svg',
+      title: '玄彩會員',
+      text: '消費四筆即為玄彩會員',
+    },
+    {
+      icon: '/chameleon/v4.svg',
+      title: '斜陽會員',
+      text: '消費六筆即為斜陽會員',
+    },
+    {
+      icon: '/chameleon/v5.svg',
+      title: '碧海會員',
+      text: '消費八筆即為碧海會員',
+    },
+    {
+      icon: '/chameleon/v6.svg',
+      title: '彩霞會員',
+      text: '消費十筆即為彩霞會員',
+    },
+  ]
   useEffect(() => {
     const currentPath = router.pathname
     const currentIndex = links.findIndex((link) => link.href === currentPath)
@@ -162,24 +194,26 @@ export default function Index() {
             className={styles.memberFrame}
           >
             <div className={styles.infoFrame}>
-              <div className={styles.achieveFrame}>
-                <div className={styles.achieveFrameCircle}>
-                  <Image
-                    className={styles.achieveFrameImage}
-                    src="/chameleon/grey.svg"
-                    alt="chameleon"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <div className={styles.achieveFrameContent}>
-                  <h3>入門Fun</h3>
-                  <div className={styles.achieveFrameText}>
-                    <h5>入門會員</h5>
-                    <h5>註冊後即為入門會員</h5>
+              {level.map((v, i) => (
+                <div key={i} className={styles.achieveFrame}>
+                  <div className={styles.achieveFrameCircle}>
+                    <Image
+                      className={styles.achieveFrameImage}
+                      src={v.icon}
+                      alt="chameleon"
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                  <div className={styles.achieveFrameContent}>
+                    <h3>{v.title}</h3>
+                    <div className={styles.achieveFrameText}>
+                      {/* <h5>入門會員</h5> */}
+                      <h5>{v.text}</h5>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </form>
         </div>
