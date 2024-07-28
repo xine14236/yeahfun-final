@@ -6,6 +6,9 @@ import { FaPencil } from "react-icons/fa6";
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link'
+import CommentList from '@/components/blog/commentList';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -13,6 +16,7 @@ import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 import Image from 'next/image'
 import heart from '@/assets/heart.svg'
 import chiiLikes from '@/assets/chiiLike.svg'
+import { clearConfig } from 'dompurify';
 export default function blogDetail() {
   const { auth } = useAuth()
   const [blog, setBlog] = useState({
@@ -30,6 +34,9 @@ export default function blogDetail() {
   const [favBlog, setFavBlog] = useState([])
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const [comments, setComments] = useState([]);
+  const MySwal = withReactContent(Swal)
+  const [comText,setComText]=useState('')
 
   const getBlog = async (bid) => {
     try {
@@ -38,7 +45,7 @@ export default function blogDetail() {
       if (resData.success === true) {
         setFavBlog(resData.data.favBlog)
         setBlog(resData.data.blog)
-       
+        setComments(resData.data.comment);
   
         setTimeout(() => {
           setIsLoading(false)
@@ -56,6 +63,7 @@ export default function blogDetail() {
 
   
   const handleClickStar = async (id)=>{
+    
     const res = await fetch(`http://localhost:3005/api/blog/fav/${id}?customer=1`,{
       credentials: 'include', 
     method: 'GET', // or POST/PUT depending on your use case
@@ -93,11 +101,236 @@ export default function blogDetail() {
     getBlog(router.query.bid)
   }
 
+  const handleEdit = async (id, newText) => {
+    const payload = { comment: newText, BCId: id };
+try{
+  await fetch('http://localhost:3005/api/blog/Cedit', {
+    method: 'POST',
+    credentials: 'include', 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.success==true) {
+        MySwal.fire({
+          title: '成功!',
+          text: 'BLOG留言編輯成功',
+          icon: 'success',
+        }).then(
+          // Navigate to another page with insertId in the route
+          getBlog(router.query.bid)
+        );
+      } else {
+        MySwal.fire({
+          title: '錯誤!',
+          text: data.message,
+          icon: 'error',
+        });
+      }
+})
+
+}catch(ex){
+  console.log(ex)
+}
+  };
+
+  // const handleDelete = (id) => {
+  //   setComments(comments.filter(comment => comment.id !== id));
+  // };
+
+  const handleAddImage = async (id, files) => {
+
+    const formData = new FormData();
+     for (const file of files) {
+      formData.append("photos", file);
+    }
+    try {
+      const response = await fetch(`http://localhost:3005/api/blog/Cuploads/${id}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        MySwal.fire({
+          title: '成功!',
+          text: '圖片上傳成功',
+          icon: 'success',
+        }).then(() => {
+          fetchComments(); // Refresh the comments
+        });
+      } else {
+        MySwal.fire({
+          title: '錯誤!',
+          text: '圖片上傳失敗',
+          icon: 'error',
+        });
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+     comText,
+     blogId:router.query.bid
+    };
+
+    console.log(payload)
+  try{
+    await fetch('http://localhost:3005/api/blog/createCom', {
+      method: 'POST',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+          MySwal.fire({
+            title: '成功!',
+            text: 'BLOG留言已創建',
+            icon: 'success',
+          }).then(() => {
+            // Navigate to another page with insertId in the route
+            setComText('')
+            getBlog(router.query.bid)
+          });
+        } else {
+          MySwal.fire({
+            title: '錯誤!',
+            text: 'BLOG留言失敗',
+            icon: 'error',
+          });
+        }
+  })
+  }catch(error){
+    console.error('Error saving blog:', error);
+    MySwal.fire({
+      title: '錯誤!',
+      text: '保存時出現錯誤!',
+      icon: 'error',
+      confirmButtonText: '確認',
+    });
+  }
+  };
+
+  const handleDelete = (postId) => {
+    MySwal.fire({
+      title: '您確定要刪除嗎?',
+      text: '按下確認將刪除此文章!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: '取消',
+      confirmButtonText: '確定刪除!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the fetch operation
+        fetch(`http://localhost:3005/api/blog/delete/${postId}`, {
+          credentials: 'include',
+          method: 'DELETE', // Use DELETE method for deletion
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            MySwal.fire({
+              title: '已刪除!',
+              text: '博客文章已刪除',
+              icon: 'success',
+            }).then(() => {
+              // Navigate to another page after deletion
+              router.push('/blog'); // Redirect to the blog list page
+            });
+          } else {
+            MySwal.fire({
+              title: '錯誤!',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+        })
+        .catch((error) => {
+          // Handle fetch error
+          console.error('Error:', error);
+          Swal.fire({
+            title: '錯誤!',
+            text: '發生了一些錯誤，請稍後再試。',
+            icon: 'error',
+          });
+        });
+      }
+    });
+  };
+
+  const handleDelete2 = (postId) => {
+    MySwal.fire({
+      title: '您確定要刪除嗎?',
+      text: '按下確認將刪除此留言!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: '取消',
+      confirmButtonText: '確定刪除!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the fetch operation
+        fetch(`http://localhost:3005/api/blog/Cdelete/${postId}`, {
+          credentials: 'include',
+          method: 'DELETE', // Use DELETE method for deletion
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            MySwal.fire({
+              title: '已刪除!',
+              text: '留言已刪除',
+              icon: 'success',
+            }).then(() => {
+              // Navigate to another page after deletion
+              getBlog(router.query.bid)// Redirect to the blog list page
+            });
+          } else {
+            MySwal.fire({
+              title: '錯誤!',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+        })
+        .catch((error) => {
+          // Handle fetch error
+          console.error('Error:', error);
+          Swal.fire({
+            title: '錯誤!',
+            text: '發生了一些錯誤，請稍後再試。',
+            icon: 'error',
+          });
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (router.isReady) {
       // 這裡可以得到router.query
 
       getBlog(router.query.bid)
+     
     }
     // 以下為注解掉eslint的警告一行
     // eslint-disable-next-line
@@ -157,14 +390,16 @@ export default function blogDetail() {
 </span>
 
 
-  <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 `}>
+  <span className={auth.userData.id==blog.author? `${styles.span3X}  fs-3 `:`${styles.span3}  fs-3 ` } onClick={(e)=>{handleDelete(router.query.bid)}}>
   <FaTrashCan  />
 
 </span>
-  
+ 
 </div>
 <hr />
-<div className="col-12"></div>
+<div className={`col-12 ${styles.paddingEnd}`}>
+<CommentList comments={comments} setComments={setComments} handleEdit={handleEdit} handleDelete={handleDelete2} handleAddImage={handleAddImage} getBlog={getBlog} forBId={router.query.bid} comText={comText} setComText={setComText} handleSubmit={handleSubmit} />
+</div>
 </div>
       </div>
       </div>

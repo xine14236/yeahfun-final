@@ -21,6 +21,7 @@ import { useLoader } from '@/hooks/use-loader'
 import { Select } from 'antd'
 
 // import ModalTest from '@/components/product/detail/modalTest'
+import dayjs from 'dayjs'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -59,6 +60,9 @@ export default function DetailTest() {
     textAlign: 'center',
     background: '#364d79',
   }
+
+  const query = router.query
+  console.log(query)
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -179,6 +183,9 @@ export default function DetailTest() {
       </>
     )
   })
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day')
+  }
 
   // 將 precautions 字串拆分成陣列
   const precautionsArray = store.precautions ? store.precautions.split(' ') : []
@@ -190,6 +197,15 @@ export default function DetailTest() {
     if (router.isReady) {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
+
+      if (router.query.startDate && router.query.endDate) {
+        setDateRange([
+          dayjs(router.query.startDate),
+          dayjs(router.query.endDate),
+        ])
+      } else {
+        setDateRange([dayjs(), dayjs().add(1, 'day')])
+      }
     }
   }, [router, router.query.pid])
 
@@ -468,7 +484,17 @@ export default function DetailTest() {
         <div className="inputDate" style={{ color: 'white' }}>
           入住日期
           <Space direction="vertical" size={12}>
-            <RangePicker onChange={setDateRange} />
+            <RangePicker
+              onChange={(e) => {
+                setDateRange(e)
+              }}
+              defaultValue={
+                query.startDate && query.endDate
+                  ? [dayjs(query.startDate), dayjs(query.endDate)]
+                  : [dayjs(), dayjs().add(1, 'day')]
+              }
+              disabledDate={disabledDate}
+            />
           </Space>
         </div>
         <div className="inputNumber" style={{ color: 'white' }}>
@@ -516,7 +542,6 @@ export default function DetailTest() {
       <hr />
       <div className="row">
         <h3 className="campSubtitle">住宿選擇</h3>
-        <Link href="/product/cart">前往購物車</Link>
         <div className="cardContainer">
           {filteredCampsites
             .filter((campsite) => campsite.type === 'bed')

@@ -13,6 +13,8 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [comment, setComment] = useState([])
+  const [img, setImg] = useState([])
 
   const [customer, setCustomer] = useState({
     email: '',
@@ -51,6 +53,31 @@ export default function Index() {
 
   const handleClick = (index) => {
     setSelectedIndex(index)
+  }
+
+  const getComment = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/comment`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      const resDataImg = resData.data.comment.map((v) => {
+        return v.store_img_name.split(',')
+      })
+      setImg(resDataImg)
+
+      if (resData.status === 'success' && Array.isArray(resData.data.comment)) {
+        // const order = resData.data.order
+        setComment(resData.data.comment)
+        // 設定會員資料(除了密碼)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1500)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const getCustomer = async () => {
@@ -123,6 +150,7 @@ export default function Index() {
 
     if (userId) {
       getCustomer()
+      getComment()
     } else {
       console.log('need check')
       handleCheck()
@@ -161,7 +189,37 @@ export default function Index() {
             onSubmit={handleSubmit}
             className={styles.memberFrame}
           >
-            <div className={styles.infoFrame}></div>
+            <div className={styles.infoFrame}>
+              <table className="table">
+                <thead className={styles.orderTr}>
+                  <tr>
+                    <th scope="col">營地</th>
+                    <th scope="col">評分</th>
+                    <th scope="col">評語</th>
+                    {/* <th scope="col">入住日期</th> */}
+                    <th scope="col">留言時間</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comment.map((v, i) => (
+                    <tr key={v.id}>
+                      <td>
+                        {/* <Image
+                          src={`/productDetail/${v.img}`}
+                          alt="camp1"
+                          width={160}
+                          height={120}
+                        /> */}
+                        {v.store_name}
+                      </td>
+                      <td>{v.comment_star}</td>
+                      <td>{v.comment_content}</td>
+                      <td>{v.created_at}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </form>
         </div>
       </div>
@@ -170,7 +228,16 @@ export default function Index() {
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

@@ -210,7 +210,7 @@ export default function Index() {
                         {v.startdate} ~ {v.enddate}
                       </td>
                       <td> {v.price}</td>
-                      <td>已付款</td>
+                      <td>未付款</td>
                     </tr>
                   ))}
                 </tbody>
@@ -224,7 +224,16 @@ export default function Index() {
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

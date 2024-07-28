@@ -17,6 +17,8 @@ import { ScrollMotionContainer, ScrollMotionItem } from '../../ScrollMotion'
 
 import GoTop from '@/components/home/go-top'
 import Loading from '@/components/list/loading'
+import CardLoading from '@/components/loader/card-loading'
+
 import Image from 'next/image'
 
 export default function Products() {
@@ -276,20 +278,20 @@ export default function Products() {
 
         <div className={`container-fluid ${styles.listContainer}`}>
           <div className="row">
-            {loading ? <Loading /> : <ProductList products={products} />}
+            
+              <ProductList products={products} query={query} />
+           
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-              {loading ? (
-                ''
-              ) : (
+             
                 <Pagination
                   pageCount={products.pageCount}
                   onPageChange={handlePageClick}
                   page={products.page}
                 />
-              )}
+              
             </div>
           </div>
         </div>

@@ -8,11 +8,11 @@ import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
 
-const ProductList = ({ products }) => {
+const ProductList = ({ products = {}, query = '' }) => {
   const [swiperInstances, setSwiperInstances] = useState([])
 
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
-  const [fav, setFav] = useState(true)
+  const [fav, setFav] = useState(false)
 
   useEffect(() => {
     setSwiperInstances((prevInstances) =>
@@ -62,7 +62,9 @@ const ProductList = ({ products }) => {
                   fav={fav}
                 />
               </div>
-              <Link href={`/detail-test/${v.stores_id}`}>
+              <Link
+                href={`/detail-test/${v.stores_id}?startDate=${query.startDate}&endDate=${query.endDate}`}
+              >
                 <Swiper
                   onSwiper={(swiper) => onSwiperInit(swiper, i)}
                   spaceBetween={30}
@@ -111,7 +113,11 @@ const ProductList = ({ products }) => {
                 </div>
                 <div className={`card-title ${styles.cardTitle}`}>
                   <h4>
-                    <Link href={`/detail-test/${v.stores_id}`}>{v.name}</Link>
+                    <Link
+                      href={`/detail-test/${v.stores_id}?startDate=${query.startDate}&endDate=${query.endDate}`}
+                    >
+                      {v.name}
+                    </Link>
                   </h4>
                   <h5>${v.lowest_normal_price}/晚</h5>
                 </div>

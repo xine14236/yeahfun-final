@@ -13,6 +13,7 @@ export default function Index() {
   // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [coupon, setCoupon] = useState([])
 
   const [customer, setCustomer] = useState({
     email: '',
@@ -52,7 +53,17 @@ export default function Index() {
   const handleClick = (index) => {
     setSelectedIndex(index)
   }
-
+  const getCoupon = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/coupon`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      setCoupon(resData.data.coupon)
+    } catch (e) {
+      console.error(e)
+    }
+  }
   const getCustomer = async () => {
     const url = `http://localhost:3005/api/customer/${userId}`
     try {
@@ -123,6 +134,7 @@ export default function Index() {
 
     if (userId) {
       getCustomer()
+      getCoupon()
     } else {
       console.log('need check')
       handleCheck()
@@ -161,7 +173,30 @@ export default function Index() {
             onSubmit={handleSubmit}
             className={styles.memberFrame}
           >
-            <div className={styles.infoFrame}></div>
+            <div className={styles.collectInfoFrame}>
+              {coupon.map((v, i) => (
+                <div key={v.id} className={styles.couponFrame}>
+                  <div className={styles.couponFrameCircle}>
+                    <Image
+                      className={styles.couponFrameCircleImg}
+                      src={`/coin/${v.img}`}
+                      alt="Chameleon"
+                      width={107}
+                      height={107}
+                    />
+                  </div>
+                  <div className={styles.couponFrameContent}>
+                    <h3>{v.name}</h3>
+                    <div>
+                      <h5>{v.directions}</h5>
+                      <p>
+                        {v.time_start} ~ {v.time_end}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </form>
         </div>
       </div>
@@ -170,7 +205,16 @@ export default function Index() {
   // 載入指示動畫
   const spinner = (
     <>
-      <h1>正向伺服器查詢是否有權限進入...</h1>
+      <div className={styles.loadingPage}>
+        <Image
+          src="/chameleon/v7.svg"
+          alt="Chameleon"
+          className={styles.loadingPageImg}
+          width={150}
+          height={150}
+        />
+        <h2>正向伺服器查詢是否有權限進入...</h2>
+      </div>
       <Loader />
     </>
   )

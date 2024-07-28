@@ -7,7 +7,11 @@ import { motion } from 'framer-motion'
 
 export default function Section05() {
   return (
-    <ScrollMotionContainer element="div" className={styles.section05}>
+    <ScrollMotionContainer
+      element="div"
+      className={styles.section05}
+      once={true}
+    >
       {/* 代辦事項: 卡片展開 */}
       <Image
         className={styles.section05DecorateTop}

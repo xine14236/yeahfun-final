@@ -180,7 +180,7 @@ export default function Login() {
                 >
                   一鍵輸入
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className={styles.loginButton}
                   onClick={handleLogout}
@@ -193,7 +193,7 @@ export default function Login() {
                   className={styles.loginButton}
                 >
                   個人資料頁
-                </Link>
+                </Link> */}
               </form>
             </div>
             <div className={styles.section2}>

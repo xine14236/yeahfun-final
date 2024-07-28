@@ -27,6 +27,26 @@ export default function ECPayIndex() {
     returnMessage: '',
   })
 
+  const [level, setLevel] = useState({
+    levels:0,
+    coin:0
+  })
+
+  const [formData, setFormData] = useState({
+    name: auth.userData.name,
+    email: auth.userData.email,
+    phone: auth.userData.phone,
+  })
+
+  //控制姓名的更換
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
+  }
+
   // 格式化日期函數
   const formatDate = (dateString, includeWeekday = true) => {
     const date = new Date(dateString)
@@ -80,12 +100,81 @@ export default function ECPayIndex() {
     sumTotal()
   }, [cartItems])
 
-  // 每次cartItems变化时重新计算总金额
-  useEffect(() => {
-    sumTotal()
-  }, [cartItems])
 
-  //const userid = auth?.useData?.id
+  
+  const getLevel = async () => {
+    const userId = auth.userData.id;
+    const url = `http://localhost:3005/api/level/${userId}`;
+    try {
+      const res = await fetch(url);
+      const resData = await res.json();
+      console.log('Get Level Response:', resData);
+  
+      if (resData.status === 'success') {
+        const { levels = 0, coin = 0 } = resData.data.level || {};
+        setLevel({ levels, coin });
+      } else {
+        setLevel({ levels: 0, coin: 0 });
+      }
+    } catch (e) {
+      console.error('Error fetching level:', e);
+      setLevel({ levels: 0, coin: 0 });
+    }
+  };
+  
+  useEffect(() => {
+    if (auth.userData && auth.userData.id) {
+      getLevel();
+    }
+  }, [auth.userData]);
+  
+
+  // 等級規則
+  const rule = (levels) => {
+    console.log('Current Levels:', levels);
+    let newLevels = Number(levels) + 100;
+    let newCoin = level.coin;
+  
+    if (newLevels <= 200) {
+      newCoin += 10;
+    } else if (newLevels <= 400) {
+      newCoin += 20;
+    } else if (newLevels <= 600) {
+      newCoin += 30;
+    } else if (newLevels <= 800) {
+      newCoin += 40;
+    } else if (newLevels <= 1000) {
+      newCoin += 50;
+    } else {
+      newCoin += 60;
+    }
+  
+    console.log('Calculated newLevels:', newLevels);
+    console.log('Calculated newCoin:', newCoin);
+  
+    return { newLevels, newCoin };
+  };
+
+  // 更新levels和coin
+  const updateLevel = async (newLevels, newCoin) => {
+    const userId = auth.userData.id;
+    const url = `http://localhost:3005/api/level/update-level`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newLevels, newCoin })
+      });
+      const resData = await res.json();
+      console.log(resData);
+  
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
 
   const createOrderAndPay = async () => {
     const products = cartItems.map((v) => ({
@@ -109,6 +198,19 @@ export default function ECPayIndex() {
       setOrder(res.data.data.order)
       toast.success('已成功建立訂單')
 
+      // 更新等级和金币
+    const currentLevels = level.levels || 0;
+    const { newLevels, newCoin } = rule(currentLevels);
+    
+     // 直接更新資料庫
+    updateLevel(newLevels, newCoin);
+
+    // 更新前端狀態
+    setLevel({
+      levels: newLevels,
+      coin: newCoin,
+    });
+
       if (window.confirm('確認要導向至ECPay進行付款?')) {
         window.location.href = `http://localhost:3005/api/ecpay/payment?orderId=${res.data.data.order.orderId}`
       }
@@ -117,39 +219,6 @@ export default function ECPayIndex() {
     }
   }
 
-  // // 導向至ECPay付款頁面
-  // const goECPay = () => {
-  //   if (window.confirm('確認要導向至ECPay進行付款?')) {
-  //     // 先連到node伺服器後，導向至ECPay付款頁面
-  //     window.location.href = `http://localhost:3005/api/ecpay/payment?orderId=${order.orderId}`
-  //   }
-  // }
-
-  // // 建立訂單，送至server建立訂單，packages與order id由server產生
-  // const createOrder = async () => {
-  //   const products = cartItems.map((v) => ({
-  //     store_id: 1,
-  //     room_id: 100, // 确保这里包含 room_id
-  //     startdate: v.startDate,
-  //     enddate: v.endDate,
-  //     normal_price: v.normal_price,
-  //     holiday_price: v.holiday_price,
-  //     totalday: v.totalDays,
-  //   }))
-
-  //   const res = await axiosInstance.post('/line-pay/create-order', {
-  //     userid: 99,
-  //     products: products,
-  //     amount: sum,
-  //   })
-
-  //   console.log(res.data)
-
-  //   if (res.data.status === 'success') {
-  //     setOrder(res.data.data.order)
-  //     toast.success('已成功建立訂單')
-  //   }
-  // }
 
   // 確認交易，處理伺服器通知已確認付款，為必要流程
   const handleConfirm = async (transactionId) => {
@@ -327,7 +396,9 @@ export default function ECPayIndex() {
                   <input
                     type="text"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -338,7 +409,9 @@ export default function ECPayIndex() {
                   <input
                     type="email"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -347,7 +420,9 @@ export default function ECPayIndex() {
                   <input
                     type="text"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -366,7 +441,7 @@ export default function ECPayIndex() {
                 <div className="d-flex justify-content-end w-100">
                   <button
                     type="button"
-                    className={`btn ${styles.btnOutlineInfo}`}
+                    className={`btn btnGreenPc`}
                     onClick={createOrderAndPay}
                   >
                     馬上下訂
@@ -411,13 +486,6 @@ export default function ECPayIndex() {
 
   return (
     <>
-      <h1>ECPay測試</h1>
-      <p>
-        會員登入狀態(需登入才能進行交易): {auth.isAuth ? '已登入' : '未登入'}
-      </p>
-      <p>
-        <Link href="/test/user">連至會員登入頁面</Link>
-      </p>
       {result.returnCode ? confirmOrder : orderDisplay}
       {/* 土司訊息視窗用 */}
       <Toaster />

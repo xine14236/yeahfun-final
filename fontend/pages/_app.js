@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 // 樣式
+import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.scss'
 // import '@/styles/product.scss'
 import '@/styles/cart.scss'
@@ -9,6 +10,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import '@/styles/swiper.scss'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 import { ConfigProvider } from 'antd'
 import theme from '@/theme/themeConfig'
@@ -35,7 +37,7 @@ Modal.setAppElement('#__next')
 export default function MyApp({ Component, pageProps }) {
   // 導入bootstrap的JS函式庫
   useEffect(() => {
-    import('bootstrap/dist/js/bootstrap')
+    import('bootstrap/dist/js/bootstrap.bundle.min.js')
   }, [])
 
   // 使用預設排版檔案，對應`components/layout/default-layout/index.js`

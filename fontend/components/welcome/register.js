@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from '@/components/welcome/login.module.scss'
 import { MdOutlineRemoveRedEye } from 'react-icons/md'
+import toast, { Toaster } from 'react-hot-toast'
+
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -85,7 +87,7 @@ export default function Register() {
       const resData = await res.json()
       console.log(resData)
 
-      alert('註冊成功，回到登入頁面。')
+      toast.success('註冊成功，回到登入頁面。')
       router.push('/welcome/login')
     } catch (e) {
       console.error(e)
@@ -132,7 +134,7 @@ export default function Register() {
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     id="password"
-                    placeholder="請輸入您的密碼(需含有8字元以上英文字母數字和符號)"
+                    placeholder="請輸入您的密碼"
                     value={user.password}
                     onChange={handleFieldChange}
                   />
@@ -242,6 +244,7 @@ export default function Register() {
           }
         `}
       </style>
+      <Toaster />
     </>
   )
 }

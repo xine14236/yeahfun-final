@@ -17,7 +17,10 @@ export default function Header() {
           >
             <WhiteLogo width={195} className={styles.homeLogoBig} />
             <div className={styles.indexHeading}>
-              <h2 className={styles.happy}>Happy Camping</h2>
+              <h2 className={styles.happy}>
+                Unleash your
+                <br /> wild side
+              </h2>
               <p>since 2024</p>
             </div>
 
