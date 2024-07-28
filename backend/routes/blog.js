@@ -415,6 +415,34 @@ if (req.files) {
 
 })
 
+router.delete('/delete/:bid', async (req, res)=>{
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const sql = 'delete from blog where id=?'
+  const [result]= await db.query(sql,[req.params.bid])
+  if(result.affectedRows){
+    output.success = !!result.affectedRows
+  }
+  res.json(output)
+})
+
+router.delete('/Cdelete/:bid', async (req, res)=>{
+  const output={
+    success:false,
+    info:'',
+    
+  }
+  const sql = 'delete from blog_comment where id=?'
+  const [result]= await db.query(sql,[req.params.bid])
+  if(result.affectedRows){
+    output.success = !!result.affectedRows
+  }
+  res.json(output)
+})
+
 router.get('/edit/:bid', authenticate , async (req, res) => {
  
   const sql = ` SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids

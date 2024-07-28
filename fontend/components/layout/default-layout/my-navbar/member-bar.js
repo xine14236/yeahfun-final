@@ -62,7 +62,7 @@ export default function MemberBar() {
             </li>
 
             <li>
-              <Link className="dropdown-item text-center " href="/about">
+              <Link className="dropdown-item text-center " href="/product/coin">
                 兌換
               </Link>
             </li>
