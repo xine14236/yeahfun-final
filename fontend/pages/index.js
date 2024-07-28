@@ -422,7 +422,9 @@ export default function Home() {
                         <Image
                           src={
                             v.img_name
-                              ? `http://localhost:3005/img-blog/${v.img_name}`
+                              ? `http://localhost:3005/img-blog/${
+                                  v.img_name.split(',')[0]
+                                }`
                               : `http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`
                           }
                           className={styles.activityImg}
