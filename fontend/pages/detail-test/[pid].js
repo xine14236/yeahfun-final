@@ -8,7 +8,9 @@ import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
 import Share from '@/components/icons/share'
 import FavStoreBtn2 from '@/components/icons/fav-store-btn2'
-import Swiper from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/swiper-bundle.css'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import Carousel from '@/components/product/detail/carousel'
 import GoTop from '@/components/home/go-top'
 import Swal from 'sweetalert2'
@@ -17,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { SlClose } from 'react-icons/sl'
 import { useLoader } from '@/hooks/use-loader'
 import { Select } from 'antd'
+
 // import ModalTest from '@/components/product/detail/modalTest'
 
 export default function DetailTest() {
@@ -32,6 +35,30 @@ export default function DetailTest() {
   const { RangePicker } = DatePicker
   const [modalIsOpen, setModalIsOpen] = useState(false)
   // const { showLoader, hideLoader, loading, delay } = useLoader()
+  //RWD
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 800
+  ) //新增狀態來維護視窗寬度
+  const [swiperInstances, setSwiperInstances] = useState([])
+
+  // RWD:初始化時檢查 window 物件是否存在
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+
+    window.addEventListener('resize', handleResize)
+
+    // 清除事件監聽器
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+  // RWD:根據 windowWidth 決定要渲染哪種組件
+  const contentStyle = {
+    margin: 0,
+    height: '160px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+  }
 
   const getCampsitesInformation = async (pid) => {
     const url = 'http://localhost:3005/api/detail-campsites-information/' + pid
@@ -65,6 +92,7 @@ export default function DetailTest() {
         setStore(resData.data.store)
         setTag(resData.data.tag)
         setImg(resData.data.img)
+        console.log(resData.data.img)
       }
     } catch (e) {
       console.error(e)
@@ -140,10 +168,6 @@ export default function DetailTest() {
     }
   }
 
-  // if (Array.isArray(store)) {
-  //   console.log('store is not an array')
-  // }
-
   // 將取得tag資料map
   const tags = tag.map((item, index) => {
     return (
@@ -184,6 +208,18 @@ export default function DetailTest() {
   //     .then(hideLoader)
   // }, [])
 
+  useEffect(() => {
+    setSwiperInstances((prevInstances) => prevInstances.slice(0, store.length))
+  }, [store])
+
+  const onSwiperInit = (swiper, index) => {
+    setSwiperInstances((prevInstances) => {
+      const newInstances = [...prevInstances]
+      newInstances[index] = swiper
+      return newInstances
+    })
+  }
+
   return (
     <>
       <div className="row storeTitleWrap">
@@ -211,83 +247,81 @@ export default function DetailTest() {
         {/* </div> */}
       </div>
       <div>
-        <div className="campGallery">
-          <figure className="gridItem">
-            <Image
-              src={`/detail/${imgArray[0]}`}
-              alt="Camping scene with tents"
-              width={500} // 圖片的實際寬度
-              height={100} // 圖片的實際高度
-              priority
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '5px',
-              }}
-              // onClick={() => setModalIsOpen(true)}
-              data-bs-toggle="modal" //告訴Bootstrap這裡要觸發一個modal
-              data-bs-target="#modal2" //告訴Bootstrap要觸發哪個modal
-            />
-            {/* <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={() => setModalIsOpen(false)}
-              contentLabel="Example Modal"
-              className="ImageModal"
-              style={{
-                content: {
-                  position: 'relative',
-                  marginTop: '10%', // 設定距離上方的高度
-                  width: '60%', // 設定寬度
-                  height: 'auto', // 設定高度
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  marginBottom: '0',
-                },
-              }}
-            >
-              <Image
-                src={`/detail/${imgArray[0]}`}
-                alt="Your description"
-                width={500} // 圖片的實際寬度
-                height={100} // 圖片的實際高度
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '5px',
+        <div>
+          {windowWidth < 640 ? (
+            <div>
+              <Swiper
+                onSwiper={(swiper, i) => onSwiperInit(swiper, i)}
+                spaceBetween={30}
+                centeredSlides={true}
+                loop={true}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: false,
+                  enabled: false, // 初始化時禁用自動播放
                 }}
-              />
-              <SlClose
-                onClick={() => setModalIsOpen(false)}
-                className="closeImageModal"
-                style={{
-                  position: 'absolute',
-                  width: '30px',
-                  height: '30px',
-                  top: '10px',
-                  right: '10px',
-                  color: 'rgb(56, 155, 135)',
-                  backgroundColor: 'white',
-                  border: 'white',
-                  borderRadius: '50px',
-                }}
-              ></SlClose>
-            </Modal> */}
-          </figure>
-
-          {imgArray.slice(1, 5).map((img, index) => (
-            <div style={{ display: 'flex' }} key={index}>
-              <Image
-                src={`/detail/${img}`}
-                alt="Camping scene"
-                width={500}
-                height={300}
-                style={{ width: '100%', height: 'auto', borderRadius: '5px' }}
-                data-bs-toggle="modal"
-                data-bs-target={`#modal${index}`}
-              />
+                pagination={true}
+                modules={[Autoplay, Pagination]}
+                className="mySwiper1"
+              >
+                {imgArray.slice(1, 5).map((img, index) => (
+                  <SwiperSlide key={index}>
+                    <Image
+                      src={`/detail/${img}`}
+                      alt="Camping scene"
+                      width={500}
+                      height={100}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
-          ))}
+          ) : (
+            <div className="campGallery">
+              <figure className="gridItem">
+                <Image
+                  src={`/detail/${imgArray[0]}`}
+                  alt="Camping scene with tents"
+                  width={500} // 圖片的實際寬度
+                  height={100} // 圖片的實際高度
+                  priority
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '5px',
+                  }}
+                  // onClick={() => setModalIsOpen(true)}
+                  data-bs-toggle="modal" //告訴Bootstrap這裡要觸發一個modal
+                  data-bs-target="#modal2" //告訴Bootstrap要觸發哪個modal
+                />
+              </figure>
+
+              {imgArray.slice(1, 5).map((img, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <Image
+                    src={`/detail/${img}`}
+                    alt="Camping scene"
+                    width={500}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '5px',
+                    }}
+                    data-bs-toggle="modal"
+                    data-bs-target={`#modal${index}`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
         {/* Modal2 */}
         <div className="modal fade  modal-xl " id="modal2">
           <div className="modal-dialog">
@@ -317,7 +351,7 @@ export default function DetailTest() {
           </div>
         </div>
         {/* Modal3 */}
-        {imgArray.slice(1, 5).map((img, index) =>(
+        {imgArray.slice(1, 5).map((img, index) => (
           <div
             className="modal fade  modal-xl "
             id={`modal${index}`}
@@ -350,33 +384,6 @@ export default function DetailTest() {
             </div>
           </div>
         ))}
-        {/* <div className="modal fade  modal-xl " id={`#modal${index}`}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                />
-              </div>
-              <div className="modal-body">
-                <Image
-                  src={`/detail/${img}`}
-                  alt="Camping scene"
-                  width={500}
-                  height={300}
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    borderRadius: '5px',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
       <div className="row storeNormalInfo">
         <div className="col-md-6 campPrecaution">
@@ -725,11 +732,13 @@ export default function DetailTest() {
       <div className="row">
         <h3 className="campSubtitle">周邊景點</h3>
         <div className="container">
-          <Carousel />
+          <Carousel className="carousel2" />
         </div>
       </div>
       <GoTop />
-
+      <div>
+        <div style={{ height: '10vh' }}></div>
+      </div>
       <style jsx>
         {`
           .storeTitle {
@@ -906,11 +915,25 @@ export default function DetailTest() {
             );
           }
            {
-            /* @media screen and (max-width: 640px) {
-            .campGallery {
-              display: flex;
+            @media screen and (max-width: 640px) {
+              .storeTitleWrap {
+                display: flex;
+                flex-direction: column;
+              }
+              .storeTitleWrap .briefIntroduce {
+                order: 2;
+                display: block;
+                width: 100%;
+              }
+              .storeTitleWrap .campTags {
+                order: 1;
+                display: block;
+                width: 100%;
+              }
+              .campGallery {
+                display: flex;
+              }
             }
-          } */
           }
         `}
       </style>

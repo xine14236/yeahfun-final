@@ -24,6 +24,7 @@ export default function Carousel() {
         loop={true}
         pagination={{
           type: 'fraction',
+          el: '.non-existent-element',
         }}
         modules={[Navigation, Pagination, History]}
         className="mySwiper"
