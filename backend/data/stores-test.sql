@@ -355,3 +355,39 @@ GROUP BY
 
 
  SELECT pid FROM favorite WHERE pid = 13 AND uid =1
+
+ SELECT 
+    home_blog.title,
+    home_blog.content,
+    MIN(blog_img.img_name) AS img_name,
+    home_blog.id
+FROM 
+    home_blog
+LEFT JOIN 
+    blog_img ON home_blog.id = blog_img.blog_id
+GROUP BY 
+    home_blog.id
+LIMIT 6;
+
+
+SELECT 
+    hb.title,
+    hb.content,
+    bi.img_name,
+    hb.id
+FROM 
+    home_blog hb
+LEFT JOIN 
+    (SELECT 
+         blog_id, 
+         MIN(img_name) AS img_name
+     FROM 
+         blog_img
+     GROUP BY 
+         blog_id) bi ON hb.id = bi.blog_id
+LIMIT 6;
+
+    SELECT title,content,img_name,home_blog.id 
+    FROM home_blog
+    LEFT JOIN blog_img ON home_blog.id = blog_img.blog_id
+    LIMIT 6;
