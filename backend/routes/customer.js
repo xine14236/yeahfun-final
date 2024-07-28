@@ -237,6 +237,43 @@ router.get('/:id/coupon', async function (req, res) {
     })
   }
 })
+// GET - 得到會員等級資料
+router.get('/:id/achievement', async function (req, res) {
+  const id = Number(req.params.id)
+  if (isNaN(id)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid customer ID',
+    })
+  }
+  try {
+    const [rows] = await db.query(
+      `SELECT
+    achievements.id,
+    achievements.customer_id,
+    achievements.levels
+    FROM 
+    achievements
+    WHERE
+    achievements.customer_id = ?`,
+      [id]
+    )
+
+    const achievement = rows[0]
+
+    // 標準回傳JSON
+    return res.json({
+      status: 'success',
+      data: { achievement },
+    })
+  } catch (err) {
+    console.error('Database query error: ', err)
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    })
+  }
+})
 
 // PUT - 新增會員資料
 router.put('/:id/profile', async function (req, res) {
