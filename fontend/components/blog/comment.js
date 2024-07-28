@@ -97,7 +97,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
       <div className='col-4'>
       <div className=''>
         <Image
-                      src={`http://localhost:3005/avatar/default.png`}
+                      src={`http://localhost:3005/avatar/1.webp`}
                       className="img-fluid"
                       alt="..."
                       width={30}
