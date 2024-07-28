@@ -75,10 +75,10 @@ export default function ECPayCallback() {
           <div className="order-note">可至商城兌換各種精美禮物~</div>
           <div className="buttons mt-3">
             <Link href="/" legacyBehavior>
-              <a className="button">返回首頁</a>
+              <a className="button btnGreenPc">返回首頁</a>
             </Link>
             <Link href="/customer" legacyBehavior>
-              <a className="button">前往會員中心</a>
+              <a className="button btnGreenPc">前往會員中心</a>
             </Link>
           </div>
         </div>
@@ -175,21 +175,14 @@ export default function ECPayCallback() {
             font-size: 1rem;
             margin: 10px 5px;
             width: 38%;
-            background-color: #2e8b57;
-            border: none;
-            color: white;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
           }
 
-          .buttons .button:hover {
-            background-color: #006400;
-          }
 
           @media (max-width: 767px) {
-
             
             .text-success-custom {
               color: #ff8c00;

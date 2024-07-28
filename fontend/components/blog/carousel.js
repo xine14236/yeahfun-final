@@ -48,7 +48,7 @@ export default function Carousel() {
       >
         <SwiperSlide>
           <Image
-            src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+            src="http://localhost:3005/img-blog/202407191533198466884.png"
             className="img-fluid"
             alt="..."
             width={400}
@@ -65,7 +65,7 @@ export default function Carousel() {
 
         <SwiperSlide>
           <Image
-            src="http://localhost:3005/img-blog/20240718142201397818.webp"
+            src="http://localhost:3005/img-blog/202407191533198466884.png"
             className="img-fluid"
             alt="..."
             width={400}
@@ -82,7 +82,7 @@ export default function Carousel() {
 
         <SwiperSlide>
           <Image
-            src="http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp"
+            src="http://localhost:3005/img-blog/202407191533198466884.png"
             className="img-fluid"
             alt="..."
             width={400}

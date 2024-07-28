@@ -1,158 +1,356 @@
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { useCart } from '@/hooks/cart-hook'
+import { useState, useEffect } from 'react';
+import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/hooks/use-auth';
 
-export default function StoreDetail({ title = '', type = '', pid, people }) {
-  //路徑
-  const router = useRouter()
-  //更新購物車鉤子的狀態
-  const { setCartItems, addCart } = useCart()
-  //取得商店內的商品
-  const [storeDetail, setStoreDetail] = useState([])
+export default function Coin() {
+  const router = useRouter();
+  const { auth } = useAuth();
 
-  const [stores, setStores] = useState([])
+  const [coupons, setCoupons] = useState([]);
+  const [donations, setDonations] = useState([]);
+  const [coin, setCoin] = useState(0);
 
-  const getStore = async (id, type, people) => {
-    const url = `http://localhost:3005/api/store/${id}/${type}/${people}`
-    console.log('Fetching data from:', url)
+  const getCoupons = async () => {
+    const url = `http://localhost:3005/api/coin/coupons`;
 
-    try {
-      const res = await fetch(url)
-      const resData = await res.json()
-      //console.log("Response data:", resData);
+    const res = await fetch(url);
+    const resData = await res.json();
 
-      if (resData.status === 'success') {
-        // 打印完整的 resData.data
-        //console.log("Complete data:", resData.data);
-
-        // 设置storeDetail为resData.data.store
-        if (Array.isArray(resData.data.store)) {
-          setStoreDetail(resData.data.store)
-        } else {
-          console.error('Data is not an array:', resData.data.store)
-        }
-      } else {
-        console.error('Failed to fetch data:', resData.message)
-      }
-    } catch (e) {
-      console.error('Error fetching data:', e)
+    if (resData.status === 'success') {
+      setCoupons(resData.data.coupons);
+    } else {
+      console.error('Failed to fetch coupons:', resData.message);
     }
-  }
-
-  // const handleAddToCart = () => {}
+  };
 
   useEffect(() => {
-    if (router.isReady && pid) {
-      //console.log("Router is ready, query:", router.query);
-      getStore(pid, type, people)
-    }
-  }, [router.isReady, pid, type, people])
+    getCoupons();
+  }, []);
 
-  // const addToCart = (detail) => {
-  //   setCartItems((prevItems) => [...prevItems, detail])
-  // }
+  const getDonations = async () => {
+    const url = `http://localhost:3005/api/coin/donations`;
+
+    const res = await fetch(url);
+    const resData = await res.json();
+
+    if (resData.status === 'success') {
+      setDonations(resData.data.donations);
+    } else {
+      console.error('Failed to fetch donations:', resData.message);
+    }
+  };
+
+  useEffect(() => {
+    getDonations();
+  }, [coin]);
+
+  const getCoin = async () => {
+    const userId = auth.userData.id;
+    const url = `http://localhost:3005/api/coin/${userId}`;
+
+    try {
+        const res = await fetch(url);
+        const resData = await res.json();
+
+        if (resData.status === 'success') {
+            console.log('Coin data:', resData.coin);
+            const coinValue = Number(resData.coin);
+            console.log('Parsed coin value:', coinValue);
+            if (!isNaN(coinValue)) {
+                setCoin(coinValue);
+            } else {
+                console.error('Coin value is NaN');
+            }
+        } else {
+            console.error('Failed to fetch coin:', resData.message);
+        }
+    } catch (error) {
+        console.error('Error fetching coin:', error);
+    }
+};
+
+useEffect(() => {
+    if (auth.userData) {
+        getCoin();
+    }
+}, [auth.userData]);
+
+
 
   return (
     <>
-      <h3 className="mb-3 campSubtitle">{title}</h3>
-
-      <div
-        className="row row-cols-1 row-cols-md-3 g-4 mb-4 campAreas"
-        style={{ border: '1px solid black' }}
-      >
-        {storeDetail.map((detail, index) => (
-          <div
-            key={index}
-            className="col campArea"
-            style={{ border: '1px solid red' }}
-          >
-            <div className="thumbNail" style={{ border: '1px solid orange' }}>
-              <img
-                src={`/productDetail/${detail.img}`}
-                className="card-img-top"
+      <section className="banner">
+        <h1 className="bannerH1">YeahFun Coin</h1>
+        <p className="bannerP">Explore our exclusive items!</p>
+      </section>
+      <section className="storeCategories">
+        <div className="category">
+          <div className="d-flex align-items-end">
+            <h2 className="littleTitle flex-grow-1">優惠券 | Coupon</h2>
+            <div className="littleImg">
+              <Image
+                src="/images/homepage/title-tree.png"
+                alt="tree"
+                width={66}
+                height={33}
               />
             </div>
-
-            <div className="campInfo" style={{ border: '1px solid orange' }}>
-              <div className="" style={{ border: '1px solid yellow' }}>
-                <h5 className="card-title">{detail.name}</h5>
-
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  詳細內容
-                </button>
-                {/* Modal */}
-                <div
-                  className="modal fade  modal-xl "
-                  id="exampleModal"
-                  tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          {detail.name}
-                        </h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        />
-                      </div>
-                      <div className="modal-body">
-                        <div className="modal-body">
-                          <div className="container-fluid">
-                            <div className="row">
-                              <div className="col-md-8">
-                                <img
-                                  className="w-100"
-                                  src={`/productDetail/${detail.img}`}
-                                />
-                              </div>
-                              <div className="col-md-4">
-                                <div>尺寸：{detail.square_meters}</div>
-                                <div>詳細介紹：</div>
-                                <div>{detail.introduction}</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="campPrice" style={{ border: '1px solid yellow' }}>
-                <span>平日價格：＄{detail.normal_price}/晚</span>
-                <br />
-                <span>假日價格：＄{detail.holiday_price}/晚</span>
-              </div>
-
-              <div className="addCart" style={{ border: '1px solid orange' }}>
-                <form action="">
-                  <div
-                    style={{ paddingBottom: 0, border: '1px solid darkgray' }}
+          </div>
+          <div className="items">
+            {donations.length > 0 ? (
+              coupons.map((v, i) => (
+                <div key={i} className="coinItem">
+                  <img
+                    className="itemImg"
+                    src={`/coin/${v.img}`}
+                    alt="Donation 1"
                   />
-                  <div className="form-item"></div>
-                  <div className="form-item">
-                    <button type="button" onClick={() => addCart(detail)}>
-                      加入訂房
+                  <h3 className="fs-4">{v.name}</h3>
+                  <div className="description">{v.directions}</div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p className="price mb-0">金幣：{v.coin} 枚</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary buyNow"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      兌換
                     </button>
                   </div>
-                </form>
+                </div>
+              ))
+            ) : (
+              <p>暫時沒有優惠劵</p>
+            )}
+          </div>
+          <div className="category">
+            <div className="d-flex align-items-end">
+              <h2 className="littleTitle flex-grow-1">
+                愛心捐助 | Love Donation
+              </h2>
+              <div className="littleImg">
+                <Image
+                  src="/images/homepage/title-tree.png"
+                  alt="tree"
+                  width={66}
+                  height={33}
+                />
               </div>
             </div>
+            <div className="items">
+              {donations.length > 0 ? (
+                donations.map((v, i) => (
+                  <div key={i} className="coinItem">
+                    <img
+                      className="itemImg"
+                      src={`/coin/${v.img}`}
+                      alt="Donation 1"
+                    />
+                    <h3 className="fs-4">{v.name}</h3>
+                    <div className="description">{v.directions}</div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <p className="price mb-0">金幣：{v.coin} 枚</p>
+                      <button
+                        type="button"
+                        className="btn btn-primary buyNow"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                      >
+                        兌換
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>沒有可捐助的項目</p>
+              )}
+            </div>
           </div>
-        ))}
+        </div>
+      </section>
+
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex={-1}
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                確定兌換 ?
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              />
+            </div>
+            <div className="modal-body">
+              目前還有{coin}點
+              <br />
+              此次兌換後會剩下多少點
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                取消
+              </button>
+              <button type="button" className="btn btn-primary">
+                確定
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <style jsx>
+        {`
+          .banner {
+            background-image: url('/coin/banner.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 150px 20px 100px;
+            text-align: center;
+            color: #fff;
+            margin-top: 80px;
+          }
+
+          .bannerH1 {
+            font-size: 48px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+          }
+
+          .bannerP {
+            font-size: 18px;
+            margin: 10px 0 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+          }
+
+          .category {
+            margin-bottom: 80px;
+            margin-top: 40px;
+          }
+
+          .littleTitle {
+            font-size: 24px;
+            margin-bottom: 30px;
+            position: relative;
+          }
+
+          .littleTitle::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -15px;
+            width: 100%;
+            height: 3px;
+            background-color: #ff8c00;
+          }
+
+          .littleImg {
+            font-size: 24px;
+            margin-bottom: 30px;
+            position: relative;
+          }
+
+          .littleImg::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -15px;
+            width: 100%;
+            height: 3px;
+            background-color: #ff8c00;
+          }
+
+          .items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+          }
+
+          .coinItem {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: calc(30% - 20px);
+            padding: 20px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+
+          .coinItem:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+
+          .itemImg {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-bottom: 1px solid #f1f1f1;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px 8px 0 0;
+          }
+
+          .itemH3 {
+            font-size: 20px;
+            margin: 10px 0;
+          }
+
+          .description {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #666;
+          }
+
+          .price {
+            font-size: 18px;
+            color: #ff8c00;
+            margin: 10px 0;
+          }
+
+          .buyNow {
+            background-color: #ff8c00;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+          }
+
+          .buyNow:hover {
+            background-color: #e67e00;
+          }
+
+          @media (max-width: 990px) {
+            .items {
+              flex-direction: column;
+            }
+
+            .coinItem {
+              width: 100%;
+            }
+          }
+        `}
+      </style>
     </>
-  )
+  );
 }

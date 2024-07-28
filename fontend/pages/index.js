@@ -17,8 +17,11 @@ import FavStoreBtn3 from '@/components/icons/fav-store-btn3'
 import GoTop from '@/components/home/go-top'
 import Header from '@/components/home/header'
 import Section05 from '@/components/home/section05'
+import HomeFavIcon from '@/components/home/home-fav-icon'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Home() {
+  const { getAuthHeader } = useAuth()
   const [products, setProducts] = useState([])
   const [blog, setBlog] = useState([])
   const [tag, setTag] = useState([])
@@ -58,13 +61,50 @@ export default function Home() {
       swiperInstance.slideToLoop(index)
     }
   }
+  const handleFavor = async (store_id) => {
+    const url = 'http://localhost:3005/api/add-fav/' + store_id
+
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
+      const resData = await res.json()
+      console.log(resData)
+
+      if (resData.status === 'success') {
+        // 深層複製產品資料
+        const updatedProducts = structuredClone(products)
+
+        // 更新商店的喜好狀態
+        const updatedProductsWithFavor = updatedProducts.map((product) => {
+          if (product.stores_id === store_id) {
+            return {
+              ...product,
+              like_id: resData.data.output.action === 'add' ? true : false,
+            }
+          }
+          return product
+        })
+
+        // 設置更新後的產品資料
+        setProducts(updatedProductsWithFavor)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   const getProducts = async () => {
     const url = 'http://localhost:3005/api/home'
 
     // 使用try-catch語句，讓和伺服器連線的程式能作錯誤處理
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+      })
       const resData = await res.json()
 
       if (resData.status === 'success') {
@@ -235,13 +275,20 @@ export default function Home() {
                     onMouseLeave={() => handleMouseLeave(i)}
                   >
                     <div className={styles.favor}>
-                      <FavStoreBtn3
+                      {/* <FavStoreBtn3
                         width={45}
                         onClick={() => {
                           setFav(!fav)
                           console.log(fav)
                         }}
                         fav={fav}
+                      /> */}
+                      <HomeFavIcon
+                        initFull={v.like_id}
+                        width={45}
+                        handler={() => {
+                          handleFavor(v.stores_id)
+                        }}
                       />
                     </div>
                     <Link href={`/detail-test/${v.stores_id}`}>
