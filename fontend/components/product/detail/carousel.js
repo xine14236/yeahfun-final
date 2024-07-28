@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -14,11 +14,33 @@ import 'swiper/css/pagination'
 import { Navigation, Pagination, History } from 'swiper/modules'
 
 export default function Carousel() {
+  // ＲＷＤ：useState hook 創建一個狀態變量 slidesPerView 和一個設定該狀態的函數 setSlidesPerView
+  const [slidesPerView, setSlidesPerView] = useState(3)
+
+  //ＲＷＤ：使用 useEffect hook 來添加一個視窗大小變化的事件監聽器。當視窗的寬度小於或等於 640px 時，我們將 slidesPerView 設定為 1；否則，我們將 slidesPerView 設定為 3。最後，我們將 slidesPerView 傳遞給 Swiper 組件。
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 640) {
+        setSlidesPerView(1)
+      } else {
+        setSlidesPerView(3)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    // 初始設定
+    handleResize()
+
+    // 在組件卸載時移除事件監聽器
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <>
       <Swiper
         spaceBetween={30}
-        slidesPerView={3}
+        slidesPerView={slidesPerView}
         navigation={true}
         centeredSlides={true}
         loop={true}
