@@ -1,16 +1,19 @@
 // boostrap5 sytle pagination
 import ReactPaginate from 'react-paginate'
+import LeftArrow from '@/components/icons/left-arrow'
+import RightArrow from '@/components/icons/right-arrow'
 
 export default function BS5Pagination({ forcePage, onPageChange, pageCount }) {
   return (
+    
     <ReactPaginate
       forcePage={forcePage}
-      nextLabel="下一頁 >"
+      nextLabel={<RightArrow />}
       onPageChange={onPageChange}
       pageRangeDisplayed={3}
       marginPagesDisplayed={2}
       pageCount={pageCount}
-      previousLabel="< 上一頁"
+      previousLabel={<LeftArrow />}
       pageClassName="page-item"
       pageLinkClassName="page-link"
       previousClassName="page-item"

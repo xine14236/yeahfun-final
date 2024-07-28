@@ -32,6 +32,21 @@ export default function ECPayIndex() {
     coin:0
   })
 
+  const [formData, setFormData] = useState({
+    name: auth.userData.name,
+    email: auth.userData.email,
+    phone: auth.userData.phone,
+  })
+
+  //控制姓名的更換
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
+  }
+
   // 格式化日期函數
   const formatDate = (dateString, includeWeekday = true) => {
     const date = new Date(dateString)
@@ -204,39 +219,6 @@ export default function ECPayIndex() {
     }
   }
 
-  // // 導向至ECPay付款頁面
-  // const goECPay = () => {
-  //   if (window.confirm('確認要導向至ECPay進行付款?')) {
-  //     // 先連到node伺服器後，導向至ECPay付款頁面
-  //     window.location.href = `http://localhost:3005/api/ecpay/payment?orderId=${order.orderId}`
-  //   }
-  // }
-
-  // // 建立訂單，送至server建立訂單，packages與order id由server產生
-  // const createOrder = async () => {
-  //   const products = cartItems.map((v) => ({
-  //     store_id: 1,
-  //     room_id: 100, // 确保这里包含 room_id
-  //     startdate: v.startDate,
-  //     enddate: v.endDate,
-  //     normal_price: v.normal_price,
-  //     holiday_price: v.holiday_price,
-  //     totalday: v.totalDays,
-  //   }))
-
-  //   const res = await axiosInstance.post('/line-pay/create-order', {
-  //     userid: 99,
-  //     products: products,
-  //     amount: sum,
-  //   })
-
-  //   console.log(res.data)
-
-  //   if (res.data.status === 'success') {
-  //     setOrder(res.data.data.order)
-  //     toast.success('已成功建立訂單')
-  //   }
-  // }
 
   // 確認交易，處理伺服器通知已確認付款，為必要流程
   const handleConfirm = async (transactionId) => {
@@ -414,7 +396,9 @@ export default function ECPayIndex() {
                   <input
                     type="text"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -425,7 +409,9 @@ export default function ECPayIndex() {
                   <input
                     type="email"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -434,7 +420,9 @@ export default function ECPayIndex() {
                   <input
                     type="text"
                     className="form-control mt-3"
-                    placeholder="CRO"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                   />
                 </label>
 
@@ -453,7 +441,7 @@ export default function ECPayIndex() {
                 <div className="d-flex justify-content-end w-100">
                   <button
                     type="button"
-                    className={`btn ${styles.btnOutlineInfo}`}
+                    className={`btn btnGreenPc`}
                     onClick={createOrderAndPay}
                   >
                     馬上下訂

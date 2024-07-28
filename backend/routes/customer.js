@@ -117,6 +117,11 @@ router.get('/:id/blog', async function (req, res) {
         WHERE customer_id = 1`,
       [id]
     )
+    rows.forEach((r) => {
+      if (r.img_name) {
+        r.img_name = r.img_name.split(',')[0]
+      }
+    })
 
     const blog = rows
 
