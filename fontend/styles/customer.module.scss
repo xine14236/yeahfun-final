@@ -421,11 +421,13 @@
   height: 152px;
   padding: 20px;
   align-items: center;
+  margin: 10px;
   gap: 20px;
   align-self: stretch;
   border-radius: 10px;
   border: 1px solid var(--secondary-3, #fdaf17);
-  background: var(--white, #fff);
+  // background: var(--grey-400, #c4c4c4);
+  transition: filter 0.3s;
 }
 .achieveFrameCircle {
   display: flex;
@@ -466,4 +468,8 @@
 }
 .achieveFrameImage{
   fill: var(--white, #fff);
+}
+
+.grayScale {
+  filter: grayscale(100%);
 }

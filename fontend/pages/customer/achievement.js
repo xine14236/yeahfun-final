@@ -5,15 +5,12 @@ import Loader from '@/components/loader'
 import Link from 'next/link'
 import styles from '../../styles/customer.module.scss'
 import Image from 'next/image'
-// import { set } from 'lodash'
 
 export default function Index() {
-  // 開發期間使用，之後可以從useAuth中得到
   const { auth, handleCheck } = useAuth()
-  // const userId = auth?.userData?.id
   const [userId, setUserId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-
+  // const [achievement, setAchievement] = useState([])
   const [customer, setCustomer] = useState({
     email: '',
     name: '',
@@ -22,9 +19,9 @@ export default function Index() {
     birthday: '',
     address: '',
   })
-  // 按鈕換色
   const router = useRouter()
   const [selectedIndex, setSelectedIndex] = useState(null)
+  const [memberPoint, setMemberPoint] = useState(0) // 假設會員的積分
 
   const links = [
     { href: '/customer', icon: '/icon/user.svg', text: '個人資訊' },
@@ -43,6 +40,7 @@ export default function Index() {
       text: 'FUN成就',
     },
   ]
+
   const level = [
     {
       icon: '/chameleon/v1.svg',
@@ -75,6 +73,7 @@ export default function Index() {
       text: '消費十筆即為彩霞會員',
     },
   ]
+
   useEffect(() => {
     const currentPath = router.pathname
     const currentIndex = links.findIndex((link) => link.href === currentPath)
@@ -83,6 +82,20 @@ export default function Index() {
 
   const handleClick = (index) => {
     setSelectedIndex(index)
+  }
+
+  const getAchievement = async () => {
+    const url = `http://localhost:3005/api/customer/${userId}/achievement`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log(resData)
+      // setAchievement(resData.data.achievement)
+      setMemberPoint(resData.data.achievement.levels)
+      // console.log(resData.data.achievement.levels)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const getCustomer = async () => {
@@ -94,7 +107,6 @@ export default function Index() {
       setCustomer(resData.data.customer)
       if (resData.status === 'success') {
         const user = resData.data.customer
-        // 設定會員資料(除了密碼)
         setCustomer({
           ...customer,
           email: user.email,
@@ -114,7 +126,6 @@ export default function Index() {
   }
 
   const handleSubmit = async (e) => {
-    // 阻擋表單預設送出行為
     e.preventDefault()
 
     try {
@@ -143,22 +154,21 @@ export default function Index() {
 
       const resData = await res.json()
       console.log(resData)
-
       alert('修改成功')
     } catch (e) {
       console.error(e)
     }
   }
+
   useEffect(() => {
-    // console.log('userId:', userId);
     console.log('auth:', auth)
 
     if (userId) {
       getCustomer()
+      getAchievement()
     } else {
       console.log('need check')
       handleCheck()
-      // console.og('e',auth.userData.id);
       setUserId(auth.userData.id)
     }
   }, [auth])
@@ -194,33 +204,52 @@ export default function Index() {
             className={styles.memberFrame}
           >
             <div className={styles.infoFrame}>
-              {level.map((v, i) => (
-                <div key={i} className={styles.achieveFrame}>
-                  <div className={styles.achieveFrameCircle}>
-                    <Image
-                      className={styles.achieveFrameImage}
-                      src={v.icon}
-                      alt="chameleon"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                  <div className={styles.achieveFrameContent}>
-                    <h3>{v.title}</h3>
-                    <div className={styles.achieveFrameText}>
-                      {/* <h5>入門會員</h5> */}
-                      <h5>{v.text}</h5>
+              {level.map((v, i) => {
+                let isColored = false
+
+                if (
+                  (memberPoint < 200 && i === 0) || // 如果積分小於200，只有第一個等級是彩色
+                  (memberPoint >= 200 && memberPoint < 400 && i <= 1) ||
+                  (memberPoint >= 400 && memberPoint < 600 && i <= 2) ||
+                  (memberPoint >= 600 && memberPoint < 800 && i <= 3) ||
+                  (memberPoint >= 800 && memberPoint < 1000 && i <= 4) ||
+                  memberPoint >= 1000
+                ) {
+                  isColored = true
+                }
+
+                return (
+                  <div
+                    key={i}
+                    className={`${styles.achieveFrame} ${
+                      !isColored ? styles.grayScale : ''
+                    }`}
+                  >
+                    <div className={styles.achieveFrameCircle}>
+                      <Image
+                        className={styles.achieveFrameImage}
+                        src={v.icon}
+                        alt="chameleon"
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                    <div className={styles.achieveFrameContent}>
+                      <h3>{v.title}</h3>
+                      <div className={styles.achieveFrameText}>
+                        <h5>{v.text}</h5>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </form>
         </div>
       </div>
     </>
   )
-  // 載入指示動畫
+
   const spinner = (
     <>
       <div className={styles.loadingPage}>
@@ -236,5 +265,6 @@ export default function Index() {
       <Loader />
     </>
   )
+
   return <>{isLoading ? spinner : display}</>
 }
