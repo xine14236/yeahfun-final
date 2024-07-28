@@ -35,7 +35,7 @@ export default function Home() {
 
   const [autoplayStatus, setAutoplayStatus] = useState('自動切換暫停了')
   const { showLoader, hideLoader, loading, delay } = useLoader()
-  const [fav, setFav] = useState(true)
+  const [fav, setFav] = useState(false)
 
   const tags = [
     {
