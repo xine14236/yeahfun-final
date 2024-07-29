@@ -56,10 +56,6 @@
 /* 添加 hover 效果 */
 
 @media (max-width: 576px) {
-  .swiper-button-next,
-  .swiper-button-prev {
-    display: none;
-  }
   .mySwiper2 {
     display: none;
     .swiper {
@@ -71,5 +67,9 @@
   }
   .mySwiper3 {
     height: auto;
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none;
+    }
   }
 }

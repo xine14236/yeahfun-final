@@ -110,7 +110,8 @@ router.get('/:id/blog', async function (req, res) {
         favorite_blog.id,
         blog.title,
         blog.content,
-        blog_img.img_name 
+        blog_img.img_name ,
+        blog.id as blog_id
         FROM favorite_blog
         JOIN blog ON favorite_blog.blog_id = blog.id
         LEFT JOIN blog_img ON favorite_blog.blog_id = blog_img.blog_id
