@@ -203,7 +203,7 @@ export default function Index() {
                       <td>{v.title}</td>
                       <td>
                         <Link
-                          href={`/blog/${v.id}`}
+                          href={`/blog/${v.blog_id}`}
                           className={styles.blogIcon}
                         >
                           <SlMagnifier />
