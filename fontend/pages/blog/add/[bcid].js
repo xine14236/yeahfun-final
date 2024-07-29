@@ -17,7 +17,7 @@ const MyComponent = dynamic(() => import('@/components/blog/test'), {
 export default function Test() {
     const router = useRouter();
     const [value, setValue] = useState('')
-    const [blogId,setBlogId]=useState(0)
+    const [blogId,setBlogId]=useState(1)
     const initialCate = blogCategory.filter((v)=>v.id>7)
     const [tags, setTags] = useState(initialCate);
     const [selectedTags, setSelectedTags] = useState([]);
