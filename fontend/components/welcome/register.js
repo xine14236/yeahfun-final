@@ -4,7 +4,6 @@ import styles from '@/components/welcome/login.module.scss'
 import { MdOutlineRemoveRedEye } from 'react-icons/md'
 import toast, { Toaster } from 'react-hot-toast'
 
-
 export default function Register() {
   const [user, setUser] = useState({
     email: '',
@@ -194,8 +193,8 @@ export default function Register() {
                   />{' '}
                   我同意Yeah Fun的<a className={styles.link}>會員條款</a>跟
                   <a className={styles.link}>隱私政策</a>
-                  <span className="error">{errors.confirmPassword}</span>
                 </label>
+                <span className="error">{errors.agree}</span>
                 <button type="submit" className={styles.loginButton}>
                   註冊
                 </button>
@@ -241,6 +240,11 @@ export default function Register() {
                 background: #000;
               }
             }
+          }
+          .error {
+            color: #fdaf17;
+            font-size: 14px;
+            line-height: 0;
           }
         `}
       </style>
