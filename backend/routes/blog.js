@@ -386,31 +386,42 @@ output.data=req.files
 if (req.files) {
   for (const file of req.files) {
     pictureNameArray.push(file.filename);
-    
   }
-  const pictureNameString=pictureNameArray.join(',')
-  const sql=`select img_name  from blog_comment_img where blog_comment_id =${bid2}`
-  const [rows] = await db.query(sql)
-  console.log(rows.length)
-  
-  if(rows.length<1){
-    const sql2 =`INSERT INTO blog_comment_img (img_name, blog_comment_id) VALUES (?, ?)`
-    const [result] = await db.query(sql2,[pictureNameString,bid2])
-    output.success=!!result.affectedRows
-    output.result=result;
-    output.info='圖片上傳成功'
-  }else{
-    const check=rows[0].img_name+','+pictureNameString
-    const sql3 = `UPDATE blog_comment_img SET img_name=? where blog_comment_id=?`
-    const [result]= await db.query(sql3,[check,bid2])
-    output.success=!!(result.affectedRows && result.changedRows)
-    output.info='更新成功'
+  const pictureNameString = pictureNameArray.join(',');
+
+  const connection = await db.getConnection();
+  await connection.beginTransaction(); // 開始事務
+
+  try {
+    const sql = `SELECT img_name FROM blog_comment_img WHERE blog_comment_id = ? FOR UPDATE`;
+    const [rows] = await connection.query(sql, [bid2]);
+
+    if (rows.length < 1) {
+      const sql2 = `INSERT INTO blog_comment_img (img_name, blog_comment_id) VALUES (?, ?)`;
+      const [result] = await connection.query(sql2, [pictureNameString, bid2]);
+      output.success = !!result.affectedRows;
+      output.result = result;
+      output.info = '圖片上傳成功';
+    } else {
+      const check = rows[0].img_name + ',' + pictureNameString;
+      const sql3 = `UPDATE blog_comment_img SET img_name = ? WHERE blog_comment_id = ?`;
+      const [result] = await connection.query(sql3, [check, bid2]);
+      output.success = !!(result.affectedRows && result.changedRows);
+      output.info = '更新成功';
+    }
+
+    await connection.commit(); // 提交事務
+  } catch (error) {
+    await connection.rollback(); // 發生錯誤時回滾事務
+    console.error('Transaction error:', error);
+    output.success = false;
+    output.info = '發生錯誤';
+  } finally {
+    connection.release(); // 釋放連接
   }
 }
 
-
-  // filename
-  res.json(output)
+res.json(output);
 
 
 })
