@@ -5,6 +5,7 @@ import blogCategory from '@/data/blog/BlogCategory.json'
 import { Select, Button, Tag } from 'antd';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import GoTop from '@/components/home/go-top'
 
 
 const MyComponent = dynamic(() => import('@/components/blog/test'), {
@@ -154,6 +155,7 @@ export default function EditBlog() {
       <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
         Submit
       </Button>
+      <GoTop />
     </>
   )
 }
