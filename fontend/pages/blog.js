@@ -306,14 +306,14 @@ export default function Blog() {
           </div>
 
         </div>
-        <div className="title">
+        <div className="title mt-5">
           <Image
             src="/images/homepage/title-tree.png"
             alt="tree"
             width={66}
             height={33}
           />
-          <div className="titleContent">
+          <div className="titleContent ">
             <h3 className="titleText">Blog</h3>
             <p>露營文章</p>
           </div>
