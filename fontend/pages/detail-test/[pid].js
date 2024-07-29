@@ -8,12 +8,19 @@ import styles from '@/styles/detail.module.css'
 import Link from 'next/link'
 import Share from '@/components/icons/share'
 import FavStoreBtn2 from '@/components/icons/fav-store-btn2'
-import Swiper from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/swiper-bundle.css'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import Carousel from '@/components/product/detail/carousel'
 import GoTop from '@/components/home/go-top'
 import Swal from 'sweetalert2'
 import Modal from 'react-modal'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { SlClose } from 'react-icons/sl'
+import { useLoader } from '@/hooks/use-loader'
+import { Select } from 'antd'
+
+// import ModalTest from '@/components/product/detail/modalTest'
 import dayjs from 'dayjs'
 
 export default function DetailTest() {
@@ -28,6 +35,31 @@ export default function DetailTest() {
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  // const { showLoader, hideLoader, loading, delay } = useLoader()
+  //RWD
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 800
+  ) //新增狀態來維護視窗寬度
+  const [swiperInstances, setSwiperInstances] = useState([])
+
+  // RWD:初始化時檢查 window 物件是否存在
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+
+    window.addEventListener('resize', handleResize)
+
+    // 清除事件監聽器
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+  // RWD:根據 windowWidth 決定要渲染哪種組件
+  const contentStyle = {
+    margin: 0,
+    height: '160px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+  }
 
   const query = router.query
   console.log(query)
@@ -64,6 +96,7 @@ export default function DetailTest() {
         setStore(resData.data.store)
         setTag(resData.data.tag)
         setImg(resData.data.img)
+        console.log(resData.data.store)
       }
     } catch (e) {
       console.error(e)
@@ -139,10 +172,6 @@ export default function DetailTest() {
     }
   }
 
-  // if (Array.isArray(store)) {
-  //   console.log('store is not an array')
-  // }
-
   // 將取得tag資料map
   const tags = tag.map((item, index) => {
     return (
@@ -159,7 +188,7 @@ export default function DetailTest() {
   }
 
   // 將 precautions 字串拆分成陣列
-  const precautionsArray = store.precautions ? store.precautions.split(',') : []
+  const precautionsArray = store.precautions ? store.precautions.split(' ') : []
 
   // 將取得img資料字串拆分成陣列
   const imgArray = img.img_name ? img.img_name.split(',') : []
@@ -180,13 +209,32 @@ export default function DetailTest() {
     }
   }, [router, router.query.pid])
 
-  const handlePeopleFilterChange = (e) => {
-    setPeopleFilter(e.target.value)
+  const handlePeopleFilterChange = (value) => {
+    setPeopleFilter(value)
   }
 
   const filteredCampsites = peopleFilter
     ? campsites.filter((campsite) => campsite.people >= peopleFilter)
     : campsites
+
+  // useEffect(() => {
+  //   showLoader()
+  //   getStoreInformation()
+  //     .then(() => delay(3000))
+  //     .then(hideLoader)
+  // }, [])
+
+  useEffect(() => {
+    setSwiperInstances((prevInstances) => prevInstances.slice(0, store.length))
+  }, [store])
+
+  const onSwiperInit = (swiper, index) => {
+    setSwiperInstances((prevInstances) => {
+      const newInstances = [...prevInstances]
+      newInstances[index] = swiper
+      return newInstances
+    })
+  }
 
   return (
     <>
@@ -215,79 +263,143 @@ export default function DetailTest() {
         {/* </div> */}
       </div>
       <div>
-        <div className="campGallery">
-          <figure className="gridItem">
-            <Image
-              src={`/detail/${imgArray[0]}`}
-              alt="Camping scene with tents"
-              width={500} // 圖片的實際寬度
-              height={100} // 圖片的實際高度
-              priority
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '5px',
-              }}
-              onClick={() => setModalIsOpen(true)}
-            />
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={() => setModalIsOpen(false)}
-              contentLabel="Example Modal"
-              className="ImageModal"
-              style={{
-                content: {
-                  position: 'relative',
-                  marginTop: '10%', // 設定距離上方的高度
-                  width: '60%', // 設定寬度
-                  height: 'auto', // 設定高度
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  marginBottom: '0',
-                },
-              }}
-            >
-              <Image
-                src={`/detail/${imgArray[0]}`}
-                alt="Your description"
-                width={500} // 圖片的實際寬度
-                height={100} // 圖片的實際高度
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '5px',
+        <div>
+          {windowWidth < 640 ? (
+            <div>
+              <Swiper
+                onSwiper={(swiper, i) => onSwiperInit(swiper, i)}
+                spaceBetween={30}
+                centeredSlides={true}
+                loop={true}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: false,
+                  enabled: false, // 初始化時禁用自動播放
                 }}
-              />
-              <SlClose
-                onClick={() => setModalIsOpen(false)}
-                className="closeImageModal"
-                style={{
-                  position: 'absolute',
-                  width: '30px',
-                  height: '30px',
-                  top: '10px',
-                  right: '10px',
-                  color: 'rgb(56, 155, 135)',
-                  backgroundColor: 'white',
-                  border: 'white',
-                  borderRadius: '50px',
-                }}
-              ></SlClose>
-            </Modal>
-          </figure>
-
-          {imgArray.slice(1, 5).map((img, index) => (
-            <div style={{ display: 'flex' }} key={index}>
-              <Image
-                src={`/detail/${img}`}
-                alt="Camping scene"
-                width={500}
-                height={300}
-                style={{ width: '100%', height: 'auto', borderRadius: '5px' }}
-              />
+                pagination={true}
+                modules={[Autoplay, Pagination]}
+                className="mySwiper1"
+              >
+                {imgArray.slice(1, 5).map((img, index) => (
+                  <SwiperSlide key={index}>
+                    <Image
+                      src={`/detail/${img}`}
+                      alt="Camping scene"
+                      width={500}
+                      height={100}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
-          ))}
+          ) : (
+            <div className="campGallery">
+              <figure className="gridItem">
+                <Image
+                  src={`/detail/${imgArray[0]}`}
+                  alt="Camping scene with tents"
+                  width={500} // 圖片的實際寬度
+                  height={100} // 圖片的實際高度
+                  priority
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '5px',
+                  }}
+                  // onClick={() => setModalIsOpen(true)}
+                  data-bs-toggle="modal" //告訴Bootstrap這裡要觸發一個modal
+                  data-bs-target="#modal2" //告訴Bootstrap要觸發哪個modal
+                />
+              </figure>
+
+              {imgArray.slice(1, 5).map((img, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <Image
+                    src={`/detail/${img}`}
+                    alt="Camping scene"
+                    width={500}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '5px',
+                    }}
+                    data-bs-toggle="modal"
+                    data-bs-target={`#modal${index}`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Modal2 */}
+        <div className="modal fade  modal-xl " id="modal2">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                <Image
+                  src={`/detail/${imgArray[0]}`}
+                  alt="Your description"
+                  width={500} // 圖片的實際寬度
+                  height={100} // 圖片的實際高度
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '5px',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Modal3 */}
+        {imgArray.slice(1, 5).map((img, index) => (
+          <div
+            className="modal fade  modal-xl "
+            id={`modal${index}`}
+            key={index}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  />
+                </div>
+                <div className="modal-body">
+                  <Image
+                    src={`/detail/${img}`}
+                    alt="Camping scene"
+                    width={500}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '5px',
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="row storeNormalInfo">
         <div className="col-md-6 campPrecaution">
@@ -297,6 +409,7 @@ export default function DetailTest() {
             {precautionsArray.map((precaution, index) => (
               <li key={index} style={{ lineHeight: '2.4' }}>
                 {precaution}
+                <br />
               </li>
             ))}
           </div>
@@ -368,8 +481,8 @@ export default function DetailTest() {
         </div>
       </div>
       <div className="campAreaSearchBar">
-        <div className="inputDate">
-          <p style={{ color: 'white' }}>入住日期</p>
+        <div className="inputDate" style={{ color: 'white' }}>
+          入住日期
           <Space direction="vertical" size={12}>
             <RangePicker
               onChange={(e) => {
@@ -386,15 +499,43 @@ export default function DetailTest() {
         </div>
         <div className="inputNumber" style={{ color: 'white' }}>
           入住人數
-          <select value={peopleFilter} onChange={handlePeopleFilterChange}>
-            <option value="">選擇人數</option>
-            <option value="1">1人</option>
-            <option value="2">2人</option>
-            <option value="3">3人</option>
-            <option value="4">4人</option>
-            <option value="5">5人</option>
-            <option value="6">6人以上</option>
-          </select>
+          <div className="select">
+            <Select
+              placeholder="請選擇人數"
+              onChange={handlePeopleFilterChange}
+              filterOption={(input, option) =>
+                (option?.label ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              } // 選項過濾
+              options={[
+                {
+                  value: '1',
+                  label: '1人',
+                },
+                {
+                  value: '2',
+                  label: '2人',
+                },
+                {
+                  value: '3',
+                  label: '3人',
+                },
+                {
+                  value: '4',
+                  label: '4人',
+                },
+                {
+                  value: '5',
+                  label: '5人',
+                },
+                {
+                  value: '6',
+                  label: '6人以上',
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
@@ -457,7 +598,7 @@ export default function DetailTest() {
                   className="modal fade  modal-xl "
                   id="exampleModal"
                   tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
+                  labelled="exampleModalLabel"
                   aria-hidden="true"
                 >
                   <div className="modal-dialog">
@@ -563,7 +704,7 @@ export default function DetailTest() {
                   className="modal fade  modal-xl "
                   id={`exampleModal${campsite.rooms_campsites_id}`}
                   tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
+                  labelled="exampleModalLabel"
                   aria-hidden="true"
                 >
                   <div className="modal-dialog">
@@ -610,11 +751,14 @@ export default function DetailTest() {
       </div>
       <div className="row">
         <h3 className="campSubtitle">周邊景點</h3>
-        <div className="container" style={{ marginBottom: '80px' }}>
-          <Carousel />
+        <div className="container">
+          <Carousel className="carousel2" />
         </div>
       </div>
       <GoTop />
+      <div>
+        <div style={{ height: '10vh' }}></div>
+      </div>
       <style jsx>
         {`
           .storeTitle {
@@ -647,32 +791,7 @@ export default function DetailTest() {
             grid-column: 1 / 2;
             grid-row: 1 / 3;
             display: flex;
-          }
-           {
-            /* .ImageModal被蓋掉暫寫行內樣式 {
-            position: 'absolute',
-            width: '30px',
-            height: '30px',
-            top: '10px',
-            right: '10px',
-            color: 'rgb(56, 155, 135)',
-            backgroundColor: 'white',
-            border: 'white',
-            borderRadius: '50px',
-          } */
-          }
-           {
-            /* .closeImageModal被蓋掉暫寫行內樣式 {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            top: 10px;
-            right: 10px;
-            color: rgb(56, 155, 135);
-            background-color: white;
-            border: white;
-            border-radius: 50px;
-          } */
+            margin: 0px;
           }
           .campPrecaution {
             display: inline;
@@ -710,10 +829,13 @@ export default function DetailTest() {
             background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
           }
           .inputNumber {
-            display: flex;
-            width: 370px;
-            align-items: center;
-            gap: 18px;
+          display: flex;
+          width: 370px;
+          align-items: center;
+          gap: 18px;
+          }
+          .inputNumber Select {
+            width: 120px;
           }
           .inputDate {
             display: flex;
@@ -789,6 +911,58 @@ export default function DetailTest() {
               #fb955e 100%
             );
           }
+
+          @media screen and (max-width: 640px) {
+            .storeTitleWrap {
+              display: flex;
+              flex-direction: column;
+            }
+            .storeTitleWrap .briefIntroduce {
+              order: 2;
+              display: block;
+              width: 100%;
+            }
+            .storeTitleWrap .campTags {
+              order: 1;
+              display: block;
+              width: 100%;
+            }
+            .campGallery {
+              display: flex;
+            }
+            .campSubtitle {
+              margin-top: 20px;
+              margin-bottom: -2px;
+            }
+            .campPrecaution {
+              display: block;
+            }
+            .campPrecaution li {
+              position: relative;
+              list-style-type: disc;
+              text-indent: -1.3em;
+              padding-left: 1em;
+            }
+            .campAreaSearchBar {
+              display: flex;
+              flex-direction: column;
+              padding: 10px 10px 10px 20px;
+              border-radius: 20px;
+            }
+            .inputDate {
+              order: 2;
+              width: 80%;
+            }
+            .inputNumber {
+              order: 1;
+              width: 50%;
+            }
+            .select {
+              width: 100%;
+            }
+            .cardContainer {
+              display: ruby;
+            }
         `}
       </style>
     </>
