@@ -9,6 +9,7 @@ import Link from 'next/link'
 import CommentList from '@/components/blog/commentList';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import GoTop from '@/components/home/go-top'
 
 import { FaRegClock, FaTrashCan } from "react-icons/fa6";
 
@@ -460,6 +461,7 @@ try{
           </div>
         </div>
       </div>
+      <GoTop />
     </>
   )
 }
