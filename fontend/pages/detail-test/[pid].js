@@ -207,6 +207,7 @@ export default function DetailTest() {
         setDateRange([dayjs(), dayjs().add(1, 'day')])
       }
     }
+    // eslint-disable-next-line
   }, [router, router.query.pid])
 
   const handlePeopleFilterChange = (value) => {
@@ -829,10 +830,10 @@ export default function DetailTest() {
             background: linear-gradient(0deg, #fa8752 0%, #fdb524 100%);
           }
           .inputNumber {
-          display: flex;
-          width: 370px;
-          align-items: center;
-          gap: 18px;
+            display: flex;
+            width: 370px;
+            align-items: center;
+            gap: 18px;
           }
           .inputNumber Select {
             width: 120px;
@@ -963,6 +964,7 @@ export default function DetailTest() {
             .cardContainer {
               display: ruby;
             }
+          }
         `}
       </style>
     </>
