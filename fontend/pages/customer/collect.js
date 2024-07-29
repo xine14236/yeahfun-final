@@ -183,7 +183,7 @@ export default function Index() {
                     className={styles.collectCross}
                   />
                   <Link
-                    href={`/detail-test/${v.id}`}
+                    href={`/detail-test/${v.pid}`}
                     className={styles.collectCard}
                   >
                     <div>
