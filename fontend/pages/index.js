@@ -462,11 +462,18 @@ export default function Home() {
                 <Link href={`/blog/${v.id}`}>
                   <div className={`card ${styles.activityCard} `}>
                     <Image
-                      src="/images/homepage/tent02.jpg"
+                      src={
+                        v.img_name
+                          ? `http://localhost:3005/img-blog/${
+                              v.img_name.split(',')[0]
+                            }`
+                          : `http://localhost:3005/img-blog/2e0910f14f50dfb9901999ab4dcb50db.webp`
+                      }
                       className={styles.activityImg}
                       alt="blog"
                       width={400}
-                      height={600}
+                      height={800}
+                      style={{ width: '100%', height: '100%' }}
                     />
                     <div className={`card-body  ${styles.cardBody} `}>
                       <h4 className={`card-title m-0 ${styles.cardTitle}`}>
