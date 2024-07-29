@@ -144,7 +144,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
           </Dropdown>
         </div>
       </div>
-      <div className='col-12 mt-4'>
+      <div className='col-8 offset-4 mt-4'>
         {comment.images && comment.images.length > 0 && (
           <PhotoProvider>
             <div>
