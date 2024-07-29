@@ -88,14 +88,14 @@ export default function Test() {
      
     
 
-        if (router.isReady) {
+        if (router.isReady && router.query.bcid) {
           // 這裡可以得到router.query
     
           setBlogId(router.query.bcid)
         }
         // 以下為注解掉eslint的警告一行
         // eslint-disable-next-line
-      }, [router.isReady])
+      }, [router.isReady, router.query.bcid])
    
     
   return(  <>
