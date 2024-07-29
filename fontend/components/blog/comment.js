@@ -43,7 +43,7 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
   const props = {
     name: 'photos',
     action: `http://localhost:3005/api/blog/Cuploads/${comment.id}`,
-    multiple: true,
+    
     onChange(info) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
