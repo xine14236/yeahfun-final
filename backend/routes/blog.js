@@ -490,8 +490,8 @@ router.post('/update' , async (req, res) => {
   }
 
 
-  const sql0 = `Select id from blog where title=?`
-const [rows0]= await db.query(sql0,[req.body.title])
+  const sql0 = `Select id from blog where title=? AND id<>?`
+const [rows0]= await db.query(sql0,[req.body.title,req.body.blogId])
 if(rows0.length > 0){
   output.info='重複的標題'
   return  res.json(output)
