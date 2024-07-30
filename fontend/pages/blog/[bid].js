@@ -328,14 +328,14 @@ export default function blogDetail() {
   }
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && router.query.bid) {
       // 這裡可以得到router.query
 
       getBlog(router.query.bid)
     }
     // 以下為注解掉eslint的警告一行
     // eslint-disable-next-line
-  }, [router.isReady])
+  }, [router.isReady, router.query.bid])
 
   return (
     <>
