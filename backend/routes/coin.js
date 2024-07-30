@@ -89,4 +89,21 @@ router.get('/couponbag/:id', async function(req, res) {
   
 });
 
+
+// 更新couponbag
+router.post('/updateCouponbag', async function (req, res) {
+
+  const { couponId } = req.body
+
+  try {
+    const [result] = await db.query(
+      'UPDATE couponbag SET amount = 0 WHERE id = ?',
+      [couponId]
+    );
+    res.json({ status: 'success', message: 'Coin updated successfully' });
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 export default router
