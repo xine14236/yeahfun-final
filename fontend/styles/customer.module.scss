@@ -39,6 +39,8 @@
   align-items: flex-start;
   padding-left: 0;
   background-color: var(--white, #fff);
+  box-shadow: 3px 3px 5px var(--grey-600, #8c8c8c);
+  border-radius: 10px;
 }
 .memberAsideList {
   border-radius: 10px;
@@ -136,6 +138,7 @@
   border-radius: 10px;
   background: #fff;
   flex-wrap: wrap;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 .collectInfoFrame {
   display: flex;
@@ -148,6 +151,7 @@
   align-self: stretch;
   border-radius: 10px;
   background: #fff;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 .memberList {
   display: flex;
@@ -425,9 +429,10 @@
   gap: 20px;
   align-self: stretch;
   border-radius: 10px;
-  border: 1px solid var(--secondary-3, #fdaf17);
+  border: 2px solid var(--secondary-3, #fdaf17);
   // background: var(--grey-400, #c4c4c4);
   transition: filter 0.3s;
+  box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.2);
 }
 .achieveFrameCircle {
   display: flex;
@@ -439,8 +444,10 @@
   height: 120px;
   fill: var(--white, #fff);
   stroke-width: 1px;
-  border: 1px solid var(--secondary-3, #fdaf17);
+  border: 2px solid var(--secondary-3, #fdaf17);
   border-radius: 50%;
+  box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.2);
+
 }
 
 .achieveFrameContent {
