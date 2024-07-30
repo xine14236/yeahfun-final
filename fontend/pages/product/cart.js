@@ -83,14 +83,16 @@ export default function Cart() {
     const couponOff = event.target.value
 
     const selectedCouponObject = cartCoupon.find(
-      (coupon) => coupon.coupon_off == couponOff
+      (coupon) => coupon.couponbag_id == couponOff
     )
     setSelectedCoupon(selectedCouponObject)
 
     setCartItems((prevCartItems) =>
       prevCartItems.map((item) => ({
         ...item,
-        coupon_id: selectedCouponObject ? selectedCouponObject.id : null,
+        coupon_id: selectedCouponObject
+          ? selectedCouponObject.couponbag_id
+          : null,
       }))
     )
   }
@@ -218,7 +220,7 @@ export default function Cart() {
             <select name="" id="" onChange={handleCouponChange}>
               <option value="">請選擇優惠券</option>
               {cartCoupon.map((coupon, index) => (
-                <option key={coupon.id} value={coupon.coupon_off}>
+                <option key={index} value={coupon.couponbag_id}>
                   {coupon.directions}
                 </option>
               ))}

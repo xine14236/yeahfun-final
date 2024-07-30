@@ -12,7 +12,7 @@ import Image from 'next/image'
 export default function ECPayIndex() {
   const router = useRouter()
   const { auth } = useAuth()
-  const { cartItems} = useCart()
+  const { cartItems, processCheckout } = useCart()
 
   const [sum, setSum] = useState(0)
   // 建立訂單用，格式參考主控台由伺服器回傳
@@ -95,33 +95,35 @@ export default function ECPayIndex() {
 
       return acc + subtotal
     }, 0)
-    setSum(total-coupon.coupon_off)
+    const discount = coupon && !isNaN(Number(coupon.coupon_off)) ? Number(coupon.coupon_off) : 0;
+  setSum(total - discount);
   }
 
   useEffect(() => {
-    sumTotal()
-  }, [cartItems])
+    sumTotal();
+  }, [cartItems, coupon]);
 
   //取得 couponbag 的資料
   const getCoupon = async () => {
-    const couponId = cartItems[0]?.coupon_id || 1;
-    const url = `http://localhost:3005/api/coin/couponbag/${couponId}`;
-  
-    
-      const res = await fetch(url);
-      const resData = await res.json();
-  
-      if (resData.status === 'success') {
-        setCoupon(resData.data.couponbag);
-        console.log('Set Coupon:', resData.data.couponbag);
-      } else {
-        console.error('Failed to fetch coupon data:', resData.message);
-      }
-  };
+    const couponId = cartItems[0]?.coupon_id || 1
+    const url = `http://localhost:3005/api/coin/couponbag/${couponId}`
+
+    const res = await fetch(url)
+    const resData = await res.json()
+
+    if (resData.status === 'success') {
+      setCoupon(resData.data.couponbag)
+      console.log('Set Coupon:', resData.data.couponbag)
+    } else {
+      console.error('Failed to fetch coupon data:', resData.message)
+    }
+  }
 
   useEffect(() => {
-    getCoupon();
-  }, [cartItems])
+    if (cartItems.length > 0) {
+      getCoupon().then(() => sumTotal());
+    }
+  }, [cartItems]);
 
   const getLevel = async () => {
     const userId = auth.userData.id
@@ -215,8 +217,6 @@ export default function ECPayIndex() {
     if (res.data.status === 'success') {
       setOrder(res.data.data.order)
       toast.success('已成功建立訂單')
-
-      
 
       // 更新等级和金币
       const currentLevels = level.levels || 0
@@ -397,8 +397,12 @@ export default function ECPayIndex() {
               </div>
               <div className="mb-4 p-3 border rounded bg-light">
                 <div className="d-flex justify-content-between mb-2">
-                  <div>{`優惠劵: ${coupon.directions || 'No directions available'}`}</div>
-    <div>{`- $ ${coupon.coupon_off || 'No discount available'}`}</div>
+                  <div>{`優惠劵: ${
+                    coupon.directions || 'No directions available'
+                  }`}</div>
+                  <div>{`- $ ${
+                    coupon.coupon_off || 'No discount available'
+                  }`}</div>
                 </div>
               </div>
 
@@ -408,6 +412,7 @@ export default function ECPayIndex() {
                   <div className="font-weight-bold text-primary">$ {sum}</div>
                 </div>
               </div>
+
             </div>
           </div>
 

@@ -273,6 +273,14 @@ router.post('/save',authenticate, async (req, res) => {
     info:'',
     
   }
+
+const sql0 = `Select id from blog where title=?`
+const [rows0]= await db.query(sql0,[req.body.title])
+if(rows0.length > 0){
+  output.info='重複的標題'
+  return  res.json(output)
+}
+
   const memberId = req.user.id || null
   const sql = `UPDATE blog set title=?, author=? , content=? where id=?`
   const [result]= await db.query(sql,[req.body.title, memberId, req.body.content, req.body.blogId])
@@ -300,7 +308,7 @@ router.post('/save',authenticate, async (req, res) => {
 
     output.result2 = insertResult;
   } else {
-    output.info = '没有找到对应的博客';
+    output.info = '没有找到對應的blog';
   }
 
 res.json(output)
@@ -327,7 +335,7 @@ router.post('/createCom',authenticate, async (req, res) => {
     // 删除旧的标签
     
   } else {
-    output.info = '没有找到对应的博客';
+    output.info = '没有找到對應的blog';
   }
 
 res.json(output)
@@ -456,6 +464,10 @@ router.delete('/Cdelete/:bid', async (req, res)=>{
 
 router.get('/edit/:bid', authenticate , async (req, res) => {
  
+
+
+
+
   const sql = ` SELECT   b.*, GROUP_CONCAT(DISTINCT bc.blog_category_id SEPARATOR ',') AS category_ids
    FROM blog b Left join  blog_category bc ON b.id=bc.blog_id   where b.id=${req.params.bid} GROUP BY b.id
     `
@@ -476,6 +488,14 @@ router.post('/update' , async (req, res) => {
     info:'',
     
   }
+
+
+  const sql0 = `Select id from blog where title=? AND id<>?`
+const [rows0]= await db.query(sql0,[req.body.title,req.body.blogId])
+if(rows0.length > 0){
+  output.info='重複的標題'
+  return  res.json(output)
+}
  
   const sql = `UPDATE blog set title=? , content=? where id=?`
   const [result]= await db.query(sql,[req.body.title, req.body.content, req.body.blogId])
@@ -503,7 +523,7 @@ if(tags.length > 0){
 }
 
   } else {
-    output.info = '没有找到对应的博客';
+    output.info = '没有找到對應的blog';
   }
 
 res.json(output)
@@ -542,7 +562,7 @@ router.post('/bccreate',authenticate, async (req, res) => {
 
     output.result2 = insertResult;
   } else {
-    output.info = '没有找到对应的博客';
+    output.info = '没有找到對應的blog';
   }
 
 res.json(output)
@@ -572,7 +592,7 @@ router.post('/Cedit/',authenticate, async (req, res) => {
 
 
   } else {
-    output.info = '没有找到对应的博客';
+    output.info = '没有找到對應的blog';
   }
 
 res.json(output)
