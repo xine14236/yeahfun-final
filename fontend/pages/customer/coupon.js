@@ -213,7 +213,7 @@ export default function Index() {
           width={150}
           height={150}
         />
-        <h2>正向伺服器查詢是否有權限進入...</h2>
+        <h2>YeahFun正在為你檢查權限，不要轉台喔！</h2>
       </div>
       <Loader />
     </>
