@@ -37,9 +37,9 @@ const upload = multer({ storage: storage })
 
 // GET - 得到所有會員資料
 router.get('/', async function (req, res) {
-  const customer = await Customer.findAll({ logging: console.log })
+  const [rows] = await Customer.findAll({ logging: console.log })
   // 處理如果沒找到資料
-
+  const customer = rows[0]
   // 標準回傳JSON
   return res.json({ status: 'success', data: { customer } })
 })
@@ -50,7 +50,7 @@ router.get('/:id', authenticate, async function (req, res) {
   const id = getIdParam(req)
 
   // 檢查是否為授權會員，只有授權會員可以存取自己的資料
-  if (req.customer.id !== id) {
+  if (req.user.id !== id) {
     return res.json({ status: 'error', message: '存取會員資料失敗' })
   }
 
