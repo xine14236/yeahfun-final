@@ -21,7 +21,8 @@ router.get('/:id', async function (req, res) {
   const id = Number(req.params.id)
 
   const [rows] = await db.query(
-    'SELECT levels, coin FROM achievements WHERE customer_id = ?',[id]
+    'SELECT levels, coin FROM achievements WHERE customer_id = ?',
+    [id]
   )
 
   if (rows.length > 0) {

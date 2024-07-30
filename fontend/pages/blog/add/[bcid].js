@@ -67,7 +67,7 @@ export default function Test() {
           } else {
             MySwal.fire({
               title: '錯誤!',
-              text: data.message,
+              text: data.info,
               icon: 'error',
             });
           }
