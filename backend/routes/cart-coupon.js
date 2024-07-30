@@ -13,7 +13,8 @@ router.get('/', authenticate, async function (req, res) {
     coupon.id,
     couponbag.user_id,
     coupon.directions,
-    coupon.coupon_off
+    coupon.coupon_off,
+    couponbag.id AS couponbag_id
 FROM
     coupon
 JOIN couponbag ON coupon.id = couponbag.coupon_id
