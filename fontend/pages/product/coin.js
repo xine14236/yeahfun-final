@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/use-auth'
 import GoTop from '@/components/home/go-top'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Coin() {
   const router = useRouter()
@@ -109,6 +110,8 @@ export default function Coin() {
         })
         const resData = await res.json()
         console.log(resData)
+
+        toast.success('成功兌換')
       } catch (e) {
         console.error(e)
       }
@@ -167,10 +170,12 @@ export default function Coin() {
 
   return (
     <>
+    
       <section className="banner">
         <h1 className="bannerH1">YeahFun Coin</h1>
         <p className="bannerP">Explore our exclusive items!</p>
       </section>
+      <Toaster />
       <section className="storeCategories">
         <div className="category">
           <div className="d-flex align-items-end">
