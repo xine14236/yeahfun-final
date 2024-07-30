@@ -18,7 +18,7 @@ export default function EditBlog() {
 
   const router = useRouter();
   const [value, setValue] = useState('')
-  const [blogId, setBlogId] = useState(0)
+  const [blogId, setBlogId] = useState(1)
   const initialCate = blogCategory.filter((v) => v.id > 5)
   const [tags, setTags] = useState(initialCate);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -85,11 +85,11 @@ export default function EditBlog() {
   };
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && router.query.bid) {
       setBlogId(router.query.bid);
       fetchBlogData(router.query.bid);
     }
-  }, [router.isReady]);
+  }, [router.isReady, router.query.bid]);
 
   const fetchBlogData = async (blogId) => {
     try {
