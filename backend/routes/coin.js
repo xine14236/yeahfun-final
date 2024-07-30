@@ -70,4 +70,23 @@ router.post('/plusDonation', async function (req, res){
 })
 
 
+//得到couponbag的id
+router.get('/couponbag/:id', async function(req, res) {
+  const id = Number(req.params.id);
+  console.log(`Fetching coin data for customer_id: ${id}`); 
+
+  
+    const [rows] = await db.query(
+      'SELECT couponbag.id, coupon_off, directions, amount FROM couponbag join coupon on coupon_id = coupon.id WHERE couponbag.id = ?', [id]
+    );
+
+    if (rows.length > 0) {
+      const couponbag = rows[0];
+      res.json({ status: 'success', data: { couponbag } });
+    } else {
+      res.json({ status: 'error', message: 'No coupon found' });
+    }
+  
+});
+
 export default router

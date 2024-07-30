@@ -210,7 +210,7 @@ export default function Index() {
                         {v.startdate} ~ {v.enddate}
                       </td>
                       <td> {v.price}</td>
-                      <td>未付款</td>
+                      <td>已付款</td>
                     </tr>
                   ))}
                 </tbody>

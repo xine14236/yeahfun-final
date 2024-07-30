@@ -17,7 +17,7 @@ const MyComponent = dynamic(() => import('@/components/blog/test'), {
 export default function Test() {
     const router = useRouter();
     const [value, setValue] = useState('')
-    const [blogId,setBlogId]=useState(0)
+    const [blogId,setBlogId]=useState(1)
     const initialCate = blogCategory.filter((v)=>v.id>7)
     const [tags, setTags] = useState(initialCate);
     const [selectedTags, setSelectedTags] = useState([]);
@@ -88,14 +88,14 @@ export default function Test() {
      
     
 
-        if (router.isReady) {
+        if (router.isReady && router.query.bcid) {
           // 這裡可以得到router.query
     
           setBlogId(router.query.bcid)
         }
         // 以下為注解掉eslint的警告一行
         // eslint-disable-next-line
-      }, [router.isReady])
+      }, [router.isReady, router.query.bcid])
    
     
   return(  <>
