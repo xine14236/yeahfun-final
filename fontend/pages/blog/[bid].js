@@ -248,7 +248,7 @@ export default function blogDetail() {
             if (data.success) {
               MySwal.fire({
                 title: '已刪除!',
-                text: '博客文章已刪除',
+                text: 'Blog文章已刪除',
                 icon: 'success',
               }).then(() => {
                 // Navigate to another page after deletion

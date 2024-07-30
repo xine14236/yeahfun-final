@@ -40,7 +40,7 @@ const handleCreate = () => {
             if (data.success) {
                 MySwal.fire({
                   title: '已創建!',
-                  text: '博客文章已創建',
+                  text: 'Blog文章已創建',
                   icon: 'success',
                 }).then(() => {
                   // Navigate to another page with insertId in the route
