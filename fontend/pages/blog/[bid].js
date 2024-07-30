@@ -385,15 +385,15 @@ export default function blogDetail() {
                   </span>
 
                   <span
-                    className={`${styles.span1} fs-3  `}
+                    className={`${styles.span1} fs-3  d-flex align-items-center`}
                     onClick={() => {
                       handleClickStar(blog.id)
                     }}
                   >
                     <Image
                       src={chiiLikes}
-                      height={20}
-                      width={20}
+                      height={24}
+                      width={24}
                       className="me-2 "
                     />
                     {blog.favorite_count}
