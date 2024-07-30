@@ -18,7 +18,7 @@ export default function EditBlog() {
 
   const router = useRouter();
   const [value, setValue] = useState('')
-  const [blogId, setBlogId] = useState(1)
+  const [blogId, setBlogId] = useState(null)
   const initialCate = blogCategory.filter((v) => v.id > 5)
   const [tags, setTags] = useState(initialCate);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -150,7 +150,7 @@ export default function EditBlog() {
         </div>
       </div>
       <div className="my-5">
-        <MyComponent value={value} setValue={setValue} blogId={blogId} />
+        {blogId && <MyComponent value={value} setValue={setValue} blogId={blogId} />}
       </div>
       <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
         Submit
