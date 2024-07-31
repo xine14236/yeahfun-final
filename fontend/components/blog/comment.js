@@ -1,7 +1,7 @@
 // Comment.js
 import React, { useEffect, useRef, useState } from 'react';
 import { Menu, Dropdown, Button, Input, Upload, message } from 'antd';
-import { AiOutlineMore, AiOutlineEdit, AiOutlineDelete, AiOutlinePicture, AiOutlineCheck } from 'react-icons/ai';
+import { AiOutlineMore, AiOutlineEdit, AiOutlineDelete, AiOutlinePicture, AiOutlineCheck, AiOutlineMeh } from 'react-icons/ai';
 import { z } from 'zod';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
@@ -81,21 +81,23 @@ const Comment = ({ comment, onEdit, onDelete, onAddImages, forBId=0, getBlog=()=
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<AiOutlineEdit />} onClick={() => setIsEditing(true)}>
-        Edit
+        編輯
       </Menu.Item>
       <Menu.Item key="2" icon={<AiOutlineDelete />} onClick={onDelete}>
-        Delete
+        刪除
       </Menu.Item>
       <Menu.Item key="3" icon={<AiOutlinePicture />}>
       <Upload  {...props} >
-          <Button type="text">Add Image</Button>
+          <Button type="text">新增圖片</Button>
         </Upload>
       </Menu.Item>
     </Menu>
   );
   const menu2 =(
     <Menu>
-   
+   <Menu.Item key="1" icon={<AiOutlineMeh />} >
+        檢舉
+      </Menu.Item>
   </Menu>
   )
 
