@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Head from 'next/head'
 import { useCart } from '@/hooks/cart-hook'
+import { useAuth } from '@/hooks/use-auth'
 import { FaLocationDot, FaStar, FaCommentDots, FaMinus } from 'react-icons/fa6'
 import { useRouter } from 'next/router'
 import { differenceInDays, parseISO } from 'date-fns'
 import Link from 'next/link'
 
 export default function Cart() {
-  const { cartItems, removeFromCart, processCheckout } = useCart()
+  const { cartItems, setCartItems, removeFromCart, processCheckout } = useCart()
+  const { getAuthHeader } = useAuth()
 
   const handleRemove = (rooms_campsites_id) => {
     removeFromCart(rooms_campsites_id)
@@ -17,6 +19,8 @@ export default function Cart() {
   const router = useRouter()
 
   const [storeInformation, setStoreInformation] = useState({})
+  const [cartCoupon, setCartCoupon] = useState([])
+  const [selectedCoupon, setSelectedCoupon] = useState(null)
 
   const getStoreInformation = async (storeId) => {
     const url = 'http://localhost:3005/api/cart-information/' + storeId
@@ -24,7 +28,7 @@ export default function Cart() {
     try {
       const res = await fetch(url)
       const resData = await res.json()
-      console.log(resData)
+      // console.log(resData)
 
       if (resData.status === 'success') {
         setStoreInformation((prevInfo) => ({
@@ -45,19 +49,64 @@ export default function Cart() {
     }
   }
 
+  const getCartCoupon = async () => {
+    const url = 'http://localhost:3005/api/cart-coupon'
+
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
+      const resData = await res.json()
+      // console.log(resData)
+
+      if (resData.status === 'success') {
+        setCartCoupon(resData.data)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   useEffect(() => {
     if (router.isReady && cartItems.length > 0) {
+      getCartCoupon()
       cartItems.forEach((item) => {
         getStoreInformation(item.stores_id)
       })
     }
+    // eslint-disable-next-line
   }, [router.isReady, cartItems])
+
+  const handleCouponChange = (event) => {
+    const couponOff = event.target.value
+
+    const selectedCouponObject = cartCoupon.find(
+      (coupon) => coupon.couponbag_id == couponOff
+    )
+    setSelectedCoupon(selectedCouponObject)
+
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((item) => ({
+        ...item,
+        coupon_id: selectedCouponObject
+          ? selectedCouponObject.couponbag_id
+          : null,
+      }))
+    )
+  }
 
   // 新增 checkout 函數
   const checkout = () => {
     // 你可以在這裡調用鉤子並傳遞所需的參數
     // 假設你想傳遞 cartItems 和總金額
-    const totalAmount = cartItems.reduce(
+    const totalAmount = calculateTotal()
+    processCheckout(cartItems, totalAmount)
+  }
+
+  const calculateTotal = () => {
+    const totalWithoutDiscount = cartItems.reduce(
       (acc, store) =>
         acc +
         store.normal_price *
@@ -65,7 +114,9 @@ export default function Cart() {
           store.rooms_campsites_amount,
       0
     )
-    processCheckout(cartItems, totalAmount)
+    return (
+      totalWithoutDiscount - (selectedCoupon ? selectedCoupon.coupon_off : 0)
+    )
   }
 
   return (
@@ -163,29 +214,25 @@ export default function Cart() {
       )}
 
       {cartItems.length > 0 && (
-        <div className="totalMount m-2">
-          <h3>
-            Total : NT${' '}
-            {cartItems.reduce(
-              (acc, store) =>
-                acc +
-                store.normal_price *
-                  differenceInDays(store.endDate, store.startDate) *
-                  store.rooms_campsites_amount,
-              0
-            )}
-          </h3>
-        </div>
+        <>
+          <div className="totalMount mt-4 mb-3">
+            <h5 className="px-3">Coupon :</h5>
+            <select name="" id="" onChange={handleCouponChange}>
+              <option value="">請選擇優惠券</option>
+              {cartCoupon.map((coupon, index) => (
+                <option key={index} value={coupon.couponbag_id}>
+                  {coupon.directions}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="totalMount m-2">
+            <h3>Total : NT$ {calculateTotal()}</h3>
+          </div>
+        </>
       )}
 
       <div className="checkoutButton">
-        {/* <button
-          className="btn btn-primary btn-lg mt-5 checkout"
-          disabled={cartItems.length === 0}
-          onClick={checkout}
-        >
-          結帳
-        </button> */}
         <Link
           href="/product/ecpay"
           className={`btnGreenPc transition mt-5`}

@@ -5,6 +5,8 @@
   border-radius: 20px;
   padding-block: 5px;
   margin-block: 5px;
+  
+ 
 }
 .span2 {
   padding-inline: 20px;
@@ -69,9 +71,14 @@
 
 .meAuto {
   margin-left: 45%;
-  @media (max-width: 768px) {
-    margin-left: 22%;
+  @media (max-width: 1200px) {
+    margin-left: 15%;
   }
+  
+  @media (max-width: 576px) {
+    margin-left: 10%;
+  }
+ 
 }
 
 .contentWrapper > * {

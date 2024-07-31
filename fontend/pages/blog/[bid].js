@@ -248,7 +248,7 @@ export default function blogDetail() {
             if (data.success) {
               MySwal.fire({
                 title: '已刪除!',
-                text: '博客文章已刪除',
+                text: 'Blog文章已刪除',
                 icon: 'success',
               }).then(() => {
                 // Navigate to another page after deletion
@@ -328,7 +328,7 @@ export default function blogDetail() {
   }
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady ) {
       // 這裡可以得到router.query
 
       getBlog(router.query.bid)
@@ -385,15 +385,15 @@ export default function blogDetail() {
                   </span>
 
                   <span
-                    className={`${styles.span1} fs-3  `}
+                    className={`${styles.span1} fs-3  d-flex align-items-center`}
                     onClick={() => {
                       handleClickStar(blog.id)
                     }}
                   >
                     <Image
                       src={chiiLikes}
-                      height={20}
-                      width={20}
+                      height={24}
+                      width={24}
                       className="me-2 "
                     />
                     {blog.favorite_count}

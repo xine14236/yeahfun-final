@@ -12,7 +12,7 @@ import Image from 'next/image'
 export default function ECPayIndex() {
   const router = useRouter()
   const { auth } = useAuth()
-  const { cartItems } = useCart()
+  const { cartItems, processCheckout } = useCart()
 
   const [sum, setSum] = useState(0)
   // 建立訂單用，格式參考主控台由伺服器回傳
@@ -28,8 +28,8 @@ export default function ECPayIndex() {
   })
 
   const [level, setLevel] = useState({
-    levels:0,
-    coin:0
+    levels: 0,
+    coin: 0,
   })
 
   const [formData, setFormData] = useState({
@@ -37,6 +37,8 @@ export default function ECPayIndex() {
     email: auth.userData.email,
     phone: auth.userData.phone,
   })
+
+  const [coupon, setCoupon] = useState({})
 
   //控制姓名的更換
   const handleChange = (e) => {
@@ -62,7 +64,7 @@ export default function ECPayIndex() {
     }
   }
 
-  // 计算总金额的函数
+  // 計算總金額
   const sumTotal = () => {
     const total = cartItems.reduce((acc, v) => {
       const startDate = new Date(v.startDate)
@@ -74,7 +76,7 @@ export default function ECPayIndex() {
 
       for (
         let d = new Date(startDate);
-        d <= endDate;
+        d < endDate;
         d.setDate(d.getDate() + 1)
       ) {
         totalDays++
@@ -93,88 +95,126 @@ export default function ECPayIndex() {
 
       return acc + subtotal
     }, 0)
-    setSum(total)
+    const discount = coupon && !isNaN(Number(coupon.coupon_off)) ? Number(coupon.coupon_off) : 0;
+  setSum(total - discount);
   }
 
   useEffect(() => {
-    sumTotal()
-  }, [cartItems])
+    sumTotal();
+  }, [cartItems, coupon]);
 
+  //取得 couponbag 的資料
+  const getCoupon = async () => {
+    const couponId = cartItems[0].coupon_id
+    const url = `http://localhost:3005/api/coin/couponbag/${couponId}`
 
-  
-  const getLevel = async () => {
-    const userId = auth.userData.id;
-    const url = `http://localhost:3005/api/level/${userId}`;
-    try {
-      const res = await fetch(url);
-      const resData = await res.json();
-      console.log('Get Level Response:', resData);
-  
-      if (resData.status === 'success') {
-        const { levels = 0, coin = 0 } = resData.data.level || {};
-        setLevel({ levels, coin });
-      } else {
-        setLevel({ levels: 0, coin: 0 });
-      }
-    } catch (e) {
-      console.error('Error fetching level:', e);
-      setLevel({ levels: 0, coin: 0 });
-    }
-  };
-  
-  useEffect(() => {
-    if (auth.userData && auth.userData.id) {
-      getLevel();
-    }
-  }, [auth.userData]);
-  
+    const res = await fetch(url)
+    const resData = await res.json()
 
-  // 等級規則
-  const rule = (levels) => {
-    console.log('Current Levels:', levels);
-    let newLevels = Number(levels) + 100;
-    let newCoin = level.coin;
-  
-    if (newLevels <= 200) {
-      newCoin += 10;
-    } else if (newLevels <= 400) {
-      newCoin += 20;
-    } else if (newLevels <= 600) {
-      newCoin += 30;
-    } else if (newLevels <= 800) {
-      newCoin += 40;
-    } else if (newLevels <= 1000) {
-      newCoin += 50;
+    if (resData.status === 'success') {
+      setCoupon(resData.data.couponbag)
+      console.log('Set Coupon:', resData.data.couponbag)
     } else {
-      newCoin += 60;
+      console.error('Failed to fetch coupon data:', resData.message)
     }
-  
-    console.log('Calculated newLevels:', newLevels);
-    console.log('Calculated newCoin:', newCoin);
-  
-    return { newLevels, newCoin };
-  };
+  }
 
-  // 更新levels和coin
-  const updateLevel = async (newLevels, newCoin) => {
-    const userId = auth.userData.id;
-    const url = `http://localhost:3005/api/level/update-level`;
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      getCoupon().then(() => sumTotal());
+    }
+  }, [cartItems]);
+
+  //更新 couponbag 的資料
+  const updateCouponbag = async () => {
+    const couponId = cartItems[0].coupon_id
+    const url = `http://localhost:3005/api/coin/updateCouponbag`
     try {
       const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, newLevels, newCoin })
-      });
-      const resData = await res.json();
-      console.log(resData);
-  
+        body: JSON.stringify({ couponId }),
+      })
+      const resData = await res.json()
+      console.log(resData)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
-  };
+  }
 
+  //取得 Level 的資料
+  const getLevel = async () => {
+    const userId = auth.userData.id
+    const url = `http://localhost:3005/api/level/${userId}`
+    try {
+      const res = await fetch(url)
+      const resData = await res.json()
+      console.log('Get Level Response:', resData)
+
+      if (resData.status === 'success') {
+        const { levels = 0, coin = 0 } = resData.data.level || {}
+        setLevel({ levels, coin })
+      } else {
+        setLevel({ levels: 0, coin: 0 })
+      }
+    } catch (e) {
+      console.error('Error fetching level:', e)
+      setLevel({ levels: 0, coin: 0 })
+    }
+  }
+
+  useEffect(() => {
+    if (auth.userData && auth.userData.id) {
+      getLevel()
+    }
+  }, [auth.userData])
+
+  // 等級規則
+  const rule = (levels) => {
+    console.log('Current Levels:', levels)
+    let newLevels = Number(levels) + 100
+    let newCoin = level.coin
+
+    if (newLevels <= 200) {
+      newCoin += 10
+    } else if (newLevels <= 400) {
+      newCoin += 20
+    } else if (newLevels <= 600) {
+      newCoin += 30
+    } else if (newLevels <= 800) {
+      newCoin += 40
+    } else if (newLevels <= 1000) {
+      newCoin += 50
+    } else {
+      newCoin += 60
+    }
+
+    console.log('Calculated newLevels:', newLevels)
+    console.log('Calculated newCoin:', newCoin)
+
+    return { newLevels, newCoin }
+  }
+
+  // 更新levels和coin
+  const updateLevel = async (newLevels, newCoin) => {
+    const userId = auth.userData.id
+    const url = `http://localhost:3005/api/level/update-level`
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newLevels, newCoin }),
+      })
+      const resData = await res.json()
+      console.log(resData)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   const createOrderAndPay = async () => {
     const products = cartItems.map((v) => ({
@@ -183,7 +223,7 @@ export default function ECPayIndex() {
       startdate: v.startDate,
       enddate: v.endDate,
       normal_price: v.normal_price,
-      holiday_price: v.holiday_price
+      holiday_price: v.holiday_price,
     }))
 
     const res = await axiosInstance.post('/line-pay/create-order', {
@@ -198,18 +238,21 @@ export default function ECPayIndex() {
       setOrder(res.data.data.order)
       toast.success('已成功建立訂單')
 
-      // 更新等级和金币
-    const currentLevels = level.levels || 0;
-    const { newLevels, newCoin } = rule(currentLevels);
-    
-     // 直接更新資料庫
-    updateLevel(newLevels, newCoin);
+      //更新 couponbag 的資料庫
+      updateCouponbag();
 
-    // 更新前端狀態
-    setLevel({
-      levels: newLevels,
-      coin: newCoin,
-    });
+      // 更新等级和金幣
+      const currentLevels = level.levels || 0
+      const { newLevels, newCoin } = rule(currentLevels)
+
+      // 更新等级和金幣的資料庫
+      updateLevel(newLevels, newCoin)
+
+      // 更新前端狀態
+      setLevel({
+        levels: newLevels,
+        coin: newCoin,
+      })
 
       if (window.confirm('確認要導向至ECPay進行付款?')) {
         window.location.href = `http://localhost:3005/api/ecpay/payment?orderId=${res.data.data.order.orderId}`
@@ -218,7 +261,6 @@ export default function ECPayIndex() {
       toast.error('建立訂單失敗')
     }
   }
-
 
   // 確認交易，處理伺服器通知已確認付款，為必要流程
   const handleConfirm = async (transactionId) => {
@@ -285,7 +327,7 @@ export default function ECPayIndex() {
                           地點：
                         </span>
                         <span className={`fs-6 ${styles.textColor}`}>
-                        {v.store_name}
+                          {v.store_name}
                         </span>
                       </div>
                     </div>
@@ -341,7 +383,7 @@ export default function ECPayIndex() {
 
                   for (
                     let d = new Date(start);
-                    d <= end;
+                    d < end;
                     d.setDate(d.getDate() + 1)
                   ) {
                     const dayOfWeek = d.getDay()
@@ -376,6 +418,16 @@ export default function ECPayIndex() {
                   )
                 })}
               </div>
+              <div className="mb-4 p-3 border rounded bg-light">
+                <div className="d-flex justify-content-between mb-2">
+                  <div>{`優惠劵: ${
+                    coupon.directions || 'No directions available'
+                  }`}</div>
+                  <div>{`- $ ${
+                    coupon.coupon_off || 'No discount available'
+                  }`}</div>
+                </div>
+              </div>
 
               <div className="d-flex flex-column align-items-end mt-3 p-3 border-top">
                 <div className="d-flex justify-content-between w-100">
@@ -383,6 +435,7 @@ export default function ECPayIndex() {
                   <div className="font-weight-bold text-primary">$ {sum}</div>
                 </div>
               </div>
+
             </div>
           </div>
 

@@ -17,7 +17,7 @@ const MyComponent = dynamic(() => import('@/components/blog/test'), {
 export default function Test() {
     const router = useRouter();
     const [value, setValue] = useState('')
-    const [blogId,setBlogId]=useState(1)
+    const [blogId,setBlogId]=useState(null)
     const initialCate = blogCategory.filter((v)=>v.id>7)
     const [tags, setTags] = useState(initialCate);
     const [selectedTags, setSelectedTags] = useState([]);
@@ -67,7 +67,7 @@ export default function Test() {
           } else {
             MySwal.fire({
               title: '錯誤!',
-              text: data.message,
+              text: data.info,
               icon: 'error',
             });
           }
@@ -135,7 +135,8 @@ export default function Test() {
          </div>
        </div>
        <div className="my-5">
-       <MyComponent value={value} setValue={setValue} blogId={blogId}  />
+
+       {blogId && <MyComponent value={value} setValue={setValue} blogId={blogId} />}
        </div>
        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
         Submit
