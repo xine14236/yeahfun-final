@@ -18,7 +18,7 @@ const getBlogData = async (req) => {
   // console.log({test1})
 
   // 分頁
-  const perPage = Number(req.query.perpage) || 10 //每頁最多有幾筆
+  const perPage = Number(req.query.perpage) || 3 //每頁最多有幾筆
 
   // 篩選
   const name_like = req.query.name_like || ''

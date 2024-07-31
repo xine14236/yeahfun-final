@@ -209,10 +209,21 @@ export default function Blog() {
     console.log(resData.action)
     if (resData.action === 'add') {
       toast.success('已收藏此文章！');
+      setBlogs(prevBlogs =>
+        prevBlogs.map(blog =>
+          blog.id === id ? { ...blog, fav_id: true } : blog
+        )
+      );
     } else if (resData.action === 'remove') {
       toast.error('已取消收藏此文章！');
+      setBlogs(prevBlogs =>
+        prevBlogs.map(blog =>
+          blog.id === id ? { ...blog, fav_id: false } : blog
+        )
+      );
     }
-    getLists(params)
+    
+
   }
 
 
