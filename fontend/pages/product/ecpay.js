@@ -64,7 +64,7 @@ export default function ECPayIndex() {
     }
   }
 
-  // 计算总金额的函数
+  // 計算總金額
   const sumTotal = () => {
     const total = cartItems.reduce((acc, v) => {
       const startDate = new Date(v.startDate)
@@ -105,7 +105,7 @@ export default function ECPayIndex() {
 
   //取得 couponbag 的資料
   const getCoupon = async () => {
-    const couponId = cartItems[0]?.coupon_id || 1
+    const couponId = cartItems[0].coupon_id
     const url = `http://localhost:3005/api/coin/couponbag/${couponId}`
 
     const res = await fetch(url)
@@ -125,6 +125,26 @@ export default function ECPayIndex() {
     }
   }, [cartItems]);
 
+  //更新 couponbag 的資料
+  const updateCouponbag = async () => {
+    const couponId = cartItems[0].coupon_id
+    const url = `http://localhost:3005/api/coin/updateCouponbag`
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ couponId }),
+      })
+      const resData = await res.json()
+      console.log(resData)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  //取得 Level 的資料
   const getLevel = async () => {
     const userId = auth.userData.id
     const url = `http://localhost:3005/api/level/${userId}`
@@ -218,11 +238,14 @@ export default function ECPayIndex() {
       setOrder(res.data.data.order)
       toast.success('已成功建立訂單')
 
-      // 更新等级和金币
+      //更新 couponbag 的資料庫
+      updateCouponbag();
+
+      // 更新等级和金幣
       const currentLevels = level.levels || 0
       const { newLevels, newCoin } = rule(currentLevels)
 
-      // 直接更新資料庫
+      // 更新等级和金幣的資料庫
       updateLevel(newLevels, newCoin)
 
       // 更新前端狀態
