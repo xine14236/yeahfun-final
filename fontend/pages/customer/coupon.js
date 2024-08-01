@@ -175,7 +175,12 @@ export default function Index() {
           >
             <div className={styles.collectInfoFrame}>
               {coupon.map((v, i) => (
-                <div key={v.id} className={styles.couponFrame}>
+                <div
+                  key={v.id}
+                  className={`${styles.couponFrame} ${
+                    v.amount === 0 ? styles.couponFrameGrey : ''
+                  }`}
+                >
                   <div className={styles.couponFrameCircle}>
                     <Image
                       className={styles.couponFrameCircleImg}

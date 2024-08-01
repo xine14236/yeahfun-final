@@ -144,7 +144,7 @@
   display: flex;
   flex-direction: row; /* 水平排列 */
   flex-wrap: wrap; /* 允許換行 */
-  justify-content: center; /* 靠左對齊 */
+  justify-content: center; /* 整體置中 */
   min-height: 600px;
   padding: 10px;
   align-items: flex-start;
@@ -379,7 +379,7 @@
 
 .couponFrame {
   display: flex;
-  width: 400px;
+  width: 450px;
   height: 128px;
   padding: 20px;
   margin: 10px;
@@ -389,6 +389,12 @@
   border: 1px solid var(--secondary-3, #fdaf17);
   background: var(--white, #fff);
 }
+.couponFrameGrey {
+  background-color: #d3d3d3; /* 灰色背景 */
+  color: #999999; /* 灰色文字 */
+  border: 1px solid #999999; /* 灰色邊框 */
+}
+
 .couponFrameCircle {
   display: flex;
   padding: 10px;
@@ -412,11 +418,11 @@
   h5 {
     color: var(--grey-600, #8c8c8c);
   }
-  p{
+  p {
     color: var(--grey-600, #8c8c8c);
   }
 }
-.couponFrameCircleImg{
+.couponFrameCircleImg {
   border-radius: 50%;
 }
 
@@ -447,7 +453,6 @@
   border: 2px solid var(--secondary-3, #fdaf17);
   border-radius: 50%;
   box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.2);
-
 }
 
 .achieveFrameContent {
@@ -471,9 +476,8 @@
   justify-content: center;
   align-items: flex-start;
   gap: 10px;
-  
 }
-.achieveFrameImage{
+.achieveFrameImage {
   fill: var(--white, #fff);
 }
 
