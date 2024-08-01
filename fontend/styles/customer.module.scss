@@ -377,7 +377,7 @@
   background-color: var(--secondary-4, #fffcf0);
 }
 
-.couponInfoFrame{
+.couponInfoFrame {
   display: flex;
   flex-direction: row; /* 水平排列 */
   flex-wrap: wrap; /* 允許換行 */
@@ -390,18 +390,27 @@
   background: #fff;
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
+
+.couponFrameStart {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%; /* 確保內層容器的寬度 */
+}
+
 .couponFrame {
   display: flex;
   width: 450px;
   height: 128px;
   padding: 20px;
-  margin: 10px auto; /* 保持水平居中 */
+  margin: 10px auto; /* 水平居中 */
   align-items: center;
   gap: 20px;
   border-radius: 10px;
   border: 1px solid var(--secondary-3, #fdaf17);
   background: var(--white, #fff);
 }
+
 .couponFrameGrey {
   background-color: #d3d3d3; /* 灰色背景 */
   color: #999999; /* 灰色文字 */

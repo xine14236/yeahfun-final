@@ -174,33 +174,35 @@ export default function Index() {
             className={styles.memberFrame}
           >
             <div className={styles.couponInfoFrame}>
-              {coupon.map((v, i) => (
-                <div
-                  key={v.id}
-                  className={`${styles.couponFrame} ${
-                    v.amount === 0 ? styles.couponFrameGrey : ''
-                  }`}
-                >
-                  <div className={styles.couponFrameCircle}>
-                    <Image
-                      className={styles.couponFrameCircleImg}
-                      src={`/coin/${v.img}`}
-                      alt="Chameleon"
-                      width={107}
-                      height={107}
-                    />
-                  </div>
-                  <div className={styles.couponFrameContent}>
-                    <h3>{v.name}</h3>
-                    <div>
-                      <h5>{v.directions}</h5>
-                      <p>
-                        {v.time_start} ~ {v.time_end}
-                      </p>
+              <div className={styles.couponFrameStart}>
+                {coupon.map((v, i) => (
+                  <div
+                    key={v.id}
+                    className={`${styles.couponFrame} ${
+                      v.amount === 0 ? styles.couponFrameGrey : ''
+                    }`}
+                  >
+                    <div className={styles.couponFrameCircle}>
+                      <Image
+                        className={styles.couponFrameCircleImg}
+                        src={`/coin/${v.img}`}
+                        alt="Chameleon"
+                        width={107}
+                        height={107}
+                      />
+                    </div>
+                    <div className={styles.couponFrameContent}>
+                      <h3>{v.name}</h3>
+                      <div>
+                        <h5>{v.directions}</h5>
+                        <p>
+                          {v.time_start} ~ {v.time_end}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </form>
         </div>
