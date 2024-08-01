@@ -213,6 +213,7 @@ router.get('/:id/coupon', async function (req, res) {
     coupon.name,
     coupon.directions,
     coupon.img,
+    couponbag.amount,
     coupon.time_start,
     coupon.time_end
     FROM

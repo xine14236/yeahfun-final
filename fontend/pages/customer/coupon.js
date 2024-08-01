@@ -173,9 +173,14 @@ export default function Index() {
             onSubmit={handleSubmit}
             className={styles.memberFrame}
           >
-            <div className={styles.collectInfoFrame}>
+            <div className={styles.couponInfoFrame}>
               {coupon.map((v, i) => (
-                <div key={v.id} className={styles.couponFrame}>
+                <div
+                  key={v.id}
+                  className={`${styles.couponFrame} ${
+                    v.amount === 0 ? styles.couponFrameGrey : ''
+                  }`}
+                >
                   <div className={styles.couponFrameCircle}>
                     <Image
                       className={styles.couponFrameCircleImg}
