@@ -19,9 +19,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { SlClose } from 'react-icons/sl'
 import { useLoader } from '@/hooks/use-loader'
 import { Select } from 'antd'
+// import StoreComment from '@/components/product/detail/comment'
 
 // import ModalTest from '@/components/product/detail/modalTest'
 import dayjs from 'dayjs'
+import { get, set } from 'lodash'
 
 export default function DetailTest() {
   const router = useRouter()
@@ -31,6 +33,7 @@ export default function DetailTest() {
   const [img, setImg] = useState([])
   const [peopleFilter, setPeopleFilter] = useState('') // 新增狀態來維護篩選值
   const [dateRange, setDateRange] = useState([])
+  const [comment, setComment] = useState([])
   const { addCart } = useCart()
   const { auth, getAuthHeader } = useAuth()
   const { RangePicker } = DatePicker
@@ -96,6 +99,7 @@ export default function DetailTest() {
         setStore(resData.data.store)
         setTag(resData.data.tag)
         setImg(resData.data.img)
+
         console.log(resData.data.store)
       }
     } catch (e) {
@@ -197,6 +201,7 @@ export default function DetailTest() {
     if (router.isReady) {
       getCampsitesInformation(router.query.pid)
       getStoreInformation(router.query.pid)
+      getStoreComment(router.query.pid)
 
       if (router.query.startDate && router.query.endDate) {
         setDateRange([
@@ -234,6 +239,28 @@ export default function DetailTest() {
       newInstances[index] = swiper
       return newInstances
     })
+  }
+
+  const getStoreComment = async (storeId) => {
+    const url = 'http://localhost:3005/api/detail-comment/' + storeId
+
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include',
+      })
+      const resData = await res.json()
+      console.log(resData)
+
+      if (resData.status === 'success') {
+        const comment = resData.data.storeComments[0].comment_content
+        setComment(comment)
+        console.log(comment)
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return (
@@ -754,6 +781,10 @@ export default function DetailTest() {
         <div className="container">
           <Carousel className="carousel2" />
         </div>
+      </div>
+      <div>
+        <h1>comment</h1>
+        <div>{comment}</div>
       </div>
       <GoTop />
       <div>

@@ -30,6 +30,7 @@ export default function Share({ size, color, className }) {
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       currentUrl
     )}`
+    console.log('Sharing URL:', facebookShareUrl) // 输出调试信息
     window.open(facebookShareUrl, '_blank')
   }
 

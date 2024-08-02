@@ -41,7 +41,7 @@ export default function MyNavbar() {
               className="offcanvas offcanvas-end"
               tabIndex="-1"
               id="offcanvasNavbar"
-              aria-labelledby="offcanvasNavbarLabel"
+              labelled="offcanvasNavbarLabel"
             >
               <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
