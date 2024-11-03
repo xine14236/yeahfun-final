@@ -404,7 +404,7 @@ export default function Home() {
             watchSlidesProgress={true}
             slidesPerView={4}
             autoplay={{
-              delay: 5000,
+              delay: 3000,
               disableOnInteraction: false,
             }}
             modules={[Autoplay, Navigation]}

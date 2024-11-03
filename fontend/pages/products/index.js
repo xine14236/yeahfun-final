@@ -219,9 +219,10 @@ export default function Products() {
               <h5>排序方式</h5>
             </label>
             <Select
-              defaultValue="價格-低到高排序"
+              placeholder="請選擇排列方式"
+              // defaultValue=""
               style={{
-                width: '100%',
+                width: '170px',
               }}
               onChange={handleChange}
               options={[
@@ -278,20 +279,17 @@ export default function Products() {
 
         <div className={`container-fluid ${styles.listContainer}`}>
           <div className="row">
-            
-              <ProductList products={products} query={query} />
-           
+            <ProductList products={products} query={query} />
+
             <div
               aria-label="Page navigation example"
               className={styles.pageBtn}
             >
-             
-                <Pagination
-                  pageCount={products.pageCount}
-                  onPageChange={handlePageClick}
-                  page={products.page}
-                />
-              
+              <Pagination
+                pageCount={products.pageCount}
+                onPageChange={handlePageClick}
+                page={products.page}
+              />
             </div>
           </div>
         </div>
